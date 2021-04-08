@@ -1,3 +1,10 @@
+:root {
+
+
+    --font : Lusitana;
+
+}
+
 * {
     box-sizing: border-box;
 }
@@ -5,6 +12,7 @@
 body {
     margin: 0;
     padding: 0;
+    font-family: var(--font);
 }
 
 .map-container {
@@ -25,11 +33,23 @@ body {
 
 }
 
-.story {
+.story-container {
 
     position: absolute;
     top: 0;
     right: 0;
     width: 50vw;
+    height: 100vh;
+    background-color: ghostwhite;
+
+}
+
+.story {
+
+    max-width: 40vw;
+    margin: 0 auto;
+    margin-top: 50vh;
+    transform: translateY(-50%);
+
 
 }
