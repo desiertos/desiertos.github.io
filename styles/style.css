@@ -17,7 +17,7 @@ body {
 
 .map-container {
 
-    position: relative;
+    position: fixed;
     width: 50vw;
     height: 100vh;  
 
@@ -39,17 +39,17 @@ body {
     top: 0;
     right: 0;
     width: 50vw;
-    height: 100vh;
     background-color: ghostwhite;
 
 }
 
-.story {
+.story-step {
 
     max-width: 40vw;
-    margin: 0 auto;
+    margin: 50vh auto;
     margin-top: 50vh;
     transform: translateY(-50%);
+
 
 
 }
