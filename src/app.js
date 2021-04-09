@@ -153,6 +153,26 @@ const app = {
                     [-53, -56]]
                 );
 
+
+                // image
+
+                // Load an image to use as the pattern
+                app.map_obj.loadImage(
+                    '../img/semi_bosque.PNG',
+                    function (err, image) {
+                        // Throw an error if something went wrong
+                        if (err) throw err;
+                    
+                        // Declare the image
+                        app.map_obj.addImage('pattern', image);
+                        
+                        // Use it
+                        app.map_obj.setPaintProperty('provinces', 'fill-pattern', 'pattern');
+
+                    }
+                        
+                );
+                       
             });
 
         }
