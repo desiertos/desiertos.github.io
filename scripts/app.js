@@ -78,7 +78,7 @@ const app = {
                         'source': 'provinces',
                         'layout': {},
                         'paint': {
-                          'fill-color': 'tomato',
+                          'fill-color': 'transparent',
                           'fill-opacity': 0.5
                         }
                     });
@@ -101,12 +101,58 @@ const app = {
                         'type': 'fill',
                         'source': 'mask',
                         'layout': {},
-                        'paint': {
-                          'fill-color': 'ghostwhite'
-                        },
+                        'paint': {'fill-color': 'ghostwhite'},
                     });
 
                 }
+
+            }
+
+
+
+        }
+
+
+
+    },
+
+    scroller : {
+
+        config : function() {
+
+            enterView({
+
+                selector: '.story-step',
+
+                enter: function(el) {
+
+                    const step = el.dataset.step;
+
+                    app.scroller.render[step]();
+
+                },
+
+                exit: function(el) {
+                    console.log("saiu, ", el.dataset.step);
+                },
+
+                offset: 0.5, // enter at middle of viewport
+                //once: true, // trigger just once
+            });
+
+        },
+
+        render : {
+
+            'abertura' : function() {
+
+                app.map_obj.setPaintProperty('provinces', 'fill-color', 'tomato');
+
+            },
+
+            'segundo' : function() {
+
+                app.map_obj.setPaintProperty('provinces', 'fill-pattern', 'pattern');
 
             }
 
@@ -171,10 +217,10 @@ const app = {
                     }
                         
                 );
-
-                app.map_obj.setPaintProperty('provinces', 'fill-pattern', 'pattern');
                        
             });
+
+            app.scroller.config();
 
         }
 
