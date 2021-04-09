@@ -138,7 +138,7 @@ const app = {
             app.map_obj = new mapboxgl.Map({
                 container: 'map', // container id
                 style: app.params.mapbox.style, // style URL
-                center: [-40.678, -54.409], // starting position [lng, lat]
+                center: [-40.74735, -64], // starting position [lng, lat]
                 zoom: 3 // starting zoom
             });
 
@@ -146,6 +146,12 @@ const app = {
 
                 app.utils.map.provinces.initialize();
                 app.utils.map.world_mask.initialize();
+
+                //fit map to continental Argentina
+                app.map_obj.fitBounds([
+                    [-75, -21],
+                    [-53, -56]]
+                );
 
             });
 
