@@ -22,11 +22,17 @@ const app = {
 
             mask : '../data/maps/arg.json'
 
+        },
+
+        layers : {
+
         }
 
     },
 
     data : {},
+
+    map_obj : null,
 
     utils : {
 
@@ -36,6 +42,60 @@ const app = {
               .then( response => response.json())
               .then( data => app.ctrl.begin(data))
               .catch( error => console.log( error ) );
+
+        },
+
+        map : {
+
+            provinces : {
+
+                initialize : function() {
+
+                    app.map_obj.addSource('provinces', {
+                        type: 'geojson',
+                        'data' : app.data.provinces
+                    });
+
+                    app.map_obj.addLayer({
+                        'id': 'provinces',
+                        'type': 'fill',
+                        'source': 'provinces',
+                        'layout': {},
+                        'paint': {
+                          'fill-color': 'tomato',
+                          'fill-opacity': 0.5
+                        }
+                    });
+
+                }
+
+            },
+
+            world_mask : {
+
+                initialize : function() {
+
+                    app.map_obj.addSource('mask', {
+                        type: 'geojson',
+                        'data' : app.data.mask
+                    });
+
+                    app.map_obj.addLayer({
+                        'id': 'mask',
+                        'type': 'fill',
+                        'source': 'mask',
+                        'layout': {},
+                        'paint': {
+                          'fill-color': 'ghostwhite',
+                          'fill-opacity': 1
+                        }
+                    });
+
+                }
+
+            }
+
+
 
         }
 
@@ -48,15 +108,6 @@ const app = {
         init : function() {
 
             app.utils.load_data();
-        
-            mapboxgl.accessToken = app.params.mapbox.token;
-
-            const map = new mapboxgl.Map({
-                container: 'map', // container id
-                style: app.params.mapbox.style, // style URL
-                center: [-40.678, -54.409], // starting position [lng, lat]
-                zoom: 3 // starting zoom
-                });
             
         },
 
@@ -64,6 +115,22 @@ const app = {
 
             console.log(data);
 
+            app.data = data;
+
+            mapboxgl.accessToken = app.params.mapbox.token;
+
+            app.map_obj = new mapboxgl.Map({
+                container: 'map', // container id
+                style: app.params.mapbox.style, // style URL
+                center: [-40.678, -54.409], // starting position [lng, lat]
+                zoom: 3 // starting zoom
+            });
+
+            app.map_obj.on('load', function() {
+
+                app.utils.map.provinces.initialize();
+
+            });
 
         }
 
