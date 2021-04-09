@@ -199,6 +199,8 @@ const app = {
                     [-53, -56]]
                 );
 
+                app.scroller.config();
+
 
                 // image
 
@@ -219,8 +221,6 @@ const app = {
                 );
                        
             });
-
-            app.scroller.config();
 
         }
 
