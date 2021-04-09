@@ -20,7 +20,8 @@ const app = {
 
         geojsons : {
 
-            mask : '../data/maps/arg.json'
+            provinces : '../data/maps/arg.json',
+            mask : '../data/maps/arg_mask.json'
 
         },
 
@@ -30,7 +31,11 @@ const app = {
 
     },
 
-    data : {},
+    data : {
+
+        provinces : null,
+        mask : null
+    },
 
     map_obj : null,
 
@@ -38,10 +43,21 @@ const app = {
 
         load_data : function() {
 
-            fetch(app.params.geojsons.mask, {mode: 'cors'})
-              .then( response => response.json())
+            Promise.all([
+
+                fetch(app.params.geojsons.provinces, {mode: 'cors'}).then( response => response.json()),
+                fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json())
+        
+            ])
               .then( data => app.ctrl.begin(data))
               .catch( error => console.log( error ) );
+
+            //   .catch( error => console.log( error ) );
+
+            // fetch(app.params.geojsons.mask, {mode: 'cors'})
+            //   .then( response => response.json())
+            //   .then( data => app.ctrl.begin(data))
+            //   .catch( error => console.log( error ) );
 
         },
 
@@ -86,9 +102,8 @@ const app = {
                         'source': 'mask',
                         'layout': {},
                         'paint': {
-                          'fill-color': 'ghostwhite',
-                          'fill-opacity': 1
-                        }
+                          'fill-color': 'ghostwhite'
+                        },
                     });
 
                 }
@@ -115,7 +130,8 @@ const app = {
 
             console.log(data);
 
-            app.data = data;
+            app.data.provinces = data[0];
+            app.data.mask = data[1];
 
             mapboxgl.accessToken = app.params.mapbox.token;
 
@@ -129,6 +145,7 @@ const app = {
             app.map_obj.on('load', function() {
 
                 app.utils.map.provinces.initialize();
+                app.utils.map.world_mask.initialize();
 
             });
 
