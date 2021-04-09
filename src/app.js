@@ -167,11 +167,12 @@ const app = {
                         app.map_obj.addImage('pattern', image);
                         
                         // Use it
-                        app.map_obj.setPaintProperty('provinces', 'fill-pattern', 'pattern');
 
                     }
                         
                 );
+
+                app.map_obj.setPaintProperty('provinces', 'fill-pattern', 'pattern');
                        
             });
 
