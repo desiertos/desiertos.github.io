@@ -18,11 +18,36 @@ const app = {
 
         },
 
+        geojsons : {
+
+            mask : '../data/maps/arg.json'
+
+        }
+
+    },
+
+    data : {},
+
+    utils : {
+
+        load_data : function() {
+
+            fetch(app.params.geojsons.mask, {mode: 'cors'})
+              .then( response => response.json())
+              .then( data => app.ctrl.begin(data))
+              .catch( error => console.log( error ) );
+
+        }
+
+
+
     },
 
     ctrl : {
 
         init : function() {
+
+            app.utils.load_data();
         
             mapboxgl.accessToken = app.params.mapbox.token;
 
@@ -33,6 +58,13 @@ const app = {
                 zoom: 3 // starting zoom
                 });
             
+        },
+
+        begin : function(data) {
+
+            console.log(data);
+
+
         }
 
     }
