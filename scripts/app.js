@@ -150,10 +150,53 @@ const app = {
 
                 app.map_obj.fitBounds([
                     [-75, -21],
-                    [-53, -56]]
+                    [-53, -56]],
+                    
+                    { 
+                        pitch: 0,
+                        bearing : 0
+                    }
                 );
 
             },
+
+            highlight_feature : function(province) {
+
+
+                let provinces = app.map_obj.querySourceFeatures('provinces', {
+                    sourceLayer: 'provinces'});
+
+                
+            
+                let desired_features = provinces.filter(d => d.properties.nam == province)[0];
+
+                // make them into a feature collection and then combine, in case the feature spans more than one tileset(it will appear more than one time in the filter results above);
+
+                //let collection = turf.featureCollection(desired_features);
+                //let combined = turf.combine(collection);
+
+            
+                // let bbox_highlighted = [
+                //     [highlighted.properties.xmin, highlighted.properties.ymin], 
+                //     [highlighted.properties.xmax, highlighted.properties.ymax]
+                // ];
+            
+                // or we could have used 
+                let bbox_highlighted = turf.bbox(desired_features);//combined);
+                
+                console.log(bbox_highlighted);
+            
+                app.map_obj.fitBounds(
+                    bbox_highlighted, 
+                    {
+                        linear : false, // false means the map transitions using map.flyTo()
+                        speed: 1, 
+                        padding: {top: 30, bottom: 30, left: 30, right: 30},
+                        pitch: 60,
+                        bearing: 30
+                    });
+
+            }
 
 
 
@@ -225,8 +268,16 @@ const app = {
 
             'segundo' : function() {
 
+                app.utils.map.fit_Argentina();
+
                 app.map_obj.setPaintProperty('provinces', 'fill-pattern', ['get', 'tipo']);
                 app.map_obj.setPaintProperty('provinces', 'fill-opacity', 1)
+
+            },
+
+            'destaque' : function() {
+
+                app.utils.map.highlight_feature("Salta");
 
             }
 
