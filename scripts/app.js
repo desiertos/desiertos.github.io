@@ -27,6 +27,14 @@ const app = {
 
         layers : {
 
+        },
+
+        patterns : {
+
+            path1 : '../img/forests/',
+            path2 : '../img/trees/',
+            names : ['tipo1', 'tipo2', 'tipo3', 'tipo4']
+
         }
 
     },
@@ -58,6 +66,35 @@ const app = {
             //   .then( response => response.json())
             //   .then( data => app.ctrl.begin(data))
             //   .catch( error => console.log( error ) );
+
+        },
+
+        load_patterns : function() {
+
+            const path = app.params.patterns.path1;
+            const names = app.params.patterns.names;
+
+            names.forEach(name => {
+
+                app.map_obj.loadImage(
+                    path + name + ".png",
+                    function (err, image) {
+                        // Throw an error if something went wrong
+                        if (err) throw err;
+                    
+                        // Declare the image
+                        app.map_obj.addImage(name, image);
+                        
+                        // Use it
+    
+                    }
+                        
+                );
+
+
+
+
+            })
 
         },
 
@@ -107,7 +144,16 @@ const app = {
 
                 }
 
-            }
+            },
+
+            fit_Argentina : function() {
+
+                app.map_obj.fitBounds([
+                    [-75, -21],
+                    [-53, -56]]
+                );
+
+            },
 
 
 
@@ -179,7 +225,7 @@ const app = {
 
             'segundo' : function() {
 
-                app.map_obj.setPaintProperty('provinces', 'fill-pattern', 'pattern');
+                app.map_obj.setPaintProperty('provinces', 'fill-pattern', ['get', 'tipo']);
                 app.map_obj.setPaintProperty('provinces', 'fill-opacity', 1)
 
             }
@@ -208,6 +254,18 @@ const app = {
             app.data.provinces = data[0];
             app.data.mask = data[1];
 
+            // pre-process provinces data
+            app.data.provinces.features.forEach(el => {
+
+                const id = el.properties.gid;
+                const indice = ( (id - 1) % 4 );
+
+                const tipo = app.params.patterns.names[indice];
+
+                el.properties["tipo"] = tipo;
+
+            })
+
             mapboxgl.accessToken = app.params.mapbox.token;
 
             app.map_obj = new mapboxgl.Map({
@@ -223,31 +281,16 @@ const app = {
                 app.utils.map.world_mask.initialize();
 
                 //fit map to continental Argentina
-                app.map_obj.fitBounds([
-                    [-75, -21],
-                    [-53, -56]]
-                );
+                app.utils.map.fit_Argentina();
 
+                // inicializa o scroller
                 app.scroller.config();
-
 
                 // image
 
-                // Load an image to use as the pattern
-                app.map_obj.loadImage(
-                    '../img/semi_bosque.PNG',
-                    function (err, image) {
-                        // Throw an error if something went wrong
-                        if (err) throw err;
-                    
-                        // Declare the image
-                        app.map_obj.addImage('pattern', image);
-                        
-                        // Use it
+                // Load images to use as patterns
+                app.utils.load_patterns();
 
-                    }
-                        
-                );
                        
             });
 
