@@ -125,6 +125,50 @@ const app = {
 
             },
 
+            fog_of_war : {
+
+                initialize : function() {
+
+                    app.map_obj.addLayer({
+                        'id': 'fog_of_war',
+                        'type': 'fill',
+                        'source': 'provinces',
+                        'paint': {
+                          'fill-color': 'ghostwhite',
+                          'fill-opacity': 0,
+                          'fill-outline-color': '#555'
+                        },
+                        'filter': ['!=', 'province', '']
+                    }); // puts behind road-label
+
+                },
+
+                toggle : function(province) {
+
+                    let opacity = 0;
+
+                    if (province != '') {
+
+                        opacity = 1;
+
+                        app.map_obj.setFilter(
+                            'fog_of_war', [
+                                '!=',
+                                ['get', 'nam'],
+                                province
+                            ]);
+
+
+                    }
+
+                    app.map_obj.setPaintProperty('fog_of_war', 'fill-opacity', opacity);
+
+
+
+                }
+
+            },
+
             world_mask : {
 
                 initialize : function() {
@@ -151,7 +195,7 @@ const app = {
                 app.map_obj.fitBounds([
                     [-75, -21],
                     [-53, -56]],
-                    
+
                     { 
                         pitch: 0,
                         bearing : 0
@@ -183,6 +227,8 @@ const app = {
             
                 // or we could have used 
                 let bbox_highlighted = turf.bbox(desired_features);//combined);
+
+
                 
                 console.log(bbox_highlighted);
             
@@ -271,13 +317,15 @@ const app = {
                 app.utils.map.fit_Argentina();
 
                 app.map_obj.setPaintProperty('provinces', 'fill-pattern', ['get', 'tipo']);
-                app.map_obj.setPaintProperty('provinces', 'fill-opacity', 1)
+                app.map_obj.setPaintProperty('provinces', 'fill-opacity', 1);
+                app.utils.map.fog_of_war.toggle('')
 
             },
 
             'destaque' : function() {
 
-                app.utils.map.highlight_feature("Salta");
+                app.utils.map.highlight_feature('Salta');
+                app.utils.map.fog_of_war.toggle('Salta')
 
             }
 
@@ -330,6 +378,7 @@ const app = {
 
                 app.utils.map.provinces.initialize();
                 app.utils.map.world_mask.initialize();
+                app.utils.map.fog_of_war.initialize(); 
 
                 //fit map to continental Argentina
                 app.utils.map.fit_Argentina();
