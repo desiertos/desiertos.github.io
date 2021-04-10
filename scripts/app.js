@@ -79,9 +79,10 @@ const app = {
                         'layout': {},
                         'paint': {
                           'fill-color': 'transparent',
-                          'fill-opacity': 0.5
+                          'fill-opacity': 0.5,
+                          'fill-outline-color': 'ghostwhite'
                         }
-                    });
+                    }, 'road-label'); // puts behind road-label
 
                 }
 
@@ -118,6 +119,20 @@ const app = {
 
     scroller : {
 
+        steps : {
+
+            list : null,
+
+            get : function() {
+
+                const steps_html = document.querySelector(".story-container").children;
+
+                app.scroller.steps.list = Array.from(steps_html).map(d => d.dataset.step);
+
+            }
+
+        },
+
         config : function() {
 
             enterView({
@@ -133,7 +148,16 @@ const app = {
                 },
 
                 exit: function(el) {
-                    console.log("saiu, ", el.dataset.step);
+
+                    const step = el.dataset.step;
+
+                    const index_step = app.scroller.steps.list.indexOf(step);
+
+                    const step_anterior = app.scroller.steps.list[index_step - 1];
+
+                    app.scroller.render[step_anterior]();
+
+                    console.log("saiu, ", step_anterior);
                 },
 
                 offset: 0.5, // enter at middle of viewport
@@ -146,13 +170,17 @@ const app = {
 
             'abertura' : function() {
 
+                app.map_obj.setPaintProperty('provinces', 'fill-pattern', null);
                 app.map_obj.setPaintProperty('provinces', 'fill-color', 'tomato');
+                app.map_obj.setPaintProperty('provinces', 'fill-outline-color', 'ghostwhite');
+                app.map_obj.setPaintProperty('provinces', 'fill-opacity', .5)
 
             },
 
             'segundo' : function() {
 
                 app.map_obj.setPaintProperty('provinces', 'fill-pattern', 'pattern');
+                app.map_obj.setPaintProperty('provinces', 'fill-opacity', 1)
 
             }
 
@@ -168,6 +196,7 @@ const app = {
 
         init : function() {
 
+            app.scroller.steps.get();
             app.utils.load_data();
             
         },
