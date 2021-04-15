@@ -29,6 +29,7 @@ header {
     z-index: 1;
     background-color: white;
     border-bottom: 2px solid var(--header-border-color);
+    display: flex;
 }
 
 .brands-wrapper {
@@ -68,6 +69,19 @@ header {
 .brands a:last-child img {
   height: .9rem;
     /*align-self: center;*/
+}
+
+nav {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+}
+
+.menu-toggle {
+    color: var(--header-border-color);
+    align-self: center;
+    background-color: transparent;
+    border: none;
 }
 
 
