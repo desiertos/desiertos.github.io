@@ -20,7 +20,7 @@ const app = {
 
         geojsons : {
 
-            //provinces : '../data/maps/arg.json',
+            provinces : '../data/maps/arg.json',
             departments : '../data/maps/arg_dept.json',
             mask : '../data/maps/arg_mask.json'
 
@@ -42,7 +42,7 @@ const app = {
 
     data : {
 
-        //provinces : null,
+        provinces : null,
         departaments : null,
         mask : null
     },
@@ -56,7 +56,9 @@ const app = {
             Promise.all([
 
                 fetch(app.params.geojsons.departments, {mode: 'cors'}).then( response => response.json()),
-                fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json())
+                fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
+
+                fetch(app.params.geojsons.provinces, {mode: 'cors'}).then( response => response.json())
         
             ])
               .then( data => app.ctrl.begin(data))
@@ -127,6 +129,30 @@ const app = {
 
             },
 
+            province : {
+
+                initialize : function() {
+
+                    app.map_obj.addSource('provinces', {
+                        type: 'geojson',
+                        'data' : app.data.provinces
+                    });
+
+                    app.map_obj.addLayer({
+                        'id': 'provinces',
+                        'type': 'line',
+                        'source': 'provinces',
+                        'layout': {},
+                        'paint': {
+                          'line-width': 0,
+                          'line-color': 'black'
+                        }
+                    }, 'road-label'); // puts behind road-label
+
+                }
+
+            },
+
             fog_of_war : {
 
                 initialize : function() {
@@ -134,13 +160,13 @@ const app = {
                     app.map_obj.addLayer({
                         'id': 'fog_of_war',
                         'type': 'fill',
-                        'source': 'departments',
+                        'source': 'provinces',
                         'paint': {
                           'fill-color': 'ghostwhite',
                           'fill-opacity': 0,
                           'fill-outline-color': '#555'
                         },
-                        'filter': ['!=', 'department', '']
+                        'filter': ['!=', 'province', '']
                     }); // puts behind road-label
 
                 },
@@ -206,15 +232,15 @@ const app = {
 
             },
 
-            highlight_feature : function(department) {
+            highlight_feature : function(province) {
 
 
-                let departments = app.map_obj.querySourceFeatures('departments', {
-                    sourceLayer: 'departments'});
+                let provinces = app.map_obj.querySourceFeatures('provinces', {
+                    sourceLayer: 'provinces'});
 
                 
             
-                let desired_features = departments.filter(d => d.properties.nam == department)[0];
+                let desired_features = provinces.filter(d => d.properties.nam == province)[0];
 
                 // make them into a feature collection and then combine, in case the feature spans more than one tileset(it will appear more than one time in the filter results above);
 
@@ -321,11 +347,13 @@ const app = {
                 app.map_obj.setPaintProperty('departments', 'fill-pattern', ['get', 'tipo']);
                 app.map_obj.setPaintProperty('departments', 'fill-opacity', 1);
                 app.utils.map.fog_of_war.toggle('')
+                app.map_obj.setPaintProperty('provinces', 'line-width', 0);
 
             },
 
             'destaque' : function() {
 
+                app.map_obj.setPaintProperty('provinces', 'line-width', 5);
                 app.utils.map.highlight_feature('Salta');
                 app.utils.map.fog_of_war.toggle('Salta')
 
@@ -354,6 +382,7 @@ const app = {
 
             app.data.departments = data[0];
             app.data.mask = data[1];
+            app.data.provinces = data[2];
 
             // pre-process departments data
             app.data.departments.features.forEach(el => {
@@ -379,6 +408,7 @@ const app = {
             app.map_obj.on('load', function() {
 
                 app.utils.map.departments.initialize();
+                app.utils.map.province.initialize();
                 app.utils.map.world_mask.initialize();
                 app.utils.map.fog_of_war.initialize(); 
 
