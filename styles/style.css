@@ -6,6 +6,9 @@
     --background-color: ghostwhite;
     --background-transp: rgba(248, 248, 255, .5);
 
+    --header-border-color: lightgrey;
+    --header-height: 2.5rem;
+
 }
 
 * {
@@ -22,21 +25,24 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    height: 2.5rem;
+    height: var(--header-height);
     z-index: 1;
-    background-color: grey;
+    background-color: white;
+    border-bottom: 2px solid var(--header-border-color);
 }
 
 .brands-wrapper {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    height: 2.5rem;
+    height: var(--header-height);
 }
 
 .brands,
-.brands a {
+.brands a
+ {
   display: flex;
+  align-items: center;
 }
 
 .brands a {
@@ -45,23 +51,23 @@ header {
 
 .pipe {
   content: '';
-  display: flex;
+  /*display: flex;*/
   height: 1.2rem;
   min-width: .05rem;
   margin: 0 1rem;
-  background: ghostwhite;
-  align-self: center;
+  background: var(--header-border-color);
+  /*align-self: center;*/
 }
 
 .brands a:first-child img {
   width: 3rem;
-  align-self: center;
+  /*align-self: center;*/
   margin-left: 1rem;
 }
 
 .brands a:last-child img {
   height: .9rem;
-  align-self: center;
+    /*align-self: center;*/
 }
 
 
@@ -80,7 +86,7 @@ h1 {
 
 .outer-container {
 
-    margin-top: 2.5rem;
+    margin-top: var(--header-height);
 
 }
 
