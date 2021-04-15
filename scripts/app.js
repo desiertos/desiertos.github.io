@@ -20,7 +20,8 @@ const app = {
 
         geojsons : {
 
-            provinces : '../data/maps/arg.json',
+            //provinces : '../data/maps/arg.json',
+            departments : '../data/maps/arg_dept.json',
             mask : '../data/maps/arg_mask.json'
 
         },
@@ -41,7 +42,8 @@ const app = {
 
     data : {
 
-        provinces : null,
+        //provinces : null,
+        departaments : null,
         mask : null
     },
 
@@ -53,7 +55,7 @@ const app = {
 
             Promise.all([
 
-                fetch(app.params.geojsons.provinces, {mode: 'cors'}).then( response => response.json()),
+                fetch(app.params.geojsons.departments, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json())
         
             ])
@@ -100,19 +102,19 @@ const app = {
 
         map : {
 
-            provinces : {
+            departments : {
 
                 initialize : function() {
 
-                    app.map_obj.addSource('provinces', {
+                    app.map_obj.addSource('departments', {
                         type: 'geojson',
-                        'data' : app.data.provinces
+                        'data' : app.data.departments
                     });
 
                     app.map_obj.addLayer({
-                        'id': 'provinces',
+                        'id': 'departments',
                         'type': 'fill',
-                        'source': 'provinces',
+                        'source': 'departments',
                         'layout': {},
                         'paint': {
                           'fill-color': 'transparent',
@@ -132,22 +134,22 @@ const app = {
                     app.map_obj.addLayer({
                         'id': 'fog_of_war',
                         'type': 'fill',
-                        'source': 'provinces',
+                        'source': 'departments',
                         'paint': {
                           'fill-color': 'ghostwhite',
                           'fill-opacity': 0,
                           'fill-outline-color': '#555'
                         },
-                        'filter': ['!=', 'province', '']
+                        'filter': ['!=', 'department', '']
                     }); // puts behind road-label
 
                 },
 
-                toggle : function(province) {
+                toggle : function(department) {
 
                     let opacity = 0;
 
-                    if (province != '') {
+                    if (department != '') {
 
                         opacity = 1;
 
@@ -155,7 +157,7 @@ const app = {
                             'fog_of_war', [
                                 '!=',
                                 ['get', 'nam'],
-                                province
+                                department
                             ]);
 
 
@@ -204,15 +206,15 @@ const app = {
 
             },
 
-            highlight_feature : function(province) {
+            highlight_feature : function(department) {
 
 
-                let provinces = app.map_obj.querySourceFeatures('provinces', {
-                    sourceLayer: 'provinces'});
+                let departments = app.map_obj.querySourceFeatures('departments', {
+                    sourceLayer: 'departments'});
 
                 
             
-                let desired_features = provinces.filter(d => d.properties.nam == province)[0];
+                let desired_features = departments.filter(d => d.properties.nam == department)[0];
 
                 // make them into a feature collection and then combine, in case the feature spans more than one tileset(it will appear more than one time in the filter results above);
 
@@ -305,10 +307,10 @@ const app = {
 
             'abertura' : function() {
 
-                app.map_obj.setPaintProperty('provinces', 'fill-pattern', null);
-                app.map_obj.setPaintProperty('provinces', 'fill-color', 'tomato');
-                app.map_obj.setPaintProperty('provinces', 'fill-outline-color', 'ghostwhite');
-                app.map_obj.setPaintProperty('provinces', 'fill-opacity', .5)
+                app.map_obj.setPaintProperty('departments', 'fill-pattern', null);
+                app.map_obj.setPaintProperty('departments', 'fill-color', 'tomato');
+                app.map_obj.setPaintProperty('departments', 'fill-outline-color', 'ghostwhite');
+                app.map_obj.setPaintProperty('departments', 'fill-opacity', .5)
 
             },
 
@@ -316,8 +318,8 @@ const app = {
 
                 app.utils.map.fit_Argentina();
 
-                app.map_obj.setPaintProperty('provinces', 'fill-pattern', ['get', 'tipo']);
-                app.map_obj.setPaintProperty('provinces', 'fill-opacity', 1);
+                app.map_obj.setPaintProperty('departments', 'fill-pattern', ['get', 'tipo']);
+                app.map_obj.setPaintProperty('departments', 'fill-opacity', 1);
                 app.utils.map.fog_of_war.toggle('')
 
             },
@@ -350,11 +352,11 @@ const app = {
 
             console.log(data);
 
-            app.data.provinces = data[0];
+            app.data.departments = data[0];
             app.data.mask = data[1];
 
-            // pre-process provinces data
-            app.data.provinces.features.forEach(el => {
+            // pre-process departments data
+            app.data.departments.features.forEach(el => {
 
                 const id = el.properties.gid;
                 const indice = ( (id - 1) % 4 );
@@ -376,7 +378,7 @@ const app = {
 
             app.map_obj.on('load', function() {
 
-                app.utils.map.provinces.initialize();
+                app.utils.map.departments.initialize();
                 app.utils.map.world_mask.initialize();
                 app.utils.map.fog_of_war.initialize(); 
 
