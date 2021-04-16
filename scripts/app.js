@@ -281,7 +281,9 @@ const app = {
                             app.params.mapbox.start.center.lng, 
                             app.params.mapbox.start.center.lat
                         ], 
-                        zoom: app.params.mapbox.start.zoom
+                        zoom: app.params.mapbox.start.zoom,
+                        bearing: 0,
+                        pitch: 0
                     }
                 );
 
