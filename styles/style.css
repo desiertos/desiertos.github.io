@@ -5,8 +5,14 @@
     --font-body : Rubik;
     --background-color: ghostwhite;
     --background-transp: rgba(248, 248, 255, .5);
+
     --title-color : #3a3a3a;
     --font-color : #4f4f4f;
+
+    --color-desierto: #D77E5B;
+    --color-semidesierto: #E1BA9B;
+    --color-semibosque: #CEBF74;
+    --color-bosque: #7C9A68;
 
     --header-border-color: lightgrey;
     --header-height: 2.5rem;
