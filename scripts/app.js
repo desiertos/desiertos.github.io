@@ -14,7 +14,19 @@ const app = {
         mapbox : {
 
             token : 'pk.eyJ1IjoidGlhZ29tYnAiLCJhIjoiY2thdjJmajYzMHR1YzJ5b2huM2pscjdreCJ9.oT7nAiasQnIMjhUB-VFvmw',
-            style : 'mapbox://styles/tiagombp/ckn87x7w014i517qodqof85bi'
+            style : 'mapbox://styles/tiagombp/ckn87x7w014i517qodqof85bi',
+            start : {
+
+                center : {
+
+                    lng  : -64.5529,
+                    lat  : -33.9968
+
+                },
+
+                zoom : 5.24
+
+            }
 
         },
 
@@ -36,6 +48,15 @@ const app = {
             path2 : '../img/trees/',
             names : ['tipo1', 'tipo2', 'tipo3', 'tipo4']
 
+        },
+
+        colors : {
+
+            desierto : null,
+            semidesierto : null,
+            semibosque : null,
+            bosque : null
+
         }
 
     },
@@ -45,6 +66,7 @@ const app = {
         provinces : null,
         departaments : null,
         mask : null
+
     },
 
     map_obj : null,
@@ -95,10 +117,29 @@ const app = {
                         
                 );
 
-
-
-
             })
+
+        },
+
+        colors : {
+
+            get_from_css : function(color) {
+
+                const style = getComputedStyle( document.documentElement );
+                const value = style.getPropertyValue( '--color-' + color );
+                return value;
+    
+            },
+
+            populate : function() {
+
+                Object.keys(app.params.colors).forEach(color => {
+
+                    app.params.colors[color] = app.utils.colors.get_from_css(color);
+    
+                });
+
+            }
 
         },
 
@@ -232,6 +273,23 @@ const app = {
 
             },
 
+            set_initial_view : function() {
+
+                app.map_obj.flyTo(
+                    {
+                        center: [
+                            app.params.mapbox.start.center.lng, 
+                            app.params.mapbox.start.center.lat
+                        ], 
+                        zoom: app.params.mapbox.start.zoom
+                    }
+                );
+
+                //app.map_obj.setCenter(app.params.mapbox.start.center);
+                //app.map_obj.setZoom(app.params.mapbox.start.zoom);
+
+            },
+
             highlight_feature : function(province) {
 
 
@@ -334,9 +392,10 @@ const app = {
             'abertura' : function() {
 
                 app.map_obj.setPaintProperty('departments', 'fill-pattern', null);
-                app.map_obj.setPaintProperty('departments', 'fill-color', 'tomato');
+                app.map_obj.setPaintProperty('departments', 'fill-color', ['get', 'color']);
                 app.map_obj.setPaintProperty('departments', 'fill-outline-color', 'ghostwhite');
-                app.map_obj.setPaintProperty('departments', 'fill-opacity', .5)
+                app.map_obj.setPaintProperty('departments', 'fill-opacity', .5);
+                app.utils.map.set_initial_view();
 
             },
 
@@ -371,6 +430,7 @@ const app = {
 
         init : function() {
 
+            app.utils.colors.populate();
             app.scroller.steps.get();
             app.utils.load_data();
             
@@ -387,12 +447,17 @@ const app = {
             // pre-process departments data
             app.data.departments.features.forEach(el => {
 
+                const types = Object.keys(app.params.colors);
+
                 const id = el.properties.gid;
                 const indice = ( (id - 1) % 4 );
 
                 const tipo = app.params.patterns.names[indice];
+                const type = types[indice];
+                const color = app.params.colors[type];
 
                 el.properties["tipo"] = tipo;
+                el.properties["color"] = color;
 
             })
 
@@ -401,8 +466,11 @@ const app = {
             app.map_obj = new mapboxgl.Map({
                 container: 'map', // container id
                 style: app.params.mapbox.style, // style URL
-                center: [-40.74735, -64], // starting position [lng, lat]
-                zoom: 3 // starting zoom
+                center: [
+                    app.params.mapbox.start.center.lng, 
+                    app.params.mapbox.start.center.lat
+                ], // starting position [lng, lat]
+                zoom: app.params.mapbox.start.zoom // starting zoom
             });
 
             app.map_obj.on('load', function() {
