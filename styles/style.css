@@ -178,6 +178,15 @@ a.go-to-dashboard {
     justify-content: center;
     padding-right: 1rem;
     border-top: 3px solid var(--header-border-color);
+    opacity: 1;
+
+    transition: opacity .4s linear;
+
+}
+
+a.go-to-dashboard.hidden {
+
+    opacity : 0;
 
 }
 

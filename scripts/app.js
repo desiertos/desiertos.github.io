@@ -1,6 +1,8 @@
 const app = {
 
-    refs : {},
+    refs : {
+
+    },
 
     sels : {
 
@@ -70,6 +72,26 @@ const app = {
     },
 
     map_obj : null,
+
+    elements : {
+
+        refs : {
+
+            dashboard_button : "a.go-to-dashboard"
+
+        },
+
+        toggle_visibility : function(name){
+
+            const ref = app.elements.refs[name];
+
+            const elem = document.querySelector(ref);
+            elem.classList.toggle("hidden");
+
+        }
+
+
+    },
 
     utils : {
 
@@ -389,6 +411,8 @@ const app = {
 
         },
 
+        // por em outro lugar?
+
         render : {
 
             'abertura' : function() {
@@ -398,6 +422,8 @@ const app = {
                 app.map_obj.setPaintProperty('departments', 'fill-outline-color', 'ghostwhite');
                 app.map_obj.setPaintProperty('departments', 'fill-opacity', .5);
                 app.utils.map.set_initial_view();
+
+                app.elements.toggle_visibility("dashboard_button");
 
             },
 
@@ -409,6 +435,8 @@ const app = {
                 app.map_obj.setPaintProperty('departments', 'fill-opacity', 1);
                 app.utils.map.fog_of_war.toggle('')
                 app.map_obj.setPaintProperty('provinces', 'line-width', 0);
+
+                app.elements.toggle_visibility("dashboard_button");
 
             },
 
