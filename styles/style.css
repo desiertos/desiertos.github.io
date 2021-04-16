@@ -5,6 +5,8 @@
     --font-body : Rubik;
     --background-color: ghostwhite;
     --background-transp: rgba(248, 248, 255, .5);
+    --title-color : #3a3a3a;
+    --font-color : #4f4f4f;
 
     --header-border-color: lightgrey;
     --header-height: 2.5rem;
@@ -91,11 +93,29 @@ body {
     padding: 0;
     font-family: var(--font-body);
     background-color: var(--background-color);
+    color: var(--font-color);
 }
 
 h1 {
 
+    margin: 0;
+    margin-bottom: 1.4rem;
     font-family: var(--font-title);
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--title-color);
+
+}
+
+h1 .kicker {
+
+    display: block;
+    font-size: .8rem;
+    text-transform: uppercase;
+    font-family: var(--font-body);
+    font-weight: 400;
+    margin-bottom: 1.4rem;
+    color: var(--font-color);
 
 }
 
@@ -151,7 +171,9 @@ h1 {
 
 .story-step p {
 
-    font-weight: 300;
+    font-weight: 400;
+    font-size: .9rem;
+    line-height: 1.3;
 
 }
 
