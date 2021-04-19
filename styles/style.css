@@ -135,7 +135,7 @@ h1 .kicker {
 .map-container {
 
     position: fixed;
-    width: 50vw;
+    width: calc(100% - 50vw);
     height: 100vh;  
     z-index: 1;
 
