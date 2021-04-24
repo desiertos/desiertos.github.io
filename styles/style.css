@@ -24,6 +24,12 @@
     box-sizing: border-box;
 }
 
+html {
+
+    scroll-behavior: smooth;
+
+}
+
 img {
     display: block;
     max-width: 100%;
@@ -141,6 +147,7 @@ h2 {
 .outer-container {
 
     margin-top: var(--header-height);
+    scroll-behavior: smooth;
 
 }
 
@@ -178,20 +185,27 @@ a.go-to-dashboard {
     position: absolute;
     right: 0;
     font-size: .8rem;
-    top: 80vh;
+    bottom: 0;
     width: 50vw;
-    transform: translateY(-100%);
     height: calc(2 * var(--header-height));
     text-decoration: none;
     background-color: #efefef;
     color: var(--font-color);
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding-right: 1rem;
-    border-top: 3px solid var(--header-border-color);
+    padding-left: calc(25vw - 18rem);
+    border-top: 1px solid var(--font-color);
     opacity: 1;
     text-transform: uppercase;
+    background-color: var(--color-semibosque);
+
+}
+
+a.go-to-dashboard p {
+
+    max-width: 36vw;
+    width: 36rem;
+    margin: 0 auto;
 
 }
 
@@ -210,17 +224,16 @@ a.button-go-on {
     color: transparent;
     text-decoration: none;
 
-
 }
 
 a.button-go-on::before {
 
     position: absolute;
-    top: 80vh;
+    bottom: 0;
     content: "\003E";
     color: grey;
     font-size: 3rem;
-    transform: translateY(-100%) rotate(90deg) scaleX(.75);
+    transform: rotate(90deg) scaleX(.75);
     font-weight: 300;
 
 }
@@ -240,6 +253,7 @@ input#location-search {
 
     width: 100%;
     border: none;
+    outline: none;
     font-size: 1rem;
     background: transparent;
 
@@ -261,19 +275,30 @@ input#location-search {
 
 .story-step {
 
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.story-step-inner {
+
     max-width: 36vw;
-    margin: 50vh auto;
-    margin-top: 50vh;
-    transform: translateY(-50%);
+    width: 36rem;
+    margin: 0 auto;
+    /*margin-top: 50vh;
+    transform: translateY(-50%);*/
     background-color: var(--background-transp); 
-    position: relative; 
+
 
 }
 
 .retranca {
 
     font-size: 3rem;
-    margin-bottom: 1.81125rem;
+    margin-bottom: 1rem;
 
 }
 
