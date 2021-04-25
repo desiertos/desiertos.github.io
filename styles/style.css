@@ -257,6 +257,7 @@ input#location-search {
     outline: none;
     font-size: 1rem;
     background: transparent;
+    font-family: var(--font-body);
 
 }
 
@@ -264,6 +265,7 @@ input#location-search {
     background: transparent;
     border: none;
     outline: none;
+    cursor: pointer;
   }
   
   .search-button img {
@@ -325,6 +327,21 @@ input#location-search {
     line-height: 1.3;
 
 }
+
+/* Story - user location */
+
+[data-place-type='provincia'] {
+
+    content: 'Provincia';
+
+}
+
+[data-place-type='cidade'] {
+
+    content: 'Departamiento / Municipio';
+
+}
+
 
 @media screen and (max-width: 620px) {
 

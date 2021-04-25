@@ -76,26 +76,6 @@ const app = {
 
     map_obj : null,
 
-    elements : {
-
-        refs : {
-
-            dashboard_button : "a.go-to-dashboard"
-
-        },
-
-        toggle_visibility : function(name){
-
-            const ref = app.elements.refs[name];
-
-            const elem = document.querySelector(ref);
-            elem.classList.toggle("hidden");
-
-        }
-
-
-    },
-
     utils : {
 
         load_data : function() {
@@ -422,7 +402,7 @@ const app = {
                 app.map_obj.setPaintProperty('departments', 'fill-opacity', .5);
                 app.utils.map.set_initial_view();
 
-                app.elements.toggle_visibility("dashboard_button");
+                app.interactions.story.toggle_visibility("dashboard_button");
 
             },
 
@@ -435,7 +415,7 @@ const app = {
                 app.utils.map.fog_of_war.toggle('')
                 app.map_obj.setPaintProperty('provinces', 'line-width', 0);
 
-                app.elements.toggle_visibility("dashboard_button");
+                app.interactions.story.toggle_visibility("dashboard_button");
 
             },
 
@@ -451,7 +431,138 @@ const app = {
 
         }
 
+    },
 
+    interactions : {
+
+        story : {
+
+            refs : {
+    
+                dashboard_button : 'a.go-to-dashboard',
+
+    
+            },
+    
+            toggle_visibility : function(name){
+    
+                const ref = app.interactions.story.refs[name];
+    
+                const elem = document.querySelector(ref);
+                elem.classList.toggle('hidden');
+    
+            },
+
+            search_bar : {
+
+                refs : {
+
+                    datalist_search : 'datalist#locations',
+                    input : '#location-search',
+                    search_button : '#story-search-place',
+                    destination_step : '#location-card'
+
+                },
+
+                populate_datalist : function() {
+
+                    const ref = app.interactions.story.search_bar.refs.datalist_search;
+    
+                    const parent = document.querySelector(ref);
+    
+                    const data = app.data.fopea_data.lista_locais;
+    
+                    data.forEach(row => {
+    
+                        const new_option = document.createElement("option");
+    
+                        new_option.value = row.text;
+                        new_option.dataset.name = row.localidade;
+                        new_option.dataset.tipoLocalidade = row.tipo;
+    
+                        parent.appendChild(new_option);
+    
+                    })
+    
+                },
+
+                listen_search : function() {
+
+                    const ref_btn = app.interactions.story.search_bar.refs.search_button;
+                    const ref_input = app.interactions.story.search_bar.refs.input;
+
+                    const btn = document.querySelector(ref_btn);
+                    const input_el = document.querySelector(ref_input);
+
+                    console.log(btn);
+
+                    btn.addEventListener('click', function(e) {
+
+                        //console.log("hi!")
+
+                        const search_content = input_el.value;
+
+                        //console.log(input_el.value);
+
+                        if (
+                            app.data.fopea_data.lista_locais
+                              .map(row => row.text)
+                              .indexOf(search_content) > 0
+                        ) {
+
+                            console.log("valor detectado", search_content);
+
+                            const local = app.data.fopea_data.lista_locais.filter(row => row.text == search_content)[0];
+
+                            console.log("tipo: ", local.tipo);
+                            console.log("nome: ", local.local);
+
+                            const data = app.data.fopea_data[local.tipo].filter(d => d.local == local.local)
+
+                            console.log("Dados: ", data);
+
+                            const destination_step = document.querySelector(
+                                app.interactions.story.search_bar.refs.destination_step
+                            );
+
+                            destination_step.scrollIntoView({behavior: "smooth"});
+
+
+                        } else {
+
+                            console.log("Valor invalido, chico")
+
+                        }
+
+
+                    });
+
+                },
+
+
+
+
+
+            }
+
+        },
+
+    },
+
+    vis : {
+
+        refs : {
+
+            svg : '',
+            container : ''
+        },
+    
+        sels : {
+    
+            d3 : {},
+            js : {}
+    
+        },
 
     },
 
@@ -463,6 +574,12 @@ const app = {
             app.scroller.steps.get();
             app.utils.load_data();
             
+        },
+
+        monitors : function() {
+
+            app.interactions.story.search_bar.listen_search();
+
         },
 
         begin : function(data) {
@@ -520,9 +637,19 @@ const app = {
 
                 // Load images to use as patterns
                 app.utils.load_patterns();
-
-                       
+              
             });
+
+            app.interactions.story.search_bar.populate_datalist();
+            app.ctrl.monitors();
+
+        },
+
+        interactions : {
+
+            story : {},
+
+            vis : {}
 
         }
 
