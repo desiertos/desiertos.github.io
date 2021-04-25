@@ -517,7 +517,7 @@ const app = {
                             console.log("tipo: ", local.tipo);
                             console.log("nome: ", local.local);
 
-                            const data = app.data.fopea_data[local.tipo].filter(d => d.local == local.local)
+                            const data = app.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
 
                             console.log("Dados: ", data);
 
@@ -532,16 +532,14 @@ const app = {
 
                             console.log("Valor invalido, chico")
 
+                            // fazer algo visível na página aqui
+
                         }
 
 
                     });
 
                 },
-
-
-
-
 
             }
 
@@ -563,6 +561,12 @@ const app = {
             js : {}
     
         },
+
+        location_card : {
+
+            
+
+        }
 
     },
 

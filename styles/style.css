@@ -18,6 +18,8 @@
     --header-border-color: lightgrey;
     --header-height: 2.5rem;
 
+    --emoji-bosque: '🌳 ';
+
 }
 
 * {
@@ -138,6 +140,7 @@ h2 {
     display: block;
     font-size: .8rem;
     text-transform: uppercase;
+    letter-spacing: .8px;
     font-family: var(--font-body);
     font-weight: 400;
     margin-bottom: 1.4rem;
@@ -308,7 +311,7 @@ input#location-search {
 
 }
 
-.highlight {
+[data-category-highlight] {
 
     text-transform: uppercase;
 
@@ -328,7 +331,89 @@ input#location-search {
 
 }
 
-/* Story - user location */
+/* Story - location card*/
+
+#location-card [data-content]::before {
+
+    content: attr(data-content);
+
+}
+
+#location-card .kicker {
+
+    margin-bottom: .2rem;
+    font-size: .7rem;
+
+}
+
+#location-card h2 {
+
+    margin-bottom: .4rem;
+
+}
+
+.story-step p[data-category] {
+
+    text-transform: uppercase;
+    font-size: .8rem;
+    padding: .5rem 1rem;
+    border-top: 1px solid var(--font-color);
+    border-bottom: 1px solid var(--font-color);
+    line-height: normal;
+    margin-top: .4rem;
+
+
+}
+
+[data-category]::before {
+
+    padding-right: 1rem;
+
+}
+
+/* bosque */
+
+[data-category='bosque'] {
+
+    background-color: var(--color-bosque);
+
+}
+
+
+[data-category='bosque']::before, [data-category-highlight='bosque']::before {
+
+    content: var(--emoji-bosque);
+
+}
+
+[data-category='bosque']::after {
+
+    content: 'bosque';
+
+}
+
+/* semibosque */
+
+[data-category='semibosque'] {
+
+    background-color: var(--color-semibosque);
+
+}
+
+
+[data-category='semibosque']::before, [data-category-highlight='semibosque']::before {
+
+    content: var(--emoji-semibosque);
+
+}
+
+[data-category='semibosque']::after {
+
+    content: 'semibosque';
+
+}
+
+
 
 [data-place-type='provincia'] {
 
