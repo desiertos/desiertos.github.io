@@ -242,7 +242,7 @@ const app = {
             initialize : function() {
 
                 app.map_obj.addLayer({
-                    'id': 'fog_of_war',
+                    'id': 'fog_of_war_provincia',
                     'type': 'fill',
                     'source': 'provincia',
                     'paint': {
@@ -253,27 +253,39 @@ const app = {
                     'filter': ['!=', 'province', '']
                 }); // puts behind road-label
 
+                app.map_obj.addLayer({
+                    'id': 'fog_of_war_cidade',
+                    'type': 'fill',
+                    'source': 'cidade',
+                    'paint': {
+                      'fill-color': 'ghostwhite',
+                      'fill-opacity': 0,
+                      'fill-outline-color': '#555'
+                    },
+                    'filter': ['!=', 'cidade', '']
+                }); // puts behind road-label
+
             },
 
-            toggle : function(department) {
+            toggle : function(type, location) {
 
                 let opacity = 0;
 
-                if (department != '') {
+                if (location != '') {
 
                     opacity = 1;
 
                     app.map_obj.setFilter(
-                        'fog_of_war', [
+                        'fog_of_war_' + type, [
                             '!=',
                             ['get', 'nam'],
-                            department
+                            location
                         ]);
 
 
                 }
 
-                app.map_obj.setPaintProperty('fog_of_war', 'fill-opacity', opacity);
+                app.map_obj.setPaintProperty('fog_of_war_' + type, 'fill-opacity', opacity);
 
 
 
@@ -441,7 +453,7 @@ const app = {
                 app.map_obj.setPaintProperty('cidade', 'fill-opacity', .5);
                 app.map.set_initial_view();
 
-                app.interactions.story.toggle_visibility("dashboard_button");
+                //app.interactions.story.toggle_visibility("dashboard_button");
 
             },
 
@@ -449,13 +461,20 @@ const app = {
 
                 console.log('Pesquisando...');
 
+                app.map.set_initial_view();
+                app.map.fog_of_war.toggle('provincia', '');
+                app.map.fog_of_war.toggle('cidade', '');
+                
             },
 
             'location-card' : function() {
 
-                app.map.highlight_feature(
-                    app.vis.location_card.state.user_location_type, 
-                    app.vis.location_card.state.user_location_name);
+                const type = app.vis.location_card.state.user_location_type;
+                const location = app.vis.location_card.state.user_location_name
+
+                app.map.highlight_feature(type, location);
+
+                app.map.fog_of_war.toggle(type, location);
 
             },
 
