@@ -148,6 +148,40 @@ const app = {
 
         },
 
+        get_category_from_data : function(local, data) {
+
+            let location_category;
+
+            if (local.tipo == 'provincia') {
+
+                const cat = data['cat_media'];
+
+                if (cat == 1) {
+
+                    location_category = 'desierto';
+
+                } else if (cat <= 2) {
+
+                    location_category = 'semidesierto';
+
+                } else if (cat <= 3) {
+
+                    location_category = 'semibosque';
+
+                } else location_category = 'bosque'
+
+            } else {
+
+                const categories = ['desierto', 'semidesierto', 'semibosque', 'bosque'];
+
+                location_category = categories[ data['categoria'] ];
+                
+            }
+
+            return location_category;
+
+        },
+
         map : {
 
             departments : {
@@ -521,11 +555,7 @@ const app = {
 
                             console.log("Dados: ", data);
 
-                            const destination_step = document.querySelector(
-                                app.interactions.story.search_bar.refs.destination_step
-                            );
-
-                            destination_step.scrollIntoView({behavior: "smooth"});
+                            app.interactions.story.search_bar.successful_result_action(local, data);
 
 
                         } else {
@@ -540,6 +570,25 @@ const app = {
                     });
 
                 },
+
+                successful_result_action : function(local, data) {
+
+                    //// seria o caso de levar isso para o render step do scroller?
+
+                    // set vis state, calls vis render
+
+                    app.vis.location_card.state.set(local, data);
+
+                    // scrolls to card
+
+                    const destination_step = document.querySelector(
+                        app.interactions.story.search_bar.refs.destination_step
+                    );
+
+                    destination_step.scrollIntoView({behavior: "smooth"});
+
+
+                }
 
             }
 
@@ -572,7 +621,15 @@ const app = {
                 user_location_category : null,
                 remaining_categories : null,
 
-                set : function() {
+                set : function(local, data) {
+
+                    const state = app.vis.location_card.state;
+
+                    state.user_location = local.text;
+                    state.user_location_name = local.local; //// mudar esse local.local :/
+                    state.user_location_type = local.tipo;
+                    state.user_location_category = app.utils.get_category_from_data(local, data);
+
 
                 }
 
