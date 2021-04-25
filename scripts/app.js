@@ -36,8 +36,8 @@ const app = {
 
         geojsons : {
 
-            provinces : '../data/maps/arg.json',
-            departments : '../data/maps/arg_dept.json',
+            provincia : '../data/maps/arg.json',
+            cidade : '../data/maps/arg_dept.json',
             mask : '../data/maps/arg_mask.json'
 
         },
@@ -69,8 +69,8 @@ const app = {
 
     data : {
 
-        provinces : null,
-        departaments : null,
+        provincia : null,
+        cidade : null,
         mask : null,
         fopea_data : null
 
@@ -84,9 +84,9 @@ const app = {
 
             Promise.all([
 
-                fetch(app.params.geojsons.departments, {mode: 'cors'}).then( response => response.json()),
+                fetch(app.params.geojsons.cidade, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
-                fetch(app.params.geojsons.provinces, {mode: 'cors'}).then( response => response.json()),
+                fetch(app.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.fopea_data, {mode: 'cors'}).then( response => response.json())
         
             ])
@@ -188,19 +188,19 @@ const app = {
 
     map : {
 
-        departments : {
+        cidade : {
 
             initialize : function() {
 
-                app.map_obj.addSource('departments', {
+                app.map_obj.addSource('cidade', {
                     type: 'geojson',
-                    'data' : app.data.departments
+                    'data' : app.data.cidade
                 });
 
                 app.map_obj.addLayer({
-                    'id': 'departments',
+                    'id': 'cidade',
                     'type': 'fill',
-                    'source': 'departments',
+                    'source': 'cidade',
                     'layout': {},
                     'paint': {
                       'fill-color': 'transparent',
@@ -217,15 +217,15 @@ const app = {
 
             initialize : function() {
 
-                app.map_obj.addSource('provinces', {
+                app.map_obj.addSource('provincia', {
                     type: 'geojson',
-                    'data' : app.data.provinces
+                    'data' : app.data.provincia
                 });
 
                 app.map_obj.addLayer({
-                    'id': 'provinces',
+                    'id': 'provincia',
                     'type': 'line',
-                    'source': 'provinces',
+                    'source': 'provincia',
                     'layout': {},
                     'paint': {
                       'line-width': 0,
@@ -244,7 +244,7 @@ const app = {
                 app.map_obj.addLayer({
                     'id': 'fog_of_war',
                     'type': 'fill',
-                    'source': 'provinces',
+                    'source': 'provincia',
                     'paint': {
                       'fill-color': 'ghostwhite',
                       'fill-opacity': 0,
@@ -339,7 +339,7 @@ const app = {
 
             console.log(type, location);
 
-            // type provinces, departments
+            // type provincia, cidade
 
             let locations = app.map_obj.querySourceFeatures(type, {
                 sourceLayer: type});
@@ -435,13 +435,27 @@ const app = {
 
             'abertura' : function() {
 
-                app.map_obj.setPaintProperty('departments', 'fill-pattern', null);
-                app.map_obj.setPaintProperty('departments', 'fill-color', ['get', 'color']);
-                app.map_obj.setPaintProperty('departments', 'fill-outline-color', 'ghostwhite');
-                app.map_obj.setPaintProperty('departments', 'fill-opacity', .5);
+                app.map_obj.setPaintProperty('cidade', 'fill-pattern', null);
+                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
+                app.map_obj.setPaintProperty('cidade', 'fill-outline-color', 'ghostwhite');
+                app.map_obj.setPaintProperty('cidade', 'fill-opacity', .5);
                 app.map.set_initial_view();
 
                 app.interactions.story.toggle_visibility("dashboard_button");
+
+            },
+
+            'pesquisa' : function() {
+
+                console.log('Pesquisando...');
+
+            },
+
+            'location-card' : function() {
+
+                app.map.highlight_feature(
+                    app.vis.location_card.state.user_location_type, 
+                    app.vis.location_card.state.user_location_name);
 
             },
 
@@ -449,10 +463,10 @@ const app = {
 
                 app.map.fit_Argentina();
 
-                app.map_obj.setPaintProperty('departments', 'fill-pattern', ['get', 'tipo']);
-                app.map_obj.setPaintProperty('departments', 'fill-opacity', 1);
+                app.map_obj.setPaintProperty('cidade', 'fill-pattern', ['get', 'tipo']);
+                app.map_obj.setPaintProperty('cidade', 'fill-opacity', 1);
                 app.map.fog_of_war.toggle('')
-                app.map_obj.setPaintProperty('provinces', 'line-width', 0);
+                app.map_obj.setPaintProperty('provincia', 'line-width', 0);
 
                 app.interactions.story.toggle_visibility("dashboard_button");
 
@@ -460,8 +474,8 @@ const app = {
 
             'destaque' : function() {
 
-                app.map_obj.setPaintProperty('provinces', 'line-width', 5);
-                app.map.highlight_feature('provinces', 'Salta');
+                app.map_obj.setPaintProperty('provincia', 'line-width', 5);
+                app.map.highlight_feature('provincia', 'Salta');
                 app.map.fog_of_war.toggle('Salta')
 
             }
@@ -594,13 +608,13 @@ const app = {
                     
                     // if (local.type == "cidade") {
 
-                    //     type = 'departments';
+                    //     type = 'cidade';
 
                     // } else {
 
                     //     if (local.type == "provincia") {
                             
-                    //         type = 'provinces';
+                    //         type = 'provincia';
 
                     //     }
 
@@ -783,13 +797,13 @@ const app = {
 
             console.log(data);
 
-            app.data.departments = data[0];
+            app.data.cidade = data[0];
             app.data.mask = data[1];
-            app.data.provinces = data[2];
+            app.data.provincia = data[2];
             app.data.fopea_data = data[3];
 
-            // pre-process departments data
-            app.data.departments.features.forEach(el => {
+            // pre-process cidade data
+            app.data.cidade.features.forEach(el => {
 
                 const types = Object.keys(app.params.colors);
 
@@ -819,7 +833,7 @@ const app = {
 
             app.map_obj.on('load', function() {
 
-                app.map.departments.initialize();
+                app.map.cidade.initialize();
                 app.map.province.initialize();
                 app.map.world_mask.initialize();
                 app.map.fog_of_war.initialize(); 
