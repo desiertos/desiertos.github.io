@@ -180,196 +180,196 @@ const app = {
 
             return location_category;
 
-        },
+        }
 
-        map : {
+    },
 
-            departments : {
+    map : {
 
-                initialize : function() {
+        departments : {
 
-                    app.map_obj.addSource('departments', {
-                        type: 'geojson',
-                        'data' : app.data.departments
-                    });
+            initialize : function() {
 
-                    app.map_obj.addLayer({
-                        'id': 'departments',
-                        'type': 'fill',
-                        'source': 'departments',
-                        'layout': {},
-                        'paint': {
-                          'fill-color': 'transparent',
-                          'fill-opacity': 0.5,
-                          'fill-outline-color': 'ghostwhite'
-                        }
-                    }, 'road-label'); // puts behind road-label
+                app.map_obj.addSource('departments', {
+                    type: 'geojson',
+                    'data' : app.data.departments
+                });
 
-                }
-
-            },
-
-            province : {
-
-                initialize : function() {
-
-                    app.map_obj.addSource('provinces', {
-                        type: 'geojson',
-                        'data' : app.data.provinces
-                    });
-
-                    app.map_obj.addLayer({
-                        'id': 'provinces',
-                        'type': 'line',
-                        'source': 'provinces',
-                        'layout': {},
-                        'paint': {
-                          'line-width': 0,
-                          'line-color': 'black'
-                        }
-                    }, 'road-label'); // puts behind road-label
-
-                }
-
-            },
-
-            fog_of_war : {
-
-                initialize : function() {
-
-                    app.map_obj.addLayer({
-                        'id': 'fog_of_war',
-                        'type': 'fill',
-                        'source': 'provinces',
-                        'paint': {
-                          'fill-color': 'ghostwhite',
-                          'fill-opacity': 0,
-                          'fill-outline-color': '#555'
-                        },
-                        'filter': ['!=', 'province', '']
-                    }); // puts behind road-label
-
-                },
-
-                toggle : function(department) {
-
-                    let opacity = 0;
-
-                    if (department != '') {
-
-                        opacity = 1;
-
-                        app.map_obj.setFilter(
-                            'fog_of_war', [
-                                '!=',
-                                ['get', 'nam'],
-                                department
-                            ]);
-
-
+                app.map_obj.addLayer({
+                    'id': 'departments',
+                    'type': 'fill',
+                    'source': 'departments',
+                    'layout': {},
+                    'paint': {
+                      'fill-color': 'transparent',
+                      'fill-opacity': 0.5,
+                      'fill-outline-color': 'ghostwhite'
                     }
-
-                    app.map_obj.setPaintProperty('fog_of_war', 'fill-opacity', opacity);
-
-
-
-                }
-
-            },
-
-            world_mask : {
-
-                initialize : function() {
-
-                    app.map_obj.addSource('mask', {
-                        type: 'geojson',
-                        'data' : app.data.mask
-                    });
-
-                    app.map_obj.addLayer({
-                        'id': 'mask',
-                        'type': 'fill',
-                        'source': 'mask',
-                        'layout': {},
-                        'paint': {'fill-color': 'ghostwhite'},
-                    });
-
-                }
-
-            },
-
-            fit_Argentina : function() {
-
-                app.map_obj.fitBounds([
-                    [-75, -21],
-                    [-53, -56]],
-
-                    { 
-                        pitch: 0,
-                        bearing : 0
-                    }
-                );
-
-            },
-
-            set_initial_view : function() {
-
-                app.map_obj.flyTo(
-                    {
-                        center: [
-                            app.params.mapbox.start.center.lng, 
-                            app.params.mapbox.start.center.lat
-                        ], 
-                        zoom: app.params.mapbox.start.zoom,
-                        bearing: 0,
-                        pitch: 0
-                    }
-                );
-
-                //app.map_obj.setCenter(app.params.mapbox.start.center);
-                //app.map_obj.setZoom(app.params.mapbox.start.zoom);
-
-            },
-
-            highlight_feature : function(province) {
-
-
-                let provinces = app.map_obj.querySourceFeatures('provinces', {
-                    sourceLayer: 'provinces'});
-
-                
-            
-                let desired_features = provinces.filter(d => d.properties.nam == province)[0];
-
-                // make them into a feature collection and then combine, in case the feature spans more than one tileset(it will appear more than one time in the filter results above);
-
-                //let collection = turf.featureCollection(desired_features);
-                //let combined = turf.combine(collection);
-
-            
-                // let bbox_highlighted = [
-                //     [highlighted.properties.xmin, highlighted.properties.ymin], 
-                //     [highlighted.properties.xmax, highlighted.properties.ymax]
-                // ];
-            
-                // or we could have used 
-                let bbox_highlighted = turf.bbox(desired_features);//combined);
-
-
-                
-                console.log(bbox_highlighted);
-            
-                app.map_obj.fitBounds(
-                    bbox_highlighted, 
-                    {
-                        linear : false, // false means the map transitions using map.flyTo()
-                        speed: 1, 
-                        padding: {top: 30, bottom: 30, left: 30, right: 30},
-                        pitch: 60,
-                        bearing: 30
-                    });
+                }, 'road-label'); // puts behind road-label
 
             }
+
+        },
+
+        province : {
+
+            initialize : function() {
+
+                app.map_obj.addSource('provinces', {
+                    type: 'geojson',
+                    'data' : app.data.provinces
+                });
+
+                app.map_obj.addLayer({
+                    'id': 'provinces',
+                    'type': 'line',
+                    'source': 'provinces',
+                    'layout': {},
+                    'paint': {
+                      'line-width': 0,
+                      'line-color': 'black'
+                    }
+                }, 'road-label'); // puts behind road-label
+
+            }
+
+        },
+
+        fog_of_war : {
+
+            initialize : function() {
+
+                app.map_obj.addLayer({
+                    'id': 'fog_of_war',
+                    'type': 'fill',
+                    'source': 'provinces',
+                    'paint': {
+                      'fill-color': 'ghostwhite',
+                      'fill-opacity': 0,
+                      'fill-outline-color': '#555'
+                    },
+                    'filter': ['!=', 'province', '']
+                }); // puts behind road-label
+
+            },
+
+            toggle : function(department) {
+
+                let opacity = 0;
+
+                if (department != '') {
+
+                    opacity = 1;
+
+                    app.map_obj.setFilter(
+                        'fog_of_war', [
+                            '!=',
+                            ['get', 'nam'],
+                            department
+                        ]);
+
+
+                }
+
+                app.map_obj.setPaintProperty('fog_of_war', 'fill-opacity', opacity);
+
+
+
+            }
+
+        },
+
+        world_mask : {
+
+            initialize : function() {
+
+                app.map_obj.addSource('mask', {
+                    type: 'geojson',
+                    'data' : app.data.mask
+                });
+
+                app.map_obj.addLayer({
+                    'id': 'mask',
+                    'type': 'fill',
+                    'source': 'mask',
+                    'layout': {},
+                    'paint': {'fill-color': 'ghostwhite'},
+                });
+
+            }
+
+        },
+
+        fit_Argentina : function() {
+
+            app.map_obj.fitBounds([
+                [-75, -21],
+                [-53, -56]],
+
+                { 
+                    pitch: 0,
+                    bearing : 0
+                }
+            );
+
+        },
+
+        set_initial_view : function() {
+
+            app.map_obj.flyTo(
+                {
+                    center: [
+                        app.params.mapbox.start.center.lng, 
+                        app.params.mapbox.start.center.lat
+                    ], 
+                    zoom: app.params.mapbox.start.zoom,
+                    bearing: 0,
+                    pitch: 0
+                }
+            );
+
+            //app.map_obj.setCenter(app.params.mapbox.start.center);
+            //app.map_obj.setZoom(app.params.mapbox.start.zoom);
+
+        },
+
+        highlight_feature : function(province) {
+
+
+            let provinces = app.map_obj.querySourceFeatures('provinces', {
+                sourceLayer: 'provinces'});
+
+            
+        
+            let desired_features = provinces.filter(d => d.properties.nam == province)[0];
+
+            // make them into a feature collection and then combine, in case the feature spans more than one tileset(it will appear more than one time in the filter results above);
+
+            //let collection = turf.featureCollection(desired_features);
+            //let combined = turf.combine(collection);
+
+        
+            // let bbox_highlighted = [
+            //     [highlighted.properties.xmin, highlighted.properties.ymin], 
+            //     [highlighted.properties.xmax, highlighted.properties.ymax]
+            // ];
+        
+            // or we could have used 
+            let bbox_highlighted = turf.bbox(desired_features);//combined);
+
+
+            
+            console.log(bbox_highlighted);
+        
+            app.map_obj.fitBounds(
+                bbox_highlighted, 
+                {
+                    linear : false, // false means the map transitions using map.flyTo()
+                    speed: 1, 
+                    padding: {top: 30, bottom: 30, left: 30, right: 30},
+                    pitch: 60,
+                    bearing: 30
+                });
 
         }
 
@@ -434,7 +434,7 @@ const app = {
                 app.map_obj.setPaintProperty('departments', 'fill-color', ['get', 'color']);
                 app.map_obj.setPaintProperty('departments', 'fill-outline-color', 'ghostwhite');
                 app.map_obj.setPaintProperty('departments', 'fill-opacity', .5);
-                app.utils.map.set_initial_view();
+                app.map.set_initial_view();
 
                 app.interactions.story.toggle_visibility("dashboard_button");
 
@@ -442,11 +442,11 @@ const app = {
 
             'segundo' : function() {
 
-                app.utils.map.fit_Argentina();
+                app.map.fit_Argentina();
 
                 app.map_obj.setPaintProperty('departments', 'fill-pattern', ['get', 'tipo']);
                 app.map_obj.setPaintProperty('departments', 'fill-opacity', 1);
-                app.utils.map.fog_of_war.toggle('')
+                app.map.fog_of_war.toggle('')
                 app.map_obj.setPaintProperty('provinces', 'line-width', 0);
 
                 app.interactions.story.toggle_visibility("dashboard_button");
@@ -456,8 +456,8 @@ const app = {
             'destaque' : function() {
 
                 app.map_obj.setPaintProperty('provinces', 'line-width', 5);
-                app.utils.map.highlight_feature('Salta');
-                app.utils.map.fog_of_war.toggle('Salta')
+                app.map.highlight_feature('Salta');
+                app.map.fog_of_war.toggle('Salta')
 
             }
 
@@ -736,13 +736,13 @@ const app = {
 
             app.map_obj.on('load', function() {
 
-                app.utils.map.departments.initialize();
-                app.utils.map.province.initialize();
-                app.utils.map.world_mask.initialize();
-                app.utils.map.fog_of_war.initialize(); 
+                app.map.departments.initialize();
+                app.map.province.initialize();
+                app.map.world_mask.initialize();
+                app.map.fog_of_war.initialize(); 
 
                 //fit map to continental Argentina
-                app.utils.map.fit_Argentina();
+                app.map.fit_Argentina();
 
                 // inicializa o scroller
                 app.scroller.config();
