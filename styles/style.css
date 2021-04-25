@@ -19,6 +19,9 @@
     --header-height: 2.5rem;
 
     --emoji-bosque: '🌳 ';
+    --emoji-semibosque: '🌲';
+    --emoji-desierto: '🏜';
+    --emoji-semidesierto: '⛰';
 
 }
 
@@ -365,6 +368,12 @@ input#location-search {
 
 }
 
+.card-text {
+
+    font-family: var(--font-title);
+
+}
+
 [data-category]::before {
 
     padding-right: 1rem;
@@ -379,16 +388,15 @@ input#location-search {
 
 }
 
-
 [data-category='bosque']::before, [data-category-highlight='bosque']::before {
 
     content: var(--emoji-bosque);
 
 }
 
-[data-category='bosque']::after {
+[data-category-highlight='bosque'] {
 
-    content: 'bosque';
+    color : var(--color-bosque)
 
 }
 
@@ -400,18 +408,59 @@ input#location-search {
 
 }
 
-
 [data-category='semibosque']::before, [data-category-highlight='semibosque']::before {
 
     content: var(--emoji-semibosque);
 
 }
 
-[data-category='semibosque']::after {
+[data-category-highlight='semibosque'] {
 
-    content: 'semibosque';
+    color : var(--color-semibosque)
 
 }
+
+/* semidesierto */
+
+[data-category='semidesierto'] {
+
+    background-color: var(--color-semidesierto);
+
+}
+
+[data-category='semidesierto']::before, [data-category-highlight='semidesierto']::before {
+
+    content: var(--emoji-semidesierto);
+
+}
+
+[data-category-highlight='semidesierto'] {
+
+    color : var(--color-semidesierto)
+
+}
+
+/* desierto */
+
+[data-category='desierto'] {
+
+    background-color: var(--color-desierto);
+
+}
+
+[data-category='desierto']::before, [data-category-highlight='desierto']::before {
+
+    content: var(--emoji-desierto);
+
+}
+
+[data-category-highlight='desierto'] {
+
+    color : var(--color-desierto)
+
+}
+
+/*
 
 
 
@@ -426,6 +475,8 @@ input#location-search {
     content: 'Departamiento / Municipio';
 
 }
+
+*/
 
 
 @media screen and (max-width: 620px) {

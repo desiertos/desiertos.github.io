@@ -54,7 +54,7 @@
                     </h1>
 
                     <p>
-                        No estamos hablando de vegetación y clima, sino de acceso a la información. Las regiones donde hay un periodismo profesional activo e independiente son como <span class="highlight" data-category-highlight="bosque">bosques</span>, donde abunda la vida democrática. Las regiones que no tienen tanta suerte son como 🏜️ <span class="highlight" data-category-highlight="desiertos">desiertos</span>, donde es mucho más difícil que algo así prospere.
+                        No estamos hablando de vegetación y clima, sino de acceso a la información. Las regiones donde hay un periodismo profesional activo e independiente son como <span data-category-highlight="bosque"> bosques</span>, donde abunda la vida democrática. Las regiones que no tienen tanta suerte son como  <span data-category-highlight="desierto"> desiertos</span>, donde es mucho más difícil que algo así prospere.
                     </p>
 
                     <a href="#step-search" class="button-go-on">Continue</a>
@@ -91,38 +91,33 @@
                 <div class="story-step-inner">
 
                     <h2>
-                        <span class="kicker" data-content="Provincia | Departamento"></span>
-                        <span data-content="Place name"></span>
+                        <span class="kicker js--location-type" data-content="Provincia | Departamento"></span>
+                        <span class="js--location-name" data-content="Place name"></span>
                     </h2>
 
-                    <p data-category="bosque"></p>
+                    <p class="js--location-category" data-category="bosque"></p>
 
-                    <p class="js--location-category-description">Estás en un 🌳 bosque. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.</p>
+                    <p class="js--location-category-description card-text">Estás en un 🌳 bosque. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.</p>
 
                 </div>
 
     
             </div>
 
-            <div class="story-step" data-step="destaque">
+            <div class="story-step" data-step="segundo">
+           
 
-                <h1>Salta</h1>
+                <div class="story-step-inner">
 
-                <p>
-                    Pistol shots ring out in the barroom night
-                    Enter Patty Valentine from the upper hall
-                    She sees a bartender in a pool of blood
-                    Cries out my God, they killed them all
-                    Here comes the story of the Hurricane
-                    The man the authorities came to blame
-                    For somethin' that he never done
-                    Put in a prison cell, but one time he could-a been
-                    The champion of the world
-                </p>
+                    <p class="card-text">'Además de regiones como la tuya, que es un <span class="js--location-category" data-category-highlight="bosque">bosque</span>, también hay ciudades que se clasifican como <span class="js--remaining-category1" data-category-highlight="semibosque"></span>, <span class="js--remaining-category2" data-category-highlight="semidesierto"></span> y <span class="js--remaining-category3" data-category-highlight="desierto"></span>.'</p>
+
+                </div>
+
     
             </div>
 
         </div>
+
 
     </div>
     <script src='https://unpkg.com/@turf/turf@6.3.0/turf.min.js'></script>

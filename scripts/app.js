@@ -564,7 +564,60 @@ const app = {
 
         location_card : {
 
-            
+            state : {
+
+                user_location : null,
+                user_location_name : null,
+                user_location_type : null,
+                user_location_category : null,
+                remaining_categories : null,
+
+                set : function() {
+
+                }
+
+            },
+
+            available_categories : ['bosque', 'semibosque', 'semidesierto', 'desierto'],
+
+            refs : {
+
+                name : 'js--location-name',
+                type : 'js--location-type',
+                category : 'js--location-category',
+                category_description : 'js--location-category-description',
+
+            },
+
+            texts : {
+
+                bosque : {
+                    
+                    first : 'Estás en un <span data-category-highlight="bosque">bosque</span>. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.'
+
+                },
+
+                semibosque : {
+                    
+                    first : 'Estás en un <span data-category-highlight="semibosque">semibosque</span>. Esto significa que su ciudad tiene un buen acceso al periodismo profesional, pero con algunos problemas graves. Si bien es posible obtener información a través de los periódicos locales, existen fallas en la cobertura que pueden dañar la calidad de la vida pública.'
+
+                },
+
+ 
+                semidesierto : {
+                    
+                    first : 'Estás en un <span data-category-highlight="semidesierto">semidesierto</span>. Esto significa que su ciudad tiene serios problemas para acceder a un periodismo de calidad, aunque la prensa profesional esté presente. Esto causa problemas considerables en la calidad de la vida pública.'
+
+                },
+
+                desierto : {
+                    
+                    first : 'Estás en un <span data-category-highlight="desierto">desierto</span>. Esto significa que, en la práctica, casi no hay periodismo profesional de calidad en tu ciudad. Esto afecta gravemente a la calidad de la vida pública.'
+
+                }
+
+
+            }
 
         }
 
