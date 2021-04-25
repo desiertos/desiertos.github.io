@@ -13,6 +13,8 @@ const app = {
 
     params : {
 
+        categories : ['bosque', 'semibosque', 'semidesierto', 'desierto'],
+
         mapbox : {
 
             token : 'pk.eyJ1IjoidGlhZ29tYnAiLCJhIjoiY2thdjJmajYzMHR1YzJ5b2huM2pscjdreCJ9.oT7nAiasQnIMjhUB-VFvmw',
@@ -333,15 +335,18 @@ const app = {
 
         },
 
-        highlight_feature : function(province) {
+        highlight_feature : function(type, location) {
 
+            console.log(type, location);
 
-            let provinces = app.map_obj.querySourceFeatures('provinces', {
-                sourceLayer: 'provinces'});
+            // type provinces, departments
+
+            let locations = app.map_obj.querySourceFeatures(type, {
+                sourceLayer: type});
 
             
         
-            let desired_features = provinces.filter(d => d.properties.nam == province)[0];
+            let desired_features = locations.filter(d => d.properties.nam == location)[0];
 
             // make them into a feature collection and then combine, in case the feature spans more than one tileset(it will appear more than one time in the filter results above);
 
@@ -456,7 +461,7 @@ const app = {
             'destaque' : function() {
 
                 app.map_obj.setPaintProperty('provinces', 'line-width', 5);
-                app.map.highlight_feature('Salta');
+                app.map.highlight_feature('provinces', 'Salta');
                 app.map.fog_of_war.toggle('Salta')
 
             }
@@ -579,6 +584,30 @@ const app = {
 
                     app.vis.location_card.state.set(local, data);
 
+                    // populates fields
+
+                    app.vis.location_card.update_text_fields();
+
+                    //updates maps
+
+                    // let type; 
+                    
+                    // if (local.type == "cidade") {
+
+                    //     type = 'departments';
+
+                    // } else {
+
+                    //     if (local.type == "provincia") {
+                            
+                    //         type = 'provinces';
+
+                    //     }
+
+                    // }
+                    
+                    // app.map.highlight_feature(type = type, location = local.local);
+
                     // scrolls to card
 
                     const destination_step = document.querySelector(
@@ -628,21 +657,28 @@ const app = {
                     state.user_location = local.text;
                     state.user_location_name = local.local; //// mudar esse local.local :/
                     state.user_location_type = local.tipo;
-                    state.user_location_category = app.utils.get_category_from_data(local, data);
 
+                    const category = app.utils.get_category_from_data(local, data);
+
+                    state.user_location_category = category
+
+                    state.remaining_categories = app.params.categories.filter(d => d != category);
 
                 }
 
             },
 
-            available_categories : ['bosque', 'semibosque', 'semidesierto', 'desierto'],
-
             refs : {
 
-                name : 'js--location-name',
-                type : 'js--location-type',
-                category : 'js--location-category',
-                category_description : 'js--location-category-description',
+                name : '.js--location-name',
+                type : '.js--location-type',
+                category_description : '.js--location-category-description',
+                remaining_category1 : '.js--remaining-category1',
+                remaining_category2 : '.js--remaining-category2',
+                remaining_category3 : '.js--remaining-category3',
+                main_category : '.js--location-category-main',
+
+                category : '.js--location-category' // multiple
 
             },
 
@@ -673,6 +709,53 @@ const app = {
 
                 }
 
+            },
+
+            update_text_fields : function() {
+
+                const refs = app.vis.location_card.refs;
+                const state = app.vis.location_card.state;
+                const user_category = state.user_location_category;
+
+                // helper function
+
+                function populate_field(ref, origin_of_information, dataset = null) {
+
+                    const field = document.querySelector(refs[ref]);
+
+                    console.log(field, refs[ref], origin_of_information);
+
+                    field.innerHTML = origin_of_information;
+
+                    if (dataset) field.dataset[dataset] = origin_of_information;
+
+                }
+
+                // name
+
+                populate_field('name', state.user_location_name);
+
+                // type
+
+                populate_field('type', state.user_location_type);
+
+                // main category field
+
+                populate_field('main_category', user_category, dataset = 'category');
+
+                // description field
+
+                populate_field('category_description', app.vis.location_card.texts[user_category].first);
+
+                // category field in second page
+
+                populate_field('category', user_category, dataset = 'categoryHighlight');
+
+                // remaining categories fields
+
+                populate_field('remaining_category1', state.remaining_categories[0], dataset = 'categoryHighlight');
+                populate_field('remaining_category2', state.remaining_categories[1], dataset = 'categoryHighlight');
+                populate_field('remaining_category3', state.remaining_categories[2], dataset = 'categoryHighlight');
 
             }
 
