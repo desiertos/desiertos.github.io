@@ -26,6 +26,7 @@
 
 html {
 
+    scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
 
 }
@@ -281,6 +282,9 @@ input#location-search {
     flex-direction: column;
     justify-content: center;
 
+    scroll-snap-align: start;
+
+
 }
 
 .story-step-inner {
@@ -297,7 +301,7 @@ input#location-search {
 
 .retranca {
 
-    font-size: 3rem;
+    font-size: 2rem;
     margin-bottom: 1rem;
 
 }
