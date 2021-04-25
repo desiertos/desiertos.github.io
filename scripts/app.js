@@ -40,6 +40,8 @@ const app = {
 
         },
 
+        fopea_data : '../data/output.json',
+
         layers : {
 
         },
@@ -67,7 +69,8 @@ const app = {
 
         provinces : null,
         departaments : null,
-        mask : null
+        mask : null,
+        fopea_data : null
 
     },
 
@@ -101,8 +104,8 @@ const app = {
 
                 fetch(app.params.geojsons.departments, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
-
-                fetch(app.params.geojsons.provinces, {mode: 'cors'}).then( response => response.json())
+                fetch(app.params.geojsons.provinces, {mode: 'cors'}).then( response => response.json()),
+                fetch(app.params.fopea_data, {mode: 'cors'}).then( response => response.json())
         
             ])
               .then( data => app.ctrl.begin(data))
@@ -354,11 +357,7 @@ const app = {
 
             }
 
-
-
         }
-
-
 
     },
 
@@ -473,6 +472,7 @@ const app = {
             app.data.departments = data[0];
             app.data.mask = data[1];
             app.data.provinces = data[2];
+            app.data.fopea_data = data[3];
 
             // pre-process departments data
             app.data.departments.features.forEach(el => {
