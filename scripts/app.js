@@ -915,14 +915,14 @@ const app = {
 
             variables : {
 
-                cidade : [ 'popXmedios', 'popXperiodistas' ],
+                cidade : [ 'pobXmedios', 'pobXperiodistas' ],
 
-                provincia : [ 'popXmedios', 'popXperiodistas', 'cat_media', 'Impacto de la publicidad oficial'],
+                provincia : [ 'pobXmedios', 'pobXperiodistas', 'cat_media', 'Impacto de la publicidad oficial'],
 
                 names : {
 
-                    popXmedios : 'Poblatión x Medios',
-                    popXperiodistas : 'Poblatión x Periodistas',
+                    pobXmedios : 'Poblatión x Medios',
+                    pobXperiodistas : 'Poblatión x Periodistas',
                     cat_media : 'Categoria Promedia',
                     'Impacto de la publicidad oficial' : 'Impacto de la publicidad oficial'
 
@@ -1064,14 +1064,9 @@ const app = {
 
                         } else data = app.data.fopea_data.provincia;
 
-                        console.log(data);
-                        
-
-                        for (variable of variables) {
+                        variables.forEach(variable => {
 
                             console.log('circulos da variavel... ', variable);
-
-                            console.log(data[0][variable], data[0].variable, Object.keys(data[0]), variable);
 
                             app.vis.stripplot.sels.d3.svg
                               .selectAll("circle.vis-story-stripplot-marks[data-variable='" + variable + "']")
@@ -1081,16 +1076,14 @@ const app = {
                               .attr('data-variable', variable)
                               .attr('cx', function(d) {
 
-                                console.log(d, variable, d[variable], Object.keys(d).indexOf(variable));
-
-                                return app.vis.stripplot.scales.x[variable](d[variable])
-
-                              })
+                                console.log(d[variable], app.vis.stripplot.scales.x[variable](d[variable]))
+                                  
+                                return app.vis.stripplot.scales.x[variable](d[variable])})
                               .attr('cy', app.vis.stripplot.scales.y[variable])
                               .attr('radius', app.vis.stripplot.dimensions.dots_radius.other)
                               .attr('fill', ' blue');
 
-                        }
+                        })
 
 
 
