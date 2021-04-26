@@ -523,11 +523,39 @@ const app = {
 
             },
 
-            'destaque' : function() {
+            'remaining-category1' : function() {
 
-                app.map_obj.setPaintProperty('provincia', 'line-width', 5);
-                app.map.highlight_feature('provincia', 'Salta');
-                app.map.fog_of_war.toggle('Salta')
+                app.map.highlight_feature('cidade', app.vis.location_card.state.remaining_categories_locations[0]);
+
+                app.map.fog_of_war.toggle('cidade', app.vis.location_card.state.remaining_categories_locations[0]);
+
+            },
+
+            'remaining-category2' : function() {
+
+                app.map.highlight_feature('cidade', app.vis.location_card.state.remaining_categories_locations[1]);
+
+                app.map.fog_of_war.toggle('cidade', app.vis.location_card.state.remaining_categories_locations[1]);
+
+            },
+
+            'remaining-category3' : function() {
+
+                app.map.highlight_feature('cidade', app.vis.location_card.state.remaining_categories_locations[2]);
+
+                app.map.fog_of_war.toggle('cidade', app.vis.location_card.state.remaining_categories_locations[2]);
+
+                app.map_obj.setPaintProperty('cidade', 'line-width', 5);
+
+            },
+
+            'pernultimo' : function() {},
+
+            'fecho' : function() {
+
+                app.map.fit_Argentina();
+                //app.map.highlight_feature('provincia', 'Salta');
+                app.map.fog_of_war.toggle('')
 
             }
 
@@ -747,11 +775,14 @@ const app = {
                 remaining_category3 : '.js--remaining-category3',
                 main_category : '.js--location-category-main',
 
-                text_remaining_category1 : 'js--location-remaining-category1-text',
-                text_remaining_category2 : 'js--location-remaining-category2-text',
-                text_remaining_category3 : 'js--location-remaining-category3-text',
+                text_remaining_category1 : '.js--location-remaining-category1-text',
+                text_remaining_category2 : '.js--location-remaining-category2-text',
+                text_remaining_category3 : '.js--location-remaining-category3-text',
 
-                random_location_prefix : 'js--random-location-', // + 'bosque' etc.
+                random_location_bosque : '.js--random-location-bosque', 
+                random_location_semibosque : '.js--random-location-semibosque', 
+                random_location_semidesierto: '.js--random-location-semidesierto', 
+                random_location_desierto : '.js--random-location-desierto', 
 
                 category : '.js--location-category' // multiple
 
@@ -806,7 +837,7 @@ const app = {
 
                     const field = document.querySelector(refs[ref]);
 
-                    //console.log(field, refs[ref], origin_of_information);
+                    console.log(field, refs[ref], origin_of_information);
 
                     field.innerHTML = (ref == 'type' & origin_of_information == 'cidade') ?
                     ('departamento de ' + state.user_location_province) :
@@ -841,6 +872,44 @@ const app = {
                 populate_field('remaining_category1', state.remaining_categories[0], dataset = 'categoryHighlight');
                 populate_field('remaining_category2', state.remaining_categories[1], dataset = 'categoryHighlight');
                 populate_field('remaining_category3', state.remaining_categories[2], dataset = 'categoryHighlight');
+
+                let remain_cat1 = state.remaining_categories[0];
+
+                populate_field(
+                    'text_remaining_category1', 
+                    app.vis.location_card.texts[remain_cat1].second
+                    );
+
+                populate_field(
+                    'random_location_' + remain_cat1, 
+                    state.remaining_categories_locations[0]
+                    );
+
+
+                let remain_cat2 = state.remaining_categories[1];
+
+                populate_field(
+                    'text_remaining_category2', 
+                    app.vis.location_card.texts[remain_cat2].second
+                    );
+
+                populate_field(
+                    'random_location_' + remain_cat2, 
+                    state.remaining_categories_locations[1]
+                    );
+
+
+                let remain_cat3 = state.remaining_categories[2];
+
+                populate_field(
+                    'text_remaining_category3', 
+                    app.vis.location_card.texts[remain_cat3].second
+                    );
+
+                populate_field(
+                    'random_location_' + remain_cat3, 
+                    state.remaining_categories_locations[2]
+                    );
 
             }
 
