@@ -241,6 +241,28 @@ const app = {
                     }
                 }, 'road-label'); // puts behind road-label
 
+                app.map_obj.addLayer({
+                    'id': 'cidade-border',
+                    'type': 'line',
+                    'source': 'cidade',
+                    'layout': {},
+                    'paint': {
+                      'line-color': 'black',
+                      'line-width': 5
+                    },
+                    'filter': ['==', 'cidade', '']}); // puts behind road-label
+
+            },
+
+            toggle_highlight_border : function(cidade) {
+
+                app.map_obj.setFilter(
+                    'cidade-border', [
+                        '==',
+                        ['get', 'nam'],
+                        cidade
+                ]);
+
             }
 
         },
@@ -263,7 +285,29 @@ const app = {
                       'line-width': 0,
                       'line-color': 'black'
                     }
-                }, 'road-label'); // puts behind road-label
+                }); 
+
+                app.map_obj.addLayer({
+                    'id': 'provincia-border',
+                    'type': 'line',
+                    'source': 'provincia',
+                    'layout': {},
+                    'paint': {
+                      'line-color': 'black',
+                      'line-width': 5
+                    },
+                    'filter': ['==', 'provincia', '']}); // puts behind road-label
+
+            },
+
+            toggle_highlight_border_provincia : function(provincia) {
+
+                app.map_obj.setFilter(
+                    'provincia-border', [
+                        '==',
+                        ['get', 'nam'],
+                        provincia
+                ]);
 
             }
 
@@ -318,8 +362,6 @@ const app = {
                 }
 
                 app.map_obj.setPaintProperty('fog_of_war_' + type, 'fill-opacity', opacity);
-
-
 
             }
 
@@ -379,18 +421,18 @@ const app = {
 
         },
 
-        highlight_feature : function(type, location) {
+        highlight_feature : function(type, location, pitch = 0, bearing = 0) {
 
             console.log(type, location);
 
             // type provincia, cidade
 
-            let locations = app.map_obj.querySourceFeatures(type, {
-                sourceLayer: type});
-
-            
+            //let locations = app.map_obj.querySourceFeatures(type, {
+            //    sourceLayer: type});
         
-            let desired_features = locations.filter(d => d.properties.nam == location)[0];
+            //let desired_features = locations.filter(d => d.properties.nam == location)[0];
+
+            //console.log(desired_features);
 
             // make them into a feature collection and then combine, in case the feature spans more than one tileset(it will appear more than one time in the filter results above);
 
@@ -404,9 +446,16 @@ const app = {
             // ];
         
             // or we could have used 
-            let bbox_highlighted = turf.bbox(desired_features);//combined);
+            //let bbox_highlighted = turf.bbox(desired_features);//combined);
 
+            const location_data = app.data.fopea_data[type].filter(d => d.local == location)[0];
 
+            console.log(location_data);
+
+            let bbox_highlighted = [
+                location_data.xmin, location_data.ymin,
+                location_data.xmax, location_data.ymax
+            ];  
             
             console.log(bbox_highlighted);
         
@@ -416,8 +465,8 @@ const app = {
                     linear : false, // false means the map transitions using map.flyTo()
                     speed: 1, 
                     padding: {top: 30, bottom: 30, left: 30, right: 30},
-                    pitch: 60,
-                    bearing: 30
+                    pitch: pitch,
+                    bearing: bearing
                 });
 
         }
@@ -449,6 +498,8 @@ const app = {
                 enter: function(el) {
 
                     const step = el.dataset.step;
+
+                    console.log("Renderizando step... ", step);
 
                     app.scroller.render[step]();
 
@@ -484,6 +535,7 @@ const app = {
                 app.map_obj.setPaintProperty('cidade', 'fill-outline-color', 'ghostwhite');
                 app.map_obj.setPaintProperty('cidade', 'fill-opacity', .5);
                 app.map.set_initial_view();
+                app.map.cidade.toggle_highlight_border('');
 
                 //app.interactions.story.toggle_visibility("dashboard_button");
 
@@ -504,11 +556,15 @@ const app = {
                 const type = app.vis.location_card.state.user_location_type;
                 const location = app.vis.location_card.state.user_location_name
 
-                app.map.highlight_feature(type, location);
+                app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
+
+                app.map.cidade.toggle_highlight_border(location);
 
                 app.map.fog_of_war.toggle(type, location);
 
             },
+
+            'story-no-map-interactions' : function() {},
 
             'segundo' : function() {
 
@@ -516,46 +572,69 @@ const app = {
 
                 app.map_obj.setPaintProperty('cidade', 'fill-pattern', ['get', 'tipo']);
                 app.map_obj.setPaintProperty('cidade', 'fill-opacity', 1);
-                app.map.fog_of_war.toggle('')
-                app.map_obj.setPaintProperty('provincia', 'line-width', 0);
-
-                app.interactions.story.toggle_visibility("dashboard_button");
+                app.map.fog_of_war.toggle('provincia', '');
+                app.map.fog_of_war.toggle('cidade', '');
 
             },
 
             'remaining-category1' : function() {
 
-                app.map.highlight_feature('cidade', app.vis.location_card.state.remaining_categories_locations[0]);
+                const location = app.vis.location_card.state.remaining_categories_locations[0];
 
-                app.map.fog_of_war.toggle('cidade', app.vis.location_card.state.remaining_categories_locations[0]);
+                app.map.highlight_feature('cidade', location);
+
+                app.map.fog_of_war.toggle('cidade', location);
+
+                app.map.cidade.toggle_highlight_border(location);
 
             },
 
             'remaining-category2' : function() {
 
-                app.map.highlight_feature('cidade', app.vis.location_card.state.remaining_categories_locations[1]);
+                const location = app.vis.location_card.state.remaining_categories_locations[1];
 
-                app.map.fog_of_war.toggle('cidade', app.vis.location_card.state.remaining_categories_locations[1]);
+                app.map.highlight_feature('cidade', location);
+
+                app.map.fog_of_war.toggle('cidade', location);
+
+                app.map.cidade.toggle_highlight_border(location);
 
             },
 
             'remaining-category3' : function() {
 
-                app.map.highlight_feature('cidade', app.vis.location_card.state.remaining_categories_locations[2]);
+                const location = app.vis.location_card.state.remaining_categories_locations[2];
 
-                app.map.fog_of_war.toggle('cidade', app.vis.location_card.state.remaining_categories_locations[2]);
+                app.map.highlight_feature('cidade', location);
 
-                app.map_obj.setPaintProperty('cidade', 'line-width', 5);
+                app.map.fog_of_war.toggle('cidade', location);
+
+                app.map.cidade.toggle_highlight_border(location);
 
             },
 
-            'pernultimo' : function() {},
+            'blabla' : function() {
+
+                app.map.cidade.toggle_highlight_border('');
+
+                app.map.fit_Argentina();
+
+            },
+
+            'penultimo' : function() {
+
+                app.map.cidade.toggle_highlight_border('');
+                app.map.fog_of_war.toggle('cidade', '');
+                app.map.fit_Argentina();
+
+
+            },
 
             'fecho' : function() {
 
-                app.map.fit_Argentina();
+                //app.map.fit_Argentina();
                 //app.map.highlight_feature('provincia', 'Salta');
-                app.map.fog_of_war.toggle('')
+
 
             }
 
@@ -1293,8 +1372,11 @@ const app = {
 
                 const types = Object.keys(app.params.colors);
 
+                const categoria = el.properties.categoria;
+
                 const id = el.properties.gid;
                 const indice = ( (id - 1) % 4 );
+
 
                 const tipo = app.params.patterns.names[indice];
                 const type = types[indice];
@@ -1302,6 +1384,9 @@ const app = {
 
                 el.properties["tipo"] = tipo;
                 el.properties["color"] = color;
+                el.properties['color_real'] = categoria ?
+                  app.params.colors[app.params.categories[+categoria-1]] :
+                  'lightgray';
 
             })
 
