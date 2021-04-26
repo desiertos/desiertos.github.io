@@ -184,6 +184,38 @@ const app = {
 
         },
 
+        generate_random_remaining_locations : function(remaining_categories) {
+
+            const data = app.data.fopea_data.cidade;
+            const output = [];
+
+            remaining_categories.forEach(category => {
+
+                const cat_numeric = '' + (app.params.categories.indexOf(category) + 1);
+
+                console.log(cat_numeric);
+
+                const available_cities = data
+                  .filter(d => ['San Luis', 'Salta'].includes(d.provincia))
+                  .filter(d => d.categoria == cat_numeric)
+                  .map(d => d.local);
+
+                const amount_available_cities = available_cities.length;
+
+                console.log(available_cities);
+
+                // get a random city
+
+                const index_selected = Math.floor(Math.random() * amount_available_cities);
+
+                output.push(available_cities[index_selected]);
+
+            })
+
+            return output;
+
+        }
+
     },
 
     map : {
@@ -680,6 +712,7 @@ const app = {
                 user_location_category : null,
                 user_location_province : null,
                 remaining_categories : null,
+                remaining_categories_locations : null,
 
                 set : function(local, data) {
 
@@ -694,7 +727,11 @@ const app = {
 
                     state.user_location_category = category
 
-                    state.remaining_categories = app.params.categories.filter(d => d != category);
+                    const remaining_categories = app.params.categories.filter(d => d != category);
+
+                    state.remaining_categories = remaining_categories;
+
+                    state.remaining_categories_locations = app.utils.generate_random_remaining_locations(remaining_categories);
 
                 }
 
@@ -710,6 +747,12 @@ const app = {
                 remaining_category3 : '.js--remaining-category3',
                 main_category : '.js--location-category-main',
 
+                text_remaining_category1 : 'js--location-remaining-category1-text',
+                text_remaining_category2 : 'js--location-remaining-category2-text',
+                text_remaining_category3 : 'js--location-remaining-category3-text',
+
+                random_location_prefix : 'js--random-location-', // + 'bosque' etc.
+
                 category : '.js--location-category' // multiple
 
             },
@@ -718,26 +761,34 @@ const app = {
 
                 bosque : {
                     
-                    first : 'Estás en un <span data-category-highlight="bosque">bosque</span>. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.'
+                    first : 'Estás en un <span data-category-highlight="bosque">bosque</span>. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.',
+
+                    second: 'Un <span data-category-highlight="bosque">bosque</span> es una región bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales. La ciudad de <span class="js--random-location-bosque"></span> es un ejemplo de este tipo de región.'
 
                 },
 
                 semibosque : {
                     
-                    first : 'Estás en un <span data-category-highlight="semibosque">semibosque</span>. Esto significa que su ciudad tiene un buen acceso al periodismo profesional, pero con algunos problemas graves. Si bien es posible obtener información a través de los periódicos locales, existen fallas en la cobertura que pueden dañar la calidad de la vida pública.'
+                    first : 'Estás en un <span data-category-highlight="semibosque">semibosque</span>. Esto significa que su ciudad tiene un buen acceso al periodismo profesional, pero con algunos problemas graves. Si bien es posible obtener información a través de los periódicos locales, existen fallas en la cobertura que pueden dañar la calidad de la vida pública.',
+
+                    second : 'Un <span data-category-highlight="semibosque">semibosque</span> es una región que tiene acceso al periodismo profesional, pero con algunos problemas serios. Si bien es posible obtener información a través de los periódicos locales, existen fallas en la cobertura. La ciudad de <span class="js--random-location-semibosque"></span> es un ejemplo de este tipo de región.'
 
                 },
 
  
                 semidesierto : {
                     
-                    first : 'Estás en un <span data-category-highlight="semidesierto">semidesierto</span>. Esto significa que su ciudad tiene serios problemas para acceder a un periodismo de calidad, aunque la prensa profesional esté presente. Esto causa problemas considerables en la calidad de la vida pública.'
+                    first : 'Estás en un <span data-category-highlight="semidesierto">semidesierto</span>. Esto significa que su ciudad tiene serios problemas para acceder a un periodismo de calidad, aunque la prensa profesional esté presente. Esto causa problemas considerables en la calidad de la vida pública.',
+
+                    second : 'Un <span data-category-highlight="semidesierto">semidesierto</span> es una región que tiene serios problemas para acceder a un periodismo de calidad, a pesar de que la prensa profesional está presente, como en la ciudad de <span class="js--random-location-semidesierto></span>.'
 
                 },
 
                 desierto : {
                     
-                    first : 'Estás en un <span data-category-highlight="desierto">desierto</span>. Esto significa que, en la práctica, casi no hay periodismo profesional de calidad en tu ciudad. Esto afecta gravemente a la calidad de la vida pública.'
+                    first : 'Estás en un <span data-category-highlight="desierto">desierto</span>. Esto significa que, en la práctica, casi no hay periodismo profesional de calidad en tu ciudad. Esto afecta gravemente a la calidad de la vida pública.',
+
+                    second : 'En un <span data-category-highlight="desierto">desierto</span>, en la práctica, casi no hay periodismo profesional de calidad. Este es el caso de <span class="js--random-location-desierto"></span>.'
 
                 }
 
@@ -1105,7 +1156,7 @@ const app = {
                               .attr('r', d => d.local == app.vis.location_card.state.user_location_name ? app.vis.stripplot.dimensions.dots_radius.highlight : app.vis.stripplot.dimensions.dots_radius.other)
                               .attr('fill', function(d) {
 
-                                console.log(d.local, d.categoria);
+                                //console.log(d.local, d.categoria);
 
                                 const cat = Math.ceil(+d.categoria);
 
