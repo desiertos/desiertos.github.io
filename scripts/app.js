@@ -13,7 +13,7 @@ const app = {
 
     params : {
 
-        categories : ['bosque', 'semibosque', 'semidesierto', 'desierto'],
+        categories : ['desierto', 'semidesierto', 'semibosque', 'bosque'],
 
         mapbox : {
 
@@ -174,15 +174,15 @@ const app = {
 
             } else {
 
-                const categories = ['desierto', 'semidesierto', 'semibosque', 'bosque'];
+                const categories = app.params.categories;
 
-                location_category = categories[ data['categoria'] ];
+                location_category = categories[ data['categoria'] - 1 ];
                 
             }
 
             return location_category;
 
-        }
+        },
 
     },
 
@@ -850,7 +850,7 @@ const app = {
 
                 dots_radius : {
 
-                    highlight: 10,
+                    highlight: 14,
                     other : 4
 
                 },
@@ -1100,7 +1100,17 @@ const app = {
                               .attr('cx', d => app.vis.stripplot.scales.x[variable](d[variable]))
                               .attr('cy', app.vis.stripplot.scales.y[variable])
                               .attr('r', d => d.local == app.vis.location_card.state.user_location_name ? app.vis.stripplot.dimensions.dots_radius.highlight : app.vis.stripplot.dimensions.dots_radius.other)
-                              .attr('fill', ' blue');
+                              .attr('fill', function(d) {
+
+                                console.log(d.local, d.categoria);
+
+                                const cat = Math.ceil(+d.categoria);
+
+                                const categoria = app.params.categories[cat-1]
+
+                                return app.params.colors[categoria];
+                                  
+                              });
 
                         })
 

@@ -530,6 +530,7 @@ line.vis-story-stripplot-axis {
 .marks-location-highlighted {
 
     opacity : 1;
+    stroke : black;
 
 }
 
