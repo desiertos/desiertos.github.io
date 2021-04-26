@@ -549,6 +549,7 @@ const app = {
                 app.map.fog_of_war.toggle('provincia', '');
                 app.map.fog_of_war.toggle('cidade', '');
                 app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
+                app.map.cidade.toggle_highlight_border('');
                 
             },
 
@@ -558,6 +559,8 @@ const app = {
                 const location = app.vis.location_card.state.user_location_name
 
                 app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
+
+                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color_real']);
 
                 app.map.cidade.toggle_highlight_border(location);
 
