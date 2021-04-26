@@ -9,6 +9,7 @@
 
     --title-color : #3a3a3a;
     --font-color : #212121; /*#4f4f4f;*/
+    --font-color20 : #21212120;
 
     --color-desierto: #E37E71;
     --color-semidesierto: #F4B180;
@@ -371,10 +372,20 @@ input#location-search {
 
 }
 
-.card-text {
+.story-step .card-text {
 
     font-family: var(--font-title);
+    font-size: 1rem;
 
+}
+
+.story-step p.card-only-text {
+
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-top: 1px solid var(--font-color20);
+    border-bottom: 1px solid var(--font-color20);
+    line-height: 1.5;
 }
 
 [data-category]::before {
