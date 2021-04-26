@@ -19,9 +19,9 @@
     --header-height: 2.5rem;
 
     --emoji-bosque: '🌳 ';
-    --emoji-semibosque: '🌲';
-    --emoji-desierto: '🏜';
-    --emoji-semidesierto: '⛰';
+    --emoji-semibosque: '🌲 ';
+    --emoji-desierto: '🏜 ';
+    --emoji-semidesierto: '⛰ ';
 
     --color-vis-variable-label : #636363;
     --color-vis-axis : #E5E5E5;
@@ -512,6 +512,24 @@ line.vis-story-stripplot-axis {
 
     stroke: var(--color-vis-axis);
     stroke-width: 1;
+
+}
+
+.vis-story-stripplot-marks {
+
+    opacity : .5;
+
+}
+
+.marks-na {
+
+    opacity : 0;
+
+}
+
+.marks-location-highlighted {
+
+    opacity : 1;
 
 }
 

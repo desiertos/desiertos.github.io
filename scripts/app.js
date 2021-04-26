@@ -850,7 +850,7 @@ const app = {
 
                 dots_radius : {
 
-                    highlight: 16,
+                    highlight: 10,
                     other : 4
 
                 },
@@ -1071,6 +1071,7 @@ const app = {
                     render : function(type) {
 
                         const variables = app.vis.stripplot.variables[type];
+
                         let data;
 
                         if (type == 'cidade') {
@@ -1092,11 +1093,13 @@ const app = {
                               .data(data)
                               .join('circle')
                               .classed('vis-story-stripplot-marks', true)
+                              .classed('marks-na', d => !app.vis.stripplot.scales.x[variable](d[variable])) // se der undefined vai dar true
+                              .classed('marks-location-highlighted', d => d.local == app.vis.location_card.state.user_location_name)
                               .attr('data-variable', variable)
                               .attr('data-location', d => d.local)
                               .attr('cx', d => app.vis.stripplot.scales.x[variable](d[variable]))
                               .attr('cy', app.vis.stripplot.scales.y[variable])
-                              .attr('r', app.vis.stripplot.dimensions.dots_radius.other)
+                              .attr('r', d => d.local == app.vis.location_card.state.user_location_name ? app.vis.stripplot.dimensions.dots_radius.highlight : app.vis.stripplot.dimensions.dots_radius.other)
                               .attr('fill', ' blue');
 
                         })
