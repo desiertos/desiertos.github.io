@@ -478,6 +478,20 @@ input#location-search {
 
 */
 
+/* vis */
+
+.vis-story-container {
+
+    width: 100%;
+
+}
+
+.vis-story-stripplot {
+
+    width: 100%;
+
+}
+
 
 @media screen and (max-width: 620px) {
 

@@ -621,6 +621,10 @@ const app = {
 
                     app.vis.location_card.update_text_fields();
 
+                    // with the fields updated, resize svg
+
+                    app.vis.stripplot.dimensions.set_size();
+
                     //updates maps
 
                     // let type; 
@@ -659,19 +663,6 @@ const app = {
     },
 
     vis : {
-
-        refs : {
-
-            svg : '',
-            container : ''
-        },
-    
-        sels : {
-    
-            d3 : {},
-            js : {}
-    
-        },
 
         location_card : {
 
@@ -791,6 +782,98 @@ const app = {
                 populate_field('remaining_category3', state.remaining_categories[2], dataset = 'categoryHighlight');
 
             }
+
+        },
+
+        stripplot : {
+
+            refs : {
+
+                svg : '.vis-story-stripplot',
+                container : '.vis-story-container'
+            },
+        
+            sels : {
+        
+                d3 : {},
+                js : {}
+        
+            },
+
+            dimensions : {
+
+                variable_label : {
+
+                    top : 10,
+                    height : 15,
+
+                },
+
+                location_label : {
+
+                    top : 10,
+                    height : 15
+
+                },
+
+                axis_line : {
+
+                    top : 20,
+                    width : 1,
+                    bottom : 20
+
+                },
+
+                dots_radius : {
+
+                    highlight: 16,
+                    other : 4
+
+                },
+
+                lateral_margins : 20,
+
+                set_size : function() {
+
+                    const svg = document.querySelector(app.vis.stripplot.refs.svg);
+
+                    const height_step = document
+                      .querySelector('[data-step="location-card"]')
+                      .getBoundingClientRect()
+                      .height;
+
+                    const height_inner_step = document
+                      .querySelector('[data-step="location-card"] .story-step-inner')
+                      .getBoundingClientRect()
+                      .height;
+
+                    const height_header = document
+                      .querySelector('header')
+                      .getBoundingClientRect()
+                      .height;
+
+                    const height_svg_initial = svg
+                      .getBoundingClientRect()
+                      .height;
+
+                    let height_svg_new = height_step - height_header - ( height_inner_step - height_svg_initial ) - 1.5*height_header; // usando height_header como margem;
+
+                    if (height_svg_new > 0) { 
+
+                        svg.style.height = height_svg_new ;
+
+                    }
+
+                }
+
+            },
+
+            variables : {
+
+                cidade : [ '' ]
+
+            }
+
 
         }
 
