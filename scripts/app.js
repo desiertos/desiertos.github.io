@@ -628,6 +628,7 @@ const app = {
                     app.vis.stripplot.scales.set(local.tipo);
                     app.vis.stripplot.components.labels.render(local.tipo);
                     app.vis.stripplot.components.lines.render(local.tipo);
+                    app.vis.stripplot.components.marks.render(local.tipo);
 
                     //updates maps
 
@@ -676,6 +677,7 @@ const app = {
                 user_location_name : null,
                 user_location_type : null,
                 user_location_category : null,
+                user_location_province : null,
                 remaining_categories : null,
 
                 set : function(local, data) {
@@ -685,6 +687,7 @@ const app = {
                     state.user_location = local.text;
                     state.user_location_name = local.local; //// mudar esse local.local :/
                     state.user_location_type = local.tipo;
+                    state.user_location_province = local.provincia;
 
                     const category = app.utils.get_category_from_data(local, data);
 
@@ -1041,6 +1044,61 @@ const app = {
                           .attr("y2", d => app.vis.stripplot.scales.y[d]);
 
                     }
+
+                },
+
+                marks : {
+
+                    render : function(type) {
+
+                        const variables = app.vis.stripplot.variables[type];
+                        let data;
+
+                        if (type == 'cidade') {
+
+                            const provincia = app.vis.location_card.state.user_location_province;
+
+                            // gets departments that belong to the current province
+
+                            data = app.data.fopea_data.cidade.filter(d => d.provincia == provincia);
+
+                        } else data = app.data.fopea_data.provincia;
+
+                        console.log(data);
+                        
+
+                        for (variable of variables) {
+
+                            console.log('circulos da variavel... ', variable);
+
+                            console.log(data[0][variable], data[0].variable, Object.keys(data[0]), variable);
+
+                            app.vis.stripplot.sels.d3.svg
+                              .selectAll("circle.vis-story-stripplot-marks[data-variable='" + variable + "']")
+                              .data(data)
+                              .join('circle')
+                              .classed('vis-story-stripplot-marks', true)
+                              .attr('data-variable', variable)
+                              .attr('cx', function(d) {
+
+                                console.log(d, variable, d[variable], Object.keys(d).indexOf(variable));
+
+                                return app.vis.stripplot.scales.x[variable](d[variable])
+
+                              })
+                              .attr('cy', app.vis.stripplot.scales.y[variable])
+                              .attr('radius', app.vis.stripplot.dimensions.dots_radius.other)
+                              .attr('fill', ' blue');
+
+                        }
+
+
+
+
+
+
+                    }
+
                 }
 
 
