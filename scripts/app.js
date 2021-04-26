@@ -811,7 +811,7 @@ const app = {
                     
                     first : 'Estás en un <span data-category-highlight="semidesierto">semidesierto</span>. Esto significa que su ciudad tiene serios problemas para acceder a un periodismo de calidad, aunque la prensa profesional esté presente. Esto causa problemas considerables en la calidad de la vida pública.',
 
-                    second : 'Un <span data-category-highlight="semidesierto">semidesierto</span> es una región que tiene serios problemas para acceder a un periodismo de calidad, a pesar de que la prensa profesional está presente, como en la ciudad de <span class="js--random-location-semidesierto></span>.'
+                    second : 'Un <span data-category-highlight="semidesierto">semidesierto</span> es una región que tiene serios problemas para acceder a un periodismo de calidad, a pesar de que la prensa profesional está presente, como en la ciudad de <span class="js--random-location-semidesierto"></span>.'
 
                 },
 
@@ -837,7 +837,7 @@ const app = {
 
                     const field = document.querySelector(refs[ref]);
 
-                    console.log(field, refs[ref], origin_of_information);
+                    console.log(ref, field, refs[ref], origin_of_information);
 
                     field.innerHTML = (ref == 'type' & origin_of_information == 'cidade') ?
                     ('departamento de ' + state.user_location_province) :
@@ -875,6 +875,8 @@ const app = {
 
                 let remain_cat1 = state.remaining_categories[0];
 
+                console.log('Remain cat1', remain_cat1);
+
                 populate_field(
                     'text_remaining_category1', 
                     app.vis.location_card.texts[remain_cat1].second
@@ -888,6 +890,8 @@ const app = {
 
                 let remain_cat2 = state.remaining_categories[1];
 
+                console.log('Remain cat2', remain_cat2);
+
                 populate_field(
                     'text_remaining_category2', 
                     app.vis.location_card.texts[remain_cat2].second
@@ -900,6 +904,8 @@ const app = {
 
 
                 let remain_cat3 = state.remaining_categories[2];
+
+                console.log('Remain cat3', remain_cat3);
 
                 populate_field(
                     'text_remaining_category3', 
