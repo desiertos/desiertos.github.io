@@ -23,6 +23,9 @@
     --emoji-desierto: '🏜';
     --emoji-semidesierto: '⛰';
 
+    --color-vis-variable-label : #636363;
+    --color-vis-axis : #E5E5E5;
+
 }
 
 * {
@@ -490,6 +493,25 @@ input#location-search {
 .vis-story-stripplot {
 
     width: 100%;
+
+}
+
+.vis-story-container .vis-story-stripplot-labels-variables {
+
+    position: absolute;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    line-height: 15px;
+    color : var(--color-vis-variable-label);
+
+}
+
+line.vis-story-stripplot-axis {
+
+    stroke: var(--color-vis-axis);
+    stroke-width: 1;
 
 }
 

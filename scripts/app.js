@@ -626,6 +626,8 @@ const app = {
                     app.vis.stripplot.dimensions.set_size();
                     app.vis.stripplot.scales.range.set();
                     app.vis.stripplot.scales.set(local.tipo);
+                    app.vis.stripplot.components.labels.render(local.tipo);
+                    app.vis.stripplot.components.lines.render(local.tipo);
 
                     //updates maps
 
@@ -792,12 +794,29 @@ const app = {
             refs : {
 
                 svg : '.vis-story-stripplot',
-                container : '.vis-story-container'
+                container : 'div.vis-story-container'
+
             },
         
             sels : {
         
-                d3 : {},
+                d3 : {
+
+                    svg : null,
+                    container : null,
+
+                    set : function() {
+
+                        Object.keys(app.vis.stripplot.refs).forEach(ref_name => {
+
+                            app.vis.stripplot.sels.d3[ref_name] = d3.select(app.vis.stripplot.refs[ref_name]);
+
+                        })
+
+                    }
+
+                },
+
                 js : {}
         
             },
@@ -895,7 +914,16 @@ const app = {
 
                 cidade : [ 'popXmedios', 'popXperiodistas' ],
 
-                provincia : [ 'popXmedios', 'popXperiodistas', 'cat_media', 'Impacto de la publicidad oficial']
+                provincia : [ 'popXmedios', 'popXperiodistas', 'cat_media', 'Impacto de la publicidad oficial'],
+
+                names : {
+
+                    popXmedios : 'Poblatión x Medios',
+                    popXperiodistas : 'Poblatión x Periodistas',
+                    cat_media : 'Categoria Promedia',
+                    'Impacto de la publicidad oficial' : 'Impacto de la publicidad oficial'
+
+                }
 
             },
 
@@ -971,6 +999,53 @@ const app = {
 
                 },
 
+            },
+
+            components : {
+
+                labels : {
+
+                    render : function(type) {
+
+                        const variables = app.vis.stripplot.variables[type];
+
+                        console.log(variables);
+
+                        app.vis.stripplot.sels.d3.container
+                          .selectAll("p.vis-story-stripplot-labels-variables")
+                          .data(variables)
+                          .join("p")
+                          .classed("vis-story-stripplot-labels-variables", true)
+                          .style("left", 0)
+                          .style("top", (d,i) => app.vis.stripplot.dimensions.strip_height*i + "px")
+                          .text(d => app.vis.stripplot.variables.names[d]);
+
+                    }
+
+                },
+
+                lines : {
+
+                    render : function(type) {
+
+                        const variables = app.vis.stripplot.variables[type];
+
+                        app.vis.stripplot.sels.d3.svg
+                          .selectAll("line.vis-story-stripplot-axis")
+                          .data(variables)
+                          .join("line")
+                          .classed("vis-story-stripplot-axis", true)
+                          .attr("x1", 0)
+                          .attr("x2", app.vis.stripplot.dimensions.svg_width)
+                          .attr("y1", d => app.vis.stripplot.scales.y[d])
+                          .attr("y2", d => app.vis.stripplot.scales.y[d]);
+
+                    }
+                }
+
+
+
+
             }
 
 
@@ -984,6 +1059,7 @@ const app = {
 
             app.utils.colors.populate();
             app.scroller.steps.get();
+            app.vis.stripplot.sels.d3.set(); // sets up d3 selections;
             app.utils.load_data();
             
         },
