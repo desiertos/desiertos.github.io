@@ -548,6 +548,7 @@ const app = {
                 app.map.set_initial_view();
                 app.map.fog_of_war.toggle('provincia', '');
                 app.map.fog_of_war.toggle('cidade', '');
+                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
                 
             },
 
@@ -574,6 +575,26 @@ const app = {
                 app.map_obj.setPaintProperty('cidade', 'fill-opacity', 1);
                 app.map.fog_of_war.toggle('provincia', '');
                 app.map.fog_of_war.toggle('cidade', '');
+
+            },
+
+            'importancia-periodismo' : function() {
+
+                // app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
+
+                // app.map.cidade.toggle_highlight_border(location);
+
+                // app.map.fog_of_war.toggle(type, location);
+
+            },
+
+            'real-colors' : function() {
+
+                app.map.fit_Argentina();
+                app.map.fog_of_war.toggle('provincia', '');
+                app.map.fog_of_war.toggle('cidade', '');
+                app.map.cidade.toggle_highlight_border('');
+                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color_real']);
 
             },
 
