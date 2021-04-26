@@ -624,6 +624,8 @@ const app = {
                     // with the fields updated, resize svg
 
                     app.vis.stripplot.dimensions.set_size();
+                    app.vis.stripplot.scales.range.set();
+                    app.vis.stripplot.scales.set(local.tipo);
 
                     //updates maps
 
@@ -833,6 +835,12 @@ const app = {
 
                 lateral_margins : 20,
 
+                strip_height : null,
+
+                strip_line_relative : null,
+
+                svg_width : null,
+
                 set_size : function() {
 
                     const svg = document.querySelector(app.vis.stripplot.refs.svg);
@@ -864,13 +872,104 @@ const app = {
 
                     }
 
+                    app.vis.stripplot.dimensions.svg_width = svg.getBoundingClientRect().width;
+
+                    const dimensions = app.vis.stripplot.dimensions;
+
+                    const height = 
+                      dimensions.variable_label.top +
+                      dimensions.variable_label.height + 
+                      dimensions.location_label.top + 
+                      dimensions.location_label.height +
+                      dimensions.axis_line.top +
+                      dimensions.axis_line.bottom;
+
+                    app.vis.stripplot.dimensions.strip_height = height;
+                    app.vis.stripplot.dimensions.strip_line_relative = height - dimensions.axis_line.bottom;
+                    
                 }
 
             },
 
             variables : {
 
-                cidade : [ '' ]
+                cidade : [ 'popXmedios', 'popXperiodistas' ],
+
+                provincia : [ 'popXmedios', 'popXperiodistas', 'cat_media', 'Impacto de la publicidad oficial']
+
+            },
+
+            scales : {
+
+                range : {
+
+                    value : null,
+
+                    set : function() {
+
+                        const dimensions = app.vis.stripplot.dimensions;
+
+                        app.vis.stripplot.scales.range.value = [
+
+                            dimensions.lateral_margins,
+                            dimensions.svg_width - dimensions.lateral_margins
+
+                        ];
+
+                    }
+
+                },
+
+                x : {},
+                y : {},
+
+                set : function(type) {
+
+                    const variables = app.vis.stripplot.variables[type];
+                    const dimensions = app.vis.stripplot.dimensions;
+                    const scales = app.vis.stripplot.scales;
+
+                    console.log("setting scales...", type, variables)
+
+                    variables.forEach((variable,i) => {
+
+                        // y
+
+                        scales.y[variable] = i * dimensions.strip_height + dimensions.strip_line_relative;
+
+                        // x
+
+                        let domain;
+
+                        if (variable == 'cat_media') {
+
+                            domain = [1,4]
+
+                        } else if (variable == 'Impacto de la publicidad oficial') {
+
+                            domain = [0, 1]
+
+                        } else {
+
+                            let key = type == 'cidade' ? 'provincias' : 'nacional';
+
+                            domain = [
+                                app.data.fopea_data.stats[key][variable + '_min'],
+                                app.data.fopea_data.stats[key][variable + '_max']
+                            ];
+
+                        }
+
+
+                        scales.x[variable] = d3.scaleLinear()
+                          .range(scales.range.value)
+                          .domain(domain);
+
+                    })
+
+
+
+                },
 
             }
 

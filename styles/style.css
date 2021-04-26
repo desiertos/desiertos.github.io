@@ -483,6 +483,7 @@ input#location-search {
 .vis-story-container {
 
     width: 100%;
+    position: relative;
 
 }
 
