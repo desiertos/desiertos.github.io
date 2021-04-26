@@ -547,6 +547,7 @@ const app = {
                     data.forEach(row => {
     
                         const new_option = document.createElement("option");
+                        
     
                         new_option.value = row.text;
                         new_option.dataset.name = row.localidade;
@@ -754,9 +755,11 @@ const app = {
 
                     const field = document.querySelector(refs[ref]);
 
-                    console.log(field, refs[ref], origin_of_information);
+                    //console.log(field, refs[ref], origin_of_information);
 
-                    field.innerHTML = origin_of_information;
+                    field.innerHTML = (ref == 'type' & origin_of_information == 'cidade') ?
+                    ('departamento de ' + state.user_location_province) :
+                    origin_of_information;
 
                     if (dataset) field.dataset[dataset] = origin_of_information;
 
