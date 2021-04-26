@@ -542,7 +542,7 @@ const app = {
     
                     const parent = document.querySelector(ref);
     
-                    const data = app.data.fopea_data.lista_locais;
+                    const data = app.data.fopea_data.lista_locais.filter(d => d.tipo == "cidade");
     
                     data.forEach(row => {
     
@@ -886,7 +886,7 @@ const app = {
                       .getBoundingClientRect()
                       .height;
 
-                    let height_svg_new = height_step - height_header - ( height_inner_step - height_svg_initial ) - 1.5*height_header; // usando height_header como margem;
+                    let height_svg_new = height_step - height_header - ( height_inner_step - height_svg_initial ) - 2*height_header; // usando height_header como margem;
 
                     if (height_svg_new > 0) { 
 
