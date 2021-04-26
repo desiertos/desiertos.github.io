@@ -982,11 +982,30 @@ const app = {
 
                         } else {
 
-                            let key = type == 'cidade' ? 'provincias' : 'nacional';
+                            let key, location_stats;
+
+                            if (type == 'cidade') {
+
+                                key = 'provincias';
+
+                                location_stats = app.data.fopea_data.stats[key].filter(
+                                    d => d.provincia == app.vis.location_card.state.user_location_province)[0]
+
+                                console.log("Location stats", location_stats)
+
+                            } else {
+
+                                key = 'nacional';
+
+                                location_stats = app.data.fopea_data.stats[key][0]
+
+                            }
 
                             domain = [
-                                app.data.fopea_data.stats[key][variable + '_min'],
-                                app.data.fopea_data.stats[key][variable + '_max']
+
+                                location_stats[variable + '_min'],
+                                location_stats[variable + '_max']
+
                             ];
 
                         }
@@ -1074,13 +1093,10 @@ const app = {
                               .join('circle')
                               .classed('vis-story-stripplot-marks', true)
                               .attr('data-variable', variable)
-                              .attr('cx', function(d) {
-
-                                console.log(d[variable], app.vis.stripplot.scales.x[variable](d[variable]))
-                                  
-                                return app.vis.stripplot.scales.x[variable](d[variable])})
+                              .attr('data-location', d => d.local)
+                              .attr('cx', d => app.vis.stripplot.scales.x[variable](d[variable]))
                               .attr('cy', app.vis.stripplot.scales.y[variable])
-                              .attr('radius', app.vis.stripplot.dimensions.dots_radius.other)
+                              .attr('r', app.vis.stripplot.dimensions.dots_radius.other)
                               .attr('fill', ' blue');
 
                         })
