@@ -1346,17 +1346,21 @@ const app = {
 
                         })
 
-
-
-
-
-
                     }
 
+                },
+
+                connecting_lines : {
+
+                    render : function() {}
+
+                },
+
+                tooltips : {
+
+                    render : function() {}
+
                 }
-
-
-
 
             }
 

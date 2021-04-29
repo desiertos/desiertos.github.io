@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lusitana:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,600;1,700;1,800&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/style.css">
+    <title>Desiertos Informativos</title>
+</head>
+<body>
+
+    <header>
+        <div class="brands-wrapper">
+            <div class="brands">
+              <a href="https://www.fopea.org/" target="_blank"><img src="../img/brands/logo-fopea.png" alt="Logotipo de Fopea"></a>
+              <div class="pipe"></div>
+              <a href="https://newsinitiative.withgoogle.com/" target="_blank"><img src="../img/brands/google.svg" alt="Logotipo da Google News Initiative"></a>
+            </div>
+        </div>
+        <h1 class="title">Desiertos de Noticias</h1>
+        <nav>
+            <button class="menu-toggle">&#8801;</button>
+        </nav>
+
+    </header>
+
+    <div class="outer-container">
+
+        <div class="map-container">
+
+            <div id="map"></div>
+
+        </div>
+
+
+
+        <div class="story-container">
+
+            <div class="story-step" data-step="location-card" id="location-card">
+
+                <div class="story-step-inner">
+
+                    <h2>
+                        <span class="kicker js--location-type"></span>
+                        <span class="js--location-name"></span>
+                    </h2>
+
+                    <p class="js--location-category-main" data-category="bosque"></p>
+
+                    <p class="js--location-category-description card-text">Estás en un 🌳 bosque. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.</p>
+
+                    <div class="vis-story-container">
+
+                        <svg class="vis-story-stripplot"></svg>
+
+                    </div>
+
+                </div>
+
+    
+            </div>
+
+
+
+
+    </div>
+    <script src='https://unpkg.com/@turf/turf@6.3.0/turf.min.js'></script>
+    <script src="../scripts/enter-view.min.js"></script>
+    <script src="../scripts/d3.v6.min.js"></script>
+    <script src="../scripts/app.js"></script>
+    
+</body>
+</html>
