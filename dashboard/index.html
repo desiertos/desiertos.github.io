@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,600;1,700;1,800&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/dash.css">
     <title>Desiertos Informativos</title>
 </head>
 <body>
@@ -24,7 +24,7 @@
               <a href="https://newsinitiative.withgoogle.com/" target="_blank"><img src="../img/brands/google.svg" alt="Logotipo da Google News Initiative"></a>
             </div>
         </div>
-        <h1 class="title">Desiertos de Noticias</h1>
+        <h1 class="dashboard--title">Desiertos de Noticias</h1>
         <nav>
             <button class="menu-toggle">&#8801;</button>
         </nav>
@@ -47,14 +47,37 @@
 
                 <div class="story-step-inner">
 
+                    <ul class="dashboard--breadcrumbs">
+                        <li class="dashboard--breadcrumbs-active" data-breadcrumbs-type="pais">pais</li>
+                        <li data-breadcrumbs-type="provincia">provincia</li>
+                        <li data-breadcrumbs-type="departamento">departamento</li>
+                    </ul>
+
                     <h2>
-                        <span class="kicker js--location-type"></span>
-                        <span class="js--location-name"></span>
+                        <span class="js--location-name dashboard--location-name">Vamos muchachos</span>
                     </h2>
 
                     <p class="js--location-category-main" data-category="bosque"></p>
 
-                    <p class="js--location-category-description card-text">Estás en un 🌳 bosque. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.</p>
+                    <p class="js--location-category-description dashboard--location-description">Estás en un 🌳 bosque. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.</p>
+
+                    <div class="dashboard--basic-info-table">
+
+                        <div class="dashboard-basic-info-table-group" data-infotable-group="poblacion">
+                            <span class="name">Población</span>
+                            <span data-infotable-field="poblacion">1000</span>
+                        </div>
+
+                        <div class="dashboard-basic-info-table-group" data-infotable-group="medios">
+                            <span class="name">Medios</span>
+                            <span data-infotable-field="medios">1000</span>
+                        </div>
+
+                        <div class="dashboard-basic-info-table-group" data-infotable-group="periodistas">
+                            <span class="name">Periodistas</span>
+                            <span data-infotable-field="periodistas">1000</span>
+                        </div>
+                    </div>
 
                     <div class="vis-story-container">
 
@@ -74,7 +97,7 @@
     <script src='https://unpkg.com/@turf/turf@6.3.0/turf.min.js'></script>
     <script src="../scripts/enter-view.min.js"></script>
     <script src="../scripts/d3.v6.min.js"></script>
-    <script src="../scripts/app.js"></script>
+    <script src="../scripts/dash.js"></script>
     
 </body>
 </html>
