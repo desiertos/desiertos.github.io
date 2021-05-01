@@ -1,4 +1,4 @@
-const app = {
+const dash = {
 
     refs : {
 
@@ -36,13 +36,13 @@ const app = {
 
         geojsons : {
 
-            provincia : '../data/maps/arg.json',
-            cidade : '../data/maps/arg_dept.json',
+            provincia : '../data/maps/arg_prov.json',
+            localidad : '../data/maps/arg_localidads.geojson',
             mask : '../data/maps/arg_mask.json'
 
         },
 
-        fopea_data : '../data/output.json',
+        fopea_data : '../data/output_dash.json',
 
         layers : {
 
@@ -70,7 +70,7 @@ const app = {
     data : {
 
         provincia : null,
-        cidade : null,
+        localidad : null,
         mask : null,
         fopea_data : null
 
@@ -84,39 +84,39 @@ const app = {
 
             Promise.all([
 
-                fetch(app.params.geojsons.cidade, {mode: 'cors'}).then( response => response.json()),
-                fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
-                fetch(app.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
-                fetch(app.params.fopea_data, {mode: 'cors'}).then( response => response.json())
+                fetch(dash.params.geojsons.localidad, {mode: 'cors'}).then( response => response.json()),
+                fetch(dash.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
+                fetch(dash.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
+                fetch(dash.params.fopea_data, {mode: 'cors'}).then( response => response.json())
         
             ])
-              .then( data => app.ctrl.begin(data))
+              .then( data => dash.ctrl.begin(data))
               .catch( error => console.log( error ) );
 
             //   .catch( error => console.log( error ) );
 
-            // fetch(app.params.geojsons.mask, {mode: 'cors'})
+            // fetch(dash.params.geojsons.mask, {mode: 'cors'})
             //   .then( response => response.json())
-            //   .then( data => app.ctrl.begin(data))
+            //   .then( data => dash.ctrl.begin(data))
             //   .catch( error => console.log( error ) );
 
         },
 
         load_patterns : function() {
 
-            const path = app.params.patterns.path1;
-            const names = app.params.patterns.names;
+            const path = dash.params.patterns.path1;
+            const names = dash.params.patterns.names;
 
             names.forEach(name => {
 
-                app.map_obj.loadImage(
+                dash.map_obj.loadImage(
                     path + name + ".png",
                     function (err, image) {
                         // Throw an error if something went wrong
                         if (err) throw err;
                     
                         // Declare the image
-                        app.map_obj.addImage(name, image);
+                        dash.map_obj.addImage(name, image);
                         
                         // Use it
     
@@ -140,130 +140,129 @@ const app = {
 
             populate : function() {
 
-                Object.keys(app.params.colors).forEach(color => {
+                Object.keys(dash.params.colors).forEach(color => {
 
-                    app.params.colors[color] = app.utils.colors.get_from_css(color);
+                    dash.params.colors[color] = dash.utils.colors.get_from_css(color);
     
                 });
 
             }
 
-        },
-
-        get_category_from_data : function(local, data) {
-
-            let location_category;
-
-            if (local.tipo == 'provincia') {
-
-                const cat = data['cat_media'];
-
-                if (cat == 1) {
-
-                    location_category = 'desierto';
-
-                } else if (cat <= 2) {
-
-                    location_category = 'semidesierto';
-
-                } else if (cat <= 3) {
-
-                    location_category = 'semibosque';
-
-                } else location_category = 'bosque'
-
-            } else {
-
-                const categories = app.params.categories;
-
-                location_category = categories[ data['categoria'] - 1 ];
-                
-            }
-
-            return location_category;
-
-        },
-
-        generate_random_remaining_locations : function(remaining_categories) {
-
-            const data = app.data.fopea_data.cidade;
-            const output = [];
-
-            remaining_categories.forEach(category => {
-
-                const cat_numeric = '' + (app.params.categories.indexOf(category) + 1);
-
-                console.log(cat_numeric);
-
-                const available_cities = data
-                  .filter(d => ['San Luis', 'Salta'].includes(d.provincia))
-                  .filter(d => d.categoria == cat_numeric)
-                  .map(d => d.local);
-
-                const amount_available_cities = available_cities.length;
-
-                console.log(available_cities);
-
-                // get a random city
-
-                const index_selected = Math.floor(Math.random() * amount_available_cities);
-
-                output.push(available_cities[index_selected]);
-
-            })
-
-            return output;
-
         }
+
+        // get_category_from_data : function(local, data) {
+
+        //     let location_category;
+
+        //     if (local.tipo == 'provincia') {
+
+        //         const cat = data['cat_media'];
+
+        //         if (cat == 1) {
+
+        //             location_category = 'desierto';
+
+        //         } else if (cat <= 2) {
+
+        //             location_category = 'semidesierto';
+
+        //         } else if (cat <= 3) {
+
+        //             location_category = 'semibosque';
+
+        //         } else location_category = 'bosque'
+
+        //     } else {
+
+        //         const categories = dash.params.categories;
+
+        //         location_category = categories[ data['categoria'] - 1 ];
+                
+        //     }
+
+        //     return location_category;
+
+        // },
+
+        // generate_random_remaining_locations : function(remaining_categories) {
+
+        //     const data = dash.data.fopea_data.cidade;
+        //     const output = [];
+
+        //     remaining_categories.forEach(category => {
+
+        //         const cat_numeric = '' + (dash.params.categories.indexOf(category) + 1);
+
+        //         console.log(cat_numeric);
+
+        //         const available_cities = data
+        //           .filter(d => ['San Luis', 'Salta'].includes(d.provincia))
+        //           .filter(d => d.categoria == cat_numeric)
+        //           .map(d => d.local);
+
+        //         const amount_available_cities = available_cities.length;
+
+        //         console.log(available_cities);
+
+        //         // get a random city
+
+        //         const index_selected = Math.floor(Math.random() * amount_available_cities);
+
+        //         output.push(available_cities[index_selected]);
+
+        //     })
+
+        //     return output;
+
+        // }
 
     },
 
     map : {
 
-        cidade : {
+        localidad : {
 
             initialize : function() {
 
-                app.map_obj.addSource('cidade', {
+                dash.map_obj.addSource('localidad', {
                     type: 'geojson',
-                    'data' : app.data.cidade
+                    'data' : dash.data.localidad
                 });
 
-                app.map_obj.addLayer({
-                    'id': 'cidade',
-                    'type': 'fill',
-                    'source': 'cidade',
+                dash.map_obj.addLayer({
+                    'id': 'localidad',
+                    'type': 'circle',
+                    'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'fill-color': 'transparent',
-                      'fill-opacity': 0.5,
-                      'fill-outline-color': 'ghostwhite'
+                      'circle-color': 'blue', //['get', 'color_real'],
+                      'circle-radius' : 10 
                     }
                 }, 'road-label'); // puts behind road-label
 
-                app.map_obj.addLayer({
-                    'id': 'cidade-border',
-                    'type': 'line',
-                    'source': 'cidade',
-                    'layout': {},
-                    'paint': {
-                      'line-color': 'black',
-                      'line-width': 5
-                    },
-                    'filter': ['==', 'cidade', '']}); // puts behind road-label
+                // dash.map_obj.addLayer({
+                //     'id': 'cidade-border',
+                //     'type': 'line',
+                //     'source': 'cidade',
+                //     'layout': {},
+                //     'paint': {
+                //       'line-color': 'black',
+                //       'line-width': 5
+                //     },
+                //     'filter': ['==', 'cidade', '']}); // puts behind road-label
 
             },
 
-            toggle_highlight_border : function(cidade) {
+            // toggle_highlight_border : function(cidade) {
 
-                app.map_obj.setFilter(
-                    'cidade-border', [
-                        '==',
-                        ['get', 'nam'],
-                        cidade
-                ]);
+            //     dash.map_obj.setFilter(
+            //         'cidade-border', [
+            //             '==',
+            //             ['get', 'nam'],
+            //             cidade
+            //     ]);
 
-            }
+            // }
 
         },
 
@@ -271,12 +270,12 @@ const app = {
 
             initialize : function() {
 
-                app.map_obj.addSource('provincia', {
+                dash.map_obj.addSource('provincia', {
                     type: 'geojson',
-                    'data' : app.data.provincia
+                    'data' : dash.data.provincia
                 });
 
-                app.map_obj.addLayer({
+                dash.map_obj.addLayer({
                     'id': 'provincia',
                     'type': 'line',
                     'source': 'provincia',
@@ -287,7 +286,7 @@ const app = {
                     }
                 }); 
 
-                app.map_obj.addLayer({
+                dash.map_obj.addLayer({
                     'id': 'provincia-border',
                     'type': 'line',
                     'source': 'provincia',
@@ -296,13 +295,13 @@ const app = {
                       'line-color': 'black',
                       'line-width': 5
                     },
-                    'filter': ['==', 'provincia', '']}); // puts behind road-label
+                    'filter': ['==', 'nam', '']}); // puts behind road-label
 
             },
 
             toggle_highlight_border_provincia : function(provincia) {
 
-                app.map_obj.setFilter(
+                dash.map_obj.setFilter(
                     'provincia-border', [
                         '==',
                         ['get', 'nam'],
@@ -317,7 +316,7 @@ const app = {
 
             initialize : function() {
 
-                app.map_obj.addLayer({
+                dash.map_obj.addLayer({
                     'id': 'fog_of_war_provincia',
                     'type': 'fill',
                     'source': 'provincia',
@@ -329,21 +328,21 @@ const app = {
                     'filter': ['!=', 'province', '']
                 }); // puts behind road-label
 
-                app.map_obj.addLayer({
-                    'id': 'fog_of_war_cidade',
-                    'type': 'fill',
-                    'source': 'cidade',
-                    'paint': {
-                      'fill-color': 'ghostwhite',
-                      'fill-opacity': 0,
-                      'fill-outline-color': '#555'
-                    },
-                    'filter': ['!=', 'cidade', '']
-                }); // puts behind road-label
+                // dash.map_obj.addLayer({
+                //     'id': 'fog_of_war_cidade',
+                //     'type': 'fill',
+                //     'source': 'cidade',
+                //     'paint': {
+                //       'fill-color': 'ghostwhite',
+                //       'fill-opacity': 0,
+                //       'fill-outline-color': '#555'
+                //     },
+                //     'filter': ['!=', 'cidade', '']
+                // }); // puts behind road-label
 
             },
 
-            toggle : function(type, location) {
+            toggle : function(location, type = 'provincia') {
 
                 let opacity = 0;
 
@@ -351,7 +350,7 @@ const app = {
 
                     opacity = 1;
 
-                    app.map_obj.setFilter(
+                    dash.map_obj.setFilter(
                         'fog_of_war_' + type, [
                             '!=',
                             ['get', 'nam'],
@@ -361,7 +360,7 @@ const app = {
 
                 }
 
-                app.map_obj.setPaintProperty('fog_of_war_' + type, 'fill-opacity', opacity);
+                dash.map_obj.setPaintProperty('fog_of_war_' + type, 'fill-opacity', opacity);
 
             }
 
@@ -371,12 +370,12 @@ const app = {
 
             initialize : function() {
 
-                app.map_obj.addSource('mask', {
+                dash.map_obj.addSource('mask', {
                     type: 'geojson',
-                    'data' : app.data.mask
+                    'data' : dash.data.mask
                 });
 
-                app.map_obj.addLayer({
+                dash.map_obj.addLayer({
                     'id': 'mask',
                     'type': 'fill',
                     'source': 'mask',
@@ -390,7 +389,7 @@ const app = {
 
         fit_Argentina : function() {
 
-            app.map_obj.fitBounds([
+            dash.map_obj.fitBounds([
                 [-75, -21],
                 [-53, -56]],
 
@@ -404,30 +403,30 @@ const app = {
 
         set_initial_view : function() {
 
-            app.map_obj.flyTo(
+            dash.map_obj.flyTo(
                 {
                     center: [
-                        app.params.mapbox.start.center.lng, 
-                        app.params.mapbox.start.center.lat
+                        dash.params.mapbox.start.center.lng, 
+                        dash.params.mapbox.start.center.lat
                     ], 
-                    zoom: app.params.mapbox.start.zoom,
+                    zoom: dash.params.mapbox.start.zoom,
                     bearing: 0,
                     pitch: 0
                 }
             );
 
-            //app.map_obj.setCenter(app.params.mapbox.start.center);
-            //app.map_obj.setZoom(app.params.mapbox.start.zoom);
+            //dash.map_obj.setCenter(dash.params.mapbox.start.center);
+            //dash.map_obj.setZoom(dash.params.mapbox.start.zoom);
 
         },
 
-        highlight_feature : function(type, location, pitch = 0, bearing = 0) {
+        highlight_feature : function(location, type = 'provincia', pitch = 0, bearing = 0) {
 
             console.log(type, location);
 
             // type provincia, cidade
 
-            //let locations = app.map_obj.querySourceFeatures(type, {
+            //let locations = dash.map_obj.querySourceFeatures(type, {
             //    sourceLayer: type});
         
             //let desired_features = locations.filter(d => d.properties.nam == location)[0];
@@ -448,7 +447,9 @@ const app = {
             // or we could have used 
             //let bbox_highlighted = turf.bbox(desired_features);//combined);
 
-            const location_data = app.data.fopea_data[type].filter(d => d.local == location)[0];
+            const variavel_nome = type == 'provincia' ? 'Provincia' : 'localidad';
+
+            const location_data = dash.data.fopea_data[type].filter(d => d[variavel_nome] == location)[0];
 
             console.log(location_data);
 
@@ -459,7 +460,7 @@ const app = {
             
             console.log(bbox_highlighted);
         
-            app.map_obj.fitBounds(
+            dash.map_obj.fitBounds(
                 bbox_highlighted, 
                 {
                     linear : false, // false means the map transitions using map.flyTo()
@@ -483,7 +484,7 @@ const app = {
 
                 const steps_html = document.querySelector(".story-container").children;
 
-                app.scroller.steps.list = Array.from(steps_html).map(d => d.dataset.step);
+                dash.scroller.steps.list = Array.from(steps_html).map(d => d.dataset.step);
 
             }
 
@@ -501,7 +502,7 @@ const app = {
 
                     console.log("Renderizando step... ", step);
 
-                    app.scroller.render[step]();
+                    dash.scroller.render[step]();
 
                 },
 
@@ -509,11 +510,11 @@ const app = {
 
                     const step = el.dataset.step;
 
-                    const index_step = app.scroller.steps.list.indexOf(step);
+                    const index_step = dash.scroller.steps.list.indexOf(step);
 
-                    const step_anterior = app.scroller.steps.list[index_step - 1];
+                    const step_anterior = dash.scroller.steps.list[index_step - 1];
 
-                    app.scroller.render[step_anterior]();
+                    dash.scroller.render[step_anterior]();
 
                     console.log("saiu, ", step_anterior);
                 },
@@ -530,14 +531,14 @@ const app = {
 
             'abertura' : function() {
 
-                app.map_obj.setPaintProperty('cidade', 'fill-pattern', null);
-                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
-                app.map_obj.setPaintProperty('cidade', 'fill-outline-color', 'ghostwhite');
-                app.map_obj.setPaintProperty('cidade', 'fill-opacity', .5);
-                app.map.set_initial_view();
-                app.map.cidade.toggle_highlight_border('');
+                dash.map_obj.setPaintProperty('cidade', 'fill-pattern', null);
+                dash.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
+                dash.map_obj.setPaintProperty('cidade', 'fill-outline-color', 'ghostwhite');
+                dash.map_obj.setPaintProperty('cidade', 'fill-opacity', .5);
+                dash.map.set_initial_view();
+                dash.map.cidade.toggle_highlight_border('');
 
-                //app.interactions.story.toggle_visibility("dashboard_button");
+                //dash.interactions.story.toggle_visibility("dashboard_button");
 
             },
 
@@ -545,26 +546,26 @@ const app = {
 
                 console.log('Pesquisando...');
 
-                app.map.set_initial_view();
-                app.map.fog_of_war.toggle('provincia', '');
-                app.map.fog_of_war.toggle('cidade', '');
-                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
-                app.map.cidade.toggle_highlight_border('');
+                dash.map.set_initial_view();
+                dash.map.fog_of_war.toggle('provincia', '');
+                dash.map.fog_of_war.toggle('cidade', '');
+                dash.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
+                dash.map.cidade.toggle_highlight_border('');
                 
             },
 
             'location-card' : function() {
 
-                const type = app.vis.location_card.state.user_location_type;
-                const location = app.vis.location_card.state.user_location_name
+                const type = dash.vis.location_card.state.user_location_type;
+                const location = dash.vis.location_card.state.user_location_name
 
-                app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
+                dash.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
 
-                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color_real']);
+                dash.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color_real']);
 
-                app.map.cidade.toggle_highlight_border(location);
+                dash.map.cidade.toggle_highlight_border(location);
 
-                app.map.fog_of_war.toggle(type, location);
+                dash.map.fog_of_war.toggle(type, location);
 
             },
 
@@ -572,92 +573,92 @@ const app = {
 
             'segundo' : function() {
 
-                app.map.fit_Argentina();
+                dash.map.fit_Argentina();
 
-                app.map_obj.setPaintProperty('cidade', 'fill-pattern', ['get', 'tipo']);
-                app.map_obj.setPaintProperty('cidade', 'fill-opacity', 1);
-                app.map.fog_of_war.toggle('provincia', '');
-                app.map.fog_of_war.toggle('cidade', '');
+                dash.map_obj.setPaintProperty('cidade', 'fill-pattern', ['get', 'tipo']);
+                dash.map_obj.setPaintProperty('cidade', 'fill-opacity', 1);
+                dash.map.fog_of_war.toggle('provincia', '');
+                dash.map.fog_of_war.toggle('cidade', '');
 
             },
 
             'importancia-periodismo' : function() {
 
-                // app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
+                // dash.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
 
-                // app.map.cidade.toggle_highlight_border(location);
+                // dash.map.cidade.toggle_highlight_border(location);
 
-                // app.map.fog_of_war.toggle(type, location);
+                // dash.map.fog_of_war.toggle(type, location);
 
             },
 
             'real-colors' : function() {
 
-                app.map.fit_Argentina();
-                app.map.fog_of_war.toggle('provincia', '');
-                app.map.fog_of_war.toggle('cidade', '');
-                app.map.cidade.toggle_highlight_border('');
-                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color_real']);
+                dash.map.fit_Argentina();
+                dash.map.fog_of_war.toggle('provincia', '');
+                dash.map.fog_of_war.toggle('cidade', '');
+                dash.map.cidade.toggle_highlight_border('');
+                dash.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color_real']);
 
             },
 
             'remaining-category1' : function() {
 
-                const location = app.vis.location_card.state.remaining_categories_locations[0];
+                const location = dash.vis.location_card.state.remaining_categories_locations[0];
 
-                app.map.highlight_feature('cidade', location);
+                dash.map.highlight_feature('cidade', location);
 
-                app.map.fog_of_war.toggle('cidade', location);
+                dash.map.fog_of_war.toggle('cidade', location);
 
-                app.map.cidade.toggle_highlight_border(location);
+                dash.map.cidade.toggle_highlight_border(location);
 
             },
 
             'remaining-category2' : function() {
 
-                const location = app.vis.location_card.state.remaining_categories_locations[1];
+                const location = dash.vis.location_card.state.remaining_categories_locations[1];
 
-                app.map.highlight_feature('cidade', location);
+                dash.map.highlight_feature('cidade', location);
 
-                app.map.fog_of_war.toggle('cidade', location);
+                dash.map.fog_of_war.toggle('cidade', location);
 
-                app.map.cidade.toggle_highlight_border(location);
+                dash.map.cidade.toggle_highlight_border(location);
 
             },
 
             'remaining-category3' : function() {
 
-                const location = app.vis.location_card.state.remaining_categories_locations[2];
+                const location = dash.vis.location_card.state.remaining_categories_locations[2];
 
-                app.map.highlight_feature('cidade', location);
+                dash.map.highlight_feature('cidade', location);
 
-                app.map.fog_of_war.toggle('cidade', location);
+                dash.map.fog_of_war.toggle('cidade', location);
 
-                app.map.cidade.toggle_highlight_border(location);
+                dash.map.cidade.toggle_highlight_border(location);
 
             },
 
             'blabla' : function() {
 
-                app.map.cidade.toggle_highlight_border('');
+                dash.map.cidade.toggle_highlight_border('');
 
-                app.map.fit_Argentina();
+                dash.map.fit_Argentina();
 
             },
 
             'penultimo' : function() {
 
-                app.map.cidade.toggle_highlight_border('');
-                app.map.fog_of_war.toggle('cidade', '');
-                app.map.fit_Argentina();
+                dash.map.cidade.toggle_highlight_border('');
+                dash.map.fog_of_war.toggle('cidade', '');
+                dash.map.fit_Argentina();
 
 
             },
 
             'fecho' : function() {
 
-                //app.map.fit_Argentina();
-                //app.map.highlight_feature('provincia', 'Salta');
+                //dash.map.fit_Argentina();
+                //dash.map.highlight_feature('provincia', 'Salta');
 
 
             }
@@ -681,7 +682,7 @@ const app = {
     
             toggle_visibility : function(name){
     
-                const ref = app.interactions.story.refs[name];
+                const ref = dash.interactions.story.refs[name];
     
                 const elem = document.querySelector(ref);
                 elem.classList.toggle('hidden');
@@ -701,11 +702,11 @@ const app = {
 
                 populate_datalist : function() {
 
-                    const ref = app.interactions.story.search_bar.refs.datalist_search;
+                    const ref = dash.interactions.story.search_bar.refs.datalist_search;
     
                     const parent = document.querySelector(ref);
     
-                    const data = app.data.fopea_data.lista_locais.filter(d => d.tipo == "cidade");
+                    const data = dash.data.fopea_data.lista_locais.filter(d => d.tipo == "cidade");
     
                     data.forEach(row => {
     
@@ -724,8 +725,8 @@ const app = {
 
                 listen_search : function() {
 
-                    const ref_btn = app.interactions.story.search_bar.refs.search_button;
-                    const ref_input = app.interactions.story.search_bar.refs.input;
+                    const ref_btn = dash.interactions.story.search_bar.refs.search_button;
+                    const ref_input = dash.interactions.story.search_bar.refs.input;
 
                     const btn = document.querySelector(ref_btn);
                     const input_el = document.querySelector(ref_input);
@@ -741,23 +742,23 @@ const app = {
                         //console.log(input_el.value);
 
                         if (
-                            app.data.fopea_data.lista_locais
+                            dash.data.fopea_data.lista_locais
                               .map(row => row.text)
                               .indexOf(search_content) > 0
                         ) {
 
                             console.log("valor detectado", search_content);
 
-                            const local = app.data.fopea_data.lista_locais.filter(row => row.text == search_content)[0];
+                            const local = dash.data.fopea_data.lista_locais.filter(row => row.text == search_content)[0];
 
                             console.log("tipo: ", local.tipo);
                             console.log("nome: ", local.local);
 
-                            const data = app.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
+                            const data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
 
                             console.log("Dados: ", data);
 
-                            app.interactions.story.search_bar.successful_result_action(local, data);
+                            dash.interactions.story.search_bar.successful_result_action(local, data);
 
 
                         } else {
@@ -779,20 +780,20 @@ const app = {
 
                     // set vis state, calls vis render
 
-                    app.vis.location_card.state.set(local, data);
+                    dash.vis.location_card.state.set(local, data);
 
                     // populates fields
 
-                    app.vis.location_card.update_text_fields();
+                    dash.vis.location_card.update_text_fields();
 
                     // with the fields updated, resize svg
 
-                    app.vis.stripplot.dimensions.set_size();
-                    app.vis.stripplot.scales.range.set();
-                    app.vis.stripplot.scales.set(local.tipo);
-                    app.vis.stripplot.components.labels.render(local.tipo);
-                    app.vis.stripplot.components.lines.render(local.tipo);
-                    app.vis.stripplot.components.marks.render(local.tipo);
+                    dash.vis.stripplot.dimensions.set_size();
+                    dash.vis.stripplot.scales.range.set();
+                    dash.vis.stripplot.scales.set(local.tipo);
+                    dash.vis.stripplot.components.labels.render(local.tipo);
+                    dash.vis.stripplot.components.lines.render(local.tipo);
+                    dash.vis.stripplot.components.marks.render(local.tipo);
 
                     //updates maps
 
@@ -812,12 +813,12 @@ const app = {
 
                     // }
                     
-                    // app.map.highlight_feature(type = type, location = local.local);
+                    // dash.map.highlight_feature(type = type, location = local.local);
 
                     // scrolls to card
 
                     const destination_step = document.querySelector(
-                        app.interactions.story.search_bar.refs.destination_step
+                        dash.interactions.story.search_bar.refs.destination_step
                     );
 
                     destination_step.scrollIntoView({behavior: "smooth"});
@@ -847,22 +848,22 @@ const app = {
 
                 set : function(local, data) {
 
-                    const state = app.vis.location_card.state;
+                    const state = dash.vis.location_card.state;
 
                     state.user_location = local.text;
                     state.user_location_name = local.local; //// mudar esse local.local :/
                     state.user_location_type = local.tipo;
                     state.user_location_province = local.provincia;
 
-                    const category = app.utils.get_category_from_data(local, data);
+                    const category = dash.utils.get_category_from_data(local, data);
 
                     state.user_location_category = category
 
-                    const remaining_categories = app.params.categories.filter(d => d != category);
+                    const remaining_categories = dash.params.categories.filter(d => d != category);
 
                     state.remaining_categories = remaining_categories;
 
-                    state.remaining_categories_locations = app.utils.generate_random_remaining_locations(remaining_categories);
+                    state.remaining_categories_locations = dash.utils.generate_random_remaining_locations(remaining_categories);
 
                 }
 
@@ -930,8 +931,8 @@ const app = {
 
             update_text_fields : function() {
 
-                const refs = app.vis.location_card.refs;
-                const state = app.vis.location_card.state;
+                const refs = dash.vis.location_card.refs;
+                const state = dash.vis.location_card.state;
                 const user_category = state.user_location_category;
 
                 // helper function
@@ -964,7 +965,7 @@ const app = {
 
                 // description field
 
-                populate_field('category_description', app.vis.location_card.texts[user_category].first);
+                populate_field('category_description', dash.vis.location_card.texts[user_category].first);
 
                 // category field in second page
 
@@ -982,7 +983,7 @@ const app = {
 
                 populate_field(
                     'text_remaining_category1', 
-                    app.vis.location_card.texts[remain_cat1].second
+                    dash.vis.location_card.texts[remain_cat1].second
                     );
 
                 populate_field(
@@ -997,7 +998,7 @@ const app = {
 
                 populate_field(
                     'text_remaining_category2', 
-                    app.vis.location_card.texts[remain_cat2].second
+                    dash.vis.location_card.texts[remain_cat2].second
                     );
 
                 populate_field(
@@ -1012,7 +1013,7 @@ const app = {
 
                 populate_field(
                     'text_remaining_category3', 
-                    app.vis.location_card.texts[remain_cat3].second
+                    dash.vis.location_card.texts[remain_cat3].second
                     );
 
                 populate_field(
@@ -1042,9 +1043,9 @@ const app = {
 
                     set : function() {
 
-                        Object.keys(app.vis.stripplot.refs).forEach(ref_name => {
+                        Object.keys(dash.vis.stripplot.refs).forEach(ref_name => {
 
-                            app.vis.stripplot.sels.d3[ref_name] = d3.select(app.vis.stripplot.refs[ref_name]);
+                            dash.vis.stripplot.sels.d3[ref_name] = d3.select(dash.vis.stripplot.refs[ref_name]);
 
                         })
 
@@ -1097,7 +1098,7 @@ const app = {
 
                 set_size : function() {
 
-                    const svg = document.querySelector(app.vis.stripplot.refs.svg);
+                    const svg = document.querySelector(dash.vis.stripplot.refs.svg);
 
                     const height_step = document
                       .querySelector('[data-step="location-card"]')
@@ -1126,9 +1127,9 @@ const app = {
 
                     }
 
-                    app.vis.stripplot.dimensions.svg_width = svg.getBoundingClientRect().width;
+                    dash.vis.stripplot.dimensions.svg_width = svg.getBoundingClientRect().width;
 
-                    const dimensions = app.vis.stripplot.dimensions;
+                    const dimensions = dash.vis.stripplot.dimensions;
 
                     const height = 
                       dimensions.variable_label.top +
@@ -1138,8 +1139,8 @@ const app = {
                       dimensions.axis_line.top +
                       dimensions.axis_line.bottom;
 
-                    app.vis.stripplot.dimensions.strip_height = height;
-                    app.vis.stripplot.dimensions.strip_line_relative = height - dimensions.axis_line.bottom;
+                    dash.vis.stripplot.dimensions.strip_height = height;
+                    dash.vis.stripplot.dimensions.strip_line_relative = height - dimensions.axis_line.bottom;
                     
                 }
 
@@ -1170,9 +1171,9 @@ const app = {
 
                     set : function() {
 
-                        const dimensions = app.vis.stripplot.dimensions;
+                        const dimensions = dash.vis.stripplot.dimensions;
 
-                        app.vis.stripplot.scales.range.value = [
+                        dash.vis.stripplot.scales.range.value = [
 
                             dimensions.lateral_margins,
                             dimensions.svg_width - dimensions.lateral_margins
@@ -1188,9 +1189,9 @@ const app = {
 
                 set : function(type) {
 
-                    const variables = app.vis.stripplot.variables[type];
-                    const dimensions = app.vis.stripplot.dimensions;
-                    const scales = app.vis.stripplot.scales;
+                    const variables = dash.vis.stripplot.variables[type];
+                    const dimensions = dash.vis.stripplot.dimensions;
+                    const scales = dash.vis.stripplot.scales;
 
                     console.log("setting scales...", type, variables)
 
@@ -1220,8 +1221,8 @@ const app = {
 
                                 key = 'provincias';
 
-                                location_stats = app.data.fopea_data.stats[key].filter(
-                                    d => d.provincia == app.vis.location_card.state.user_location_province)[0]
+                                location_stats = dash.data.fopea_data.stats[key].filter(
+                                    d => d.provincia == dash.vis.location_card.state.user_location_province)[0]
 
                                 console.log("Location stats", location_stats)
 
@@ -1229,7 +1230,7 @@ const app = {
 
                                 key = 'nacional';
 
-                                location_stats = app.data.fopea_data.stats[key][0]
+                                location_stats = dash.data.fopea_data.stats[key][0]
 
                             }
 
@@ -1261,18 +1262,18 @@ const app = {
 
                     render : function(type) {
 
-                        const variables = app.vis.stripplot.variables[type];
+                        const variables = dash.vis.stripplot.variables[type];
 
                         console.log(variables);
 
-                        app.vis.stripplot.sels.d3.container
+                        dash.vis.stripplot.sels.d3.container
                           .selectAll("p.vis-story-stripplot-labels-variables")
                           .data(variables)
                           .join("p")
                           .classed("vis-story-stripplot-labels-variables", true)
                           .style("left", 0)
-                          .style("top", (d,i) => app.vis.stripplot.dimensions.strip_height*i + "px")
-                          .text(d => app.vis.stripplot.variables.names[d]);
+                          .style("top", (d,i) => dash.vis.stripplot.dimensions.strip_height*i + "px")
+                          .text(d => dash.vis.stripplot.variables.names[d]);
 
                     }
 
@@ -1282,17 +1283,17 @@ const app = {
 
                     render : function(type) {
 
-                        const variables = app.vis.stripplot.variables[type];
+                        const variables = dash.vis.stripplot.variables[type];
 
-                        app.vis.stripplot.sels.d3.svg
+                        dash.vis.stripplot.sels.d3.svg
                           .selectAll("line.vis-story-stripplot-axis")
                           .data(variables)
                           .join("line")
                           .classed("vis-story-stripplot-axis", true)
                           .attr("x1", 0)
-                          .attr("x2", app.vis.stripplot.dimensions.svg_width)
-                          .attr("y1", d => app.vis.stripplot.scales.y[d])
-                          .attr("y2", d => app.vis.stripplot.scales.y[d]);
+                          .attr("x2", dash.vis.stripplot.dimensions.svg_width)
+                          .attr("y1", d => dash.vis.stripplot.scales.y[d])
+                          .attr("y2", d => dash.vis.stripplot.scales.y[d]);
 
                     }
 
@@ -1302,45 +1303,45 @@ const app = {
 
                     render : function(type) {
 
-                        const variables = app.vis.stripplot.variables[type];
+                        const variables = dash.vis.stripplot.variables[type];
 
                         let data;
 
                         if (type == 'cidade') {
 
-                            const provincia = app.vis.location_card.state.user_location_province;
+                            const provincia = dash.vis.location_card.state.user_location_province;
 
                             // gets departments that belong to the current province
 
-                            data = app.data.fopea_data.cidade.filter(d => d.provincia == provincia);
+                            data = dash.data.fopea_data.cidade.filter(d => d.provincia == provincia);
 
-                        } else data = app.data.fopea_data.provincia;
+                        } else data = dash.data.fopea_data.provincia;
 
                         variables.forEach(variable => {
 
                             console.log('circulos da variavel... ', variable);
 
-                            app.vis.stripplot.sels.d3.svg
+                            dash.vis.stripplot.sels.d3.svg
                               .selectAll("circle.vis-story-stripplot-marks[data-variable='" + variable + "']")
                               .data(data)
                               .join('circle')
                               .classed('vis-story-stripplot-marks', true)
-                              .classed('marks-na', d => !app.vis.stripplot.scales.x[variable](d[variable])) // se der undefined vai dar true
-                              .classed('marks-location-highlighted', d => d.local == app.vis.location_card.state.user_location_name)
+                              .classed('marks-na', d => !dash.vis.stripplot.scales.x[variable](d[variable])) // se der undefined vai dar true
+                              .classed('marks-location-highlighted', d => d.local == dash.vis.location_card.state.user_location_name)
                               .attr('data-variable', variable)
                               .attr('data-location', d => d.local)
-                              .attr('cx', d => app.vis.stripplot.scales.x[variable](d[variable]))
-                              .attr('cy', app.vis.stripplot.scales.y[variable])
-                              .attr('r', d => d.local == app.vis.location_card.state.user_location_name ? app.vis.stripplot.dimensions.dots_radius.highlight : app.vis.stripplot.dimensions.dots_radius.other)
+                              .attr('cx', d => dash.vis.stripplot.scales.x[variable](d[variable]))
+                              .attr('cy', dash.vis.stripplot.scales.y[variable])
+                              .attr('r', d => d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.dots_radius.highlight : dash.vis.stripplot.dimensions.dots_radius.other)
                               .attr('fill', function(d) {
 
                                 //console.log(d.local, d.categoria);
 
                                 const cat = Math.ceil(+d.categoria);
 
-                                const categoria = app.params.categories[cat-1]
+                                const categoria = dash.params.categories[cat-1]
 
-                                return app.params.colors[categoria];
+                                return dash.params.colors[categoria];
                                   
                               });
 
@@ -1373,16 +1374,16 @@ const app = {
 
         init : function() {
 
-            app.utils.colors.populate();
-            app.scroller.steps.get();
-            app.vis.stripplot.sels.d3.set(); // sets up d3 selections;
-            app.utils.load_data();
+            dash.utils.colors.populate();
+            dash.scroller.steps.get();
+            dash.vis.stripplot.sels.d3.set(); // sets up d3 selections;
+            dash.utils.load_data();
             
         },
 
         monitors : function() {
 
-            app.interactions.story.search_bar.listen_search();
+            dash.interactions.story.search_bar.listen_search();
 
         },
 
@@ -1390,68 +1391,58 @@ const app = {
 
             console.log(data);
 
-            app.data.cidade = data[0];
-            app.data.mask = data[1];
-            app.data.provincia = data[2];
-            app.data.fopea_data = data[3];
+            dash.data.localidad = data[0];
+            dash.data.mask = data[1];
+            dash.data.provincia = data[2];
+            dash.data.fopea_data = data[3];
 
-            // pre-process cidade data
-            app.data.cidade.features.forEach(el => {
+            // pre-process localidad data
+            dash.data.localidad.features.forEach(el => {
 
-                const types = Object.keys(app.params.colors);
+                const types = Object.keys(dash.params.colors);
 
                 const categoria = el.properties.categoria;
 
-                const id = el.properties.gid;
-                const indice = ( (id - 1) % 4 );
-
-
-                const tipo = app.params.patterns.names[indice];
-                const type = types[indice];
-                const color = app.params.colors[type];
-
-                el.properties["tipo"] = tipo;
-                el.properties["color"] = color;
                 el.properties['color_real'] = categoria ?
-                  app.params.colors[app.params.categories[+categoria-1]] :
+                  dash.params.colors[dash.params.categories[+categoria-1]] :
                   'lightgray';
 
             })
 
-            mapboxgl.accessToken = app.params.mapbox.token;
+            mapboxgl.accessToken = dash.params.mapbox.token;
 
-            app.map_obj = new mapboxgl.Map({
+            dash.map_obj = new mapboxgl.Map({
                 container: 'map', // container id
-                style: app.params.mapbox.style, // style URL
+                style: dash.params.mapbox.style, // style URL
                 center: [
-                    app.params.mapbox.start.center.lng, 
-                    app.params.mapbox.start.center.lat
+                    dash.params.mapbox.start.center.lng, 
+                    dash.params.mapbox.start.center.lat
                 ], // starting position [lng, lat]
-                zoom: app.params.mapbox.start.zoom // starting zoom
+                zoom: dash.params.mapbox.start.zoom // starting zoom
             });
 
-            app.map_obj.on('load', function() {
+            dash.map_obj.on('load', function() {
 
-                app.map.cidade.initialize();
-                app.map.province.initialize();
-                app.map.world_mask.initialize();
-                app.map.fog_of_war.initialize(); 
+                dash.map.localidad.initialize();
+                dash.map.province.initialize();
+                dash.map.world_mask.initialize();
+                dash.map.fog_of_war.initialize(); 
 
                 //fit map to continental Argentina
-                app.map.fit_Argentina();
+                dash.map.fit_Argentina();
 
                 // inicializa o scroller
-                app.scroller.config();
+                dash.scroller.config();
 
                 // image
 
                 // Load images to use as patterns
-                app.utils.load_patterns();
+                dash.utils.load_patterns();
               
             });
 
-            app.interactions.story.search_bar.populate_datalist();
-            app.ctrl.monitors();
+            dash.interactions.story.search_bar.populate_datalist();
+            dash.ctrl.monitors();
 
         },
 
@@ -1467,4 +1458,4 @@ const app = {
 
 }
 
-app.ctrl.init();
+dash.ctrl.init();
