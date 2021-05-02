@@ -947,6 +947,7 @@ const dash = {
             //dash.vis.location_card.update_text_fields();
             dash.vis.location_card.text_field.update();
             dash.vis.location_card.other_fields.category_field.update();
+            dash.vis.location_card.info_table.update();
 
             // with the fields updated, resize svg
 
@@ -1080,6 +1081,34 @@ const dash = {
                         cat_field.dataset.category = dash.vis.location_card.state.user_location_category;
 
                     }
+
+                }
+
+            },
+
+            info_table : {
+
+                ref : '[data-infotable_field]',
+
+                poblacion : () =>  dash.vis.location_card.state.location_data['pob'],
+
+                medios : () =>  dash.vis.location_card.state.location_data['cant_medios'],
+                
+                periodistas : () =>  dash.vis.location_card.state.location_data['cant_periodistas'],
+
+                update : function() {
+
+                    const info_table_fields = document.querySelectorAll(this.ref);
+
+                    console.log('Atualizar números de');
+
+                    info_table_fields .forEach(field => {
+
+                        const field_type = field.dataset.infotable_field;
+
+                        field.innerHTML = this[field_type]();
+
+                    })
 
                 }
 
