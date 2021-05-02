@@ -197,6 +197,7 @@ h2 {
 .dashboard--breadcrumbs li.dashboard--breadcrumbs-active {
 
     color: var(--font-color);
+    transition: color .5s;
 
 }
 
@@ -356,6 +357,7 @@ input#location-search {
     max-width: 42vw;
     width: 36rem;
     margin: 0 auto;
+    padding-top: 1rem;
     /*margin-top: 50vh;
     transform: translateY(-50%);*/
     background-color: transparent; /*var(--background-transp); */

@@ -949,6 +949,9 @@ const dash = {
             dash.vis.location_card.other_fields.category_field.update();
             dash.vis.location_card.info_table.update();
 
+            // update breadcrumb
+            dash.vis.location_card.breadcrumbs.update(local.tipo);
+
             // with the fields updated, resize svg
 
             dash.vis.stripplot.dimensions.set_size();
@@ -1110,6 +1113,32 @@ const dash = {
                         field.innerHTML = this[field_type]();
 
                     })
+
+                }
+
+            },
+
+            breadcrumbs : {
+
+                ref : '[data-breadcrumbs-type]',
+
+                activeName : 'dashboard--breadcrumbs-active',
+
+                update : function(type) {
+
+                    const crumbs = document.querySelectorAll(this.ref);
+
+                    crumbs.forEach(crumb => {
+
+                        if (crumb.dataset.breadcrumbsType == type) {
+
+                            crumb.classList.add(this.activeName);
+
+                        } else {
+                            crumb.classList.remove(this.activeName);
+                        }
+
+                    });
 
                 }
 
