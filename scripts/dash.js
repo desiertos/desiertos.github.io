@@ -235,10 +235,10 @@ const dash = {
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'circle-color': 'blue', //['get', 'color_real'],
-                      'circle-radius' : 10 
+                      'circle-color': ['get', 'color_real'],
+                      'circle-radius' : 5 
                     }
-                }, 'road-label'); // puts behind road-label
+                }); // puts behind road-label
 
                 // dash.map_obj.addLayer({
                 //     'id': 'cidade-border',
@@ -1423,9 +1423,9 @@ const dash = {
 
             dash.map_obj.on('load', function() {
 
-                dash.map.localidad.initialize();
-                dash.map.province.initialize();
                 dash.map.world_mask.initialize();
+                dash.map.province.initialize();
+                dash.map.localidad.initialize();
                 dash.map.fog_of_war.initialize(); 
 
                 //fit map to continental Argentina
