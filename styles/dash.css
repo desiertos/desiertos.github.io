@@ -434,7 +434,7 @@ input#location-search {
     text-transform: lowercase;
 }
 
-p.dashboard--location-description {
+p[data-text_field="category_description"] {
 
     color: var(--color-grey);
     font-size: 0.8125rem;
@@ -490,6 +490,15 @@ p.dashboard--location-description {
 [data-category]::before {
 
     padding-right: 1rem;
+
+}
+
+[data-text_field='medio_prototipico'] {
+
+    color: var(--font-color);
+    font-size: 0.8125rem;
+    font-weight: normal;
+    font-family: var(--font-title);
 
 }
 

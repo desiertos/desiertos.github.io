@@ -181,73 +181,73 @@ const dash = {
 
             }
 
-        }
+        },
 
-        // get_category_from_data : function(local, data) {
+        get_category_from_data : function(local, data) {
 
-        //     let location_category;
+            let location_category;
 
-        //     if (local.tipo == 'provincia') {
+            if (local.tipo == 'provincia') {
 
-        //         const cat = data['cat_media'];
+                const cat = data['cat_media'];
 
-        //         if (cat == 1) {
+                if (cat == 1) {
 
-        //             location_category = 'desierto';
+                    location_category = 'desierto';
 
-        //         } else if (cat <= 2) {
+                } else if (cat <= 2) {
 
-        //             location_category = 'semidesierto';
+                    location_category = 'semidesierto';
 
-        //         } else if (cat <= 3) {
+                } else if (cat <= 3) {
 
-        //             location_category = 'semibosque';
+                    location_category = 'semibosque';
 
-        //         } else location_category = 'bosque'
+                } else location_category = 'bosque'
 
-        //     } else {
+            } else {
 
-        //         const categories = dash.params.categories;
+                const categories = dash.params.categories;
 
-        //         location_category = categories[ data['categoria'] - 1 ];
+                location_category = categories[ data['categoria'] - 1 ];
                 
-        //     }
+            }
 
-        //     return location_category;
+            return location_category;
 
-        // },
+        },
 
-        // generate_random_remaining_locations : function(remaining_categories) {
+        generate_random_remaining_locations : function(remaining_categories) {
 
-        //     const data = dash.data.fopea_data.cidade;
-        //     const output = [];
+            const data = dash.data.fopea_data.cidade;
+            const output = [];
 
-        //     remaining_categories.forEach(category => {
+            remaining_categories.forEach(category => {
 
-        //         const cat_numeric = '' + (dash.params.categories.indexOf(category) + 1);
+                const cat_numeric = '' + (dash.params.categories.indexOf(category) + 1);
 
-        //         console.log(cat_numeric);
+                console.log(cat_numeric);
 
-        //         const available_cities = data
-        //           .filter(d => ['San Luis', 'Salta'].includes(d.provincia))
-        //           .filter(d => d.categoria == cat_numeric)
-        //           .map(d => d.local);
+                const available_cities = data
+                  .filter(d => ['San Luis', 'Salta'].includes(d.provincia))
+                  .filter(d => d.categoria == cat_numeric)
+                  .map(d => d.local);
 
-        //         const amount_available_cities = available_cities.length;
+                const amount_available_cities = available_cities.length;
 
-        //         console.log(available_cities);
+                console.log(available_cities);
 
-        //         // get a random city
+                // get a random city
 
-        //         const index_selected = Math.floor(Math.random() * amount_available_cities);
+                const index_selected = Math.floor(Math.random() * amount_available_cities);
 
-        //         output.push(available_cities[index_selected]);
+                output.push(available_cities[index_selected]);
 
-        //     })
+            })
 
-        //     return output;
+            return output;
 
-        // }
+        }
 
     },
 
@@ -435,7 +435,21 @@ const dash = {
 
                 dash.map_obj.on('click', 'provincia', function(e) {
 
-                    console.log("Clicou em ", e.features[0].properties.nam);
+                    const province_name = e.features[0].properties.nam;
+
+                    const local = {
+
+                        local : province_name,
+                        tipo  : "provincia",
+                        text  : province_name
+
+                    };
+
+                    console.log("Clicou em ", province_name, local);
+
+                    // dash.map.highlight_feature(location = province_name, type = 'provincia');
+
+                    dash.vis.render_selected_place(local);
 
                 })
 
@@ -578,9 +592,7 @@ const dash = {
             // or we could have used 
             //let bbox_highlighted = turf.bbox(desired_features);//combined);
 
-            const variavel_nome = type == 'provincia' ? 'Provincia' : 'localidad';
-
-            const location_data = dash.data.fopea_data[type].filter(d => d[variavel_nome] == location)[0];
+            const location_data = dash.data.fopea_data[type].filter(d => d.local == location)[0];
 
             console.log(location_data);
 
@@ -599,7 +611,8 @@ const dash = {
                     padding: {top: 30, bottom: 30, left: 30, right: 30},
                     pitch: pitch,
                     bearing: bearing
-                });
+                }
+            );
 
         }
 
@@ -885,11 +898,11 @@ const dash = {
                             console.log("tipo: ", local.tipo);
                             console.log("nome: ", local.local);
 
-                            const data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
+                            // const data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
 
                             console.log("Dados: ", data);
 
-                            dash.interactions.story.search_bar.successful_result_action(local, data);
+                            dash.vis.render_selected_place(local);
 
 
                         } else {
@@ -903,58 +916,6 @@ const dash = {
 
                     });
 
-                },
-
-                successful_result_action : function(local, data) {
-
-                    //// seria o caso de levar isso para o render step do scroller?
-
-                    // set vis state, calls vis render
-
-                    dash.vis.location_card.state.set(local, data);
-
-                    // populates fields
-
-                    dash.vis.location_card.update_text_fields();
-
-                    // with the fields updated, resize svg
-
-                    dash.vis.stripplot.dimensions.set_size();
-                    dash.vis.stripplot.scales.range.set();
-                    dash.vis.stripplot.scales.set(local.tipo);
-                    dash.vis.stripplot.components.labels.render(local.tipo);
-                    dash.vis.stripplot.components.lines.render(local.tipo);
-                    dash.vis.stripplot.components.marks.render(local.tipo);
-
-                    //updates maps
-
-                    // let type; 
-                    
-                    // if (local.type == "cidade") {
-
-                    //     type = 'cidade';
-
-                    // } else {
-
-                    //     if (local.type == "provincia") {
-                            
-                    //         type = 'provincia';
-
-                    //     }
-
-                    // }
-                    
-                    // dash.map.highlight_feature(type = type, location = local.local);
-
-                    // scrolls to card
-
-                    const destination_step = document.querySelector(
-                        dash.interactions.story.search_bar.refs.destination_step
-                    );
-
-                    destination_step.scrollIntoView({behavior: "smooth"});
-
-
                 }
 
             }
@@ -964,6 +925,68 @@ const dash = {
     },
 
     vis : {
+
+        render_selected_place : function(local) {
+
+            // local has the form { text, local, tipo }
+
+            console.log('Renderizando ', local.local, local.tipo);
+
+            const data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
+
+            console.log(data);
+
+            //// seria o caso de levar isso para o render step do scroller?
+
+            // set vis state, calls vis render
+
+            dash.vis.location_card.state.set(local, data);
+
+            // populates fields
+
+            //dash.vis.location_card.update_text_fields();
+            dash.vis.location_card.text_field.update();
+            dash.vis.location_card.other_fields.category_field.update();
+
+            // with the fields updated, resize svg
+
+            // dash.vis.stripplot.dimensions.set_size();
+            // dash.vis.stripplot.scales.range.set();
+            // dash.vis.stripplot.scales.set(local.tipo);
+            // dash.vis.stripplot.components.labels.render(local.tipo);
+            // dash.vis.stripplot.components.lines.render(local.tipo);
+            // dash.vis.stripplot.components.marks.render(local.tipo);
+
+            //updates maps
+
+            // let type; 
+            
+            // if (local.type == "cidade") {
+
+            //     type = 'cidade';
+
+            // } else {
+
+            //     if (local.type == "provincia") {
+                    
+            //         type = 'provincia';
+
+            //     }
+
+            // }
+            
+            // dash.map.highlight_feature(type = type, location = local.local);
+
+            // scrolls to card
+
+            //const destination_step = document.querySelector(
+            //    dash.interactions.story.search_bar.refs.destination_step
+            //);
+
+            //destination_step.scrollIntoView({behavior: "smooth"});
+
+
+        },
 
         location_card : {
 
@@ -976,6 +999,7 @@ const dash = {
                 user_location_province : null,
                 remaining_categories : null,
                 remaining_categories_locations : null,
+                location_data : null,
 
                 set : function(local, data) {
 
@@ -986,7 +1010,7 @@ const dash = {
                     state.user_location_type = local.tipo;
                     state.user_location_province = local.provincia;
 
-                    const category = dash.utils.get_category_from_data(local, data);
+                    const category = local.tipo == "provincia" ? 'bosque' : dash.utils.get_category_from_data(local, data);
 
                     state.user_location_category = category
 
@@ -994,7 +1018,68 @@ const dash = {
 
                     state.remaining_categories = remaining_categories;
 
-                    state.remaining_categories_locations = dash.utils.generate_random_remaining_locations(remaining_categories);
+                    // state.remaining_categories_locations = dash.utils.generate_random_remaining_locations(remaining_categories);
+
+                    state.location_data = data;
+
+                }
+
+            },
+
+            text_field : {
+
+                ref: '.js--text-field',
+
+                provincia : {
+
+                    name : () => dash.vis.location_card.state.user_location_name,
+
+                    category : () => dash.vis.location_card.state.user_location_category,
+
+                    category_description : () => dash.vis.location_card.texts[dash.vis.location_card.state.user_location_category].first,
+
+                    medio_prototipico : () => dash.vis.location_card.state.location_data['Descripción del medio prototípico']
+
+                },
+
+                localidad : {},
+
+                update : function() {
+
+                    const text_fields = document.querySelectorAll(this.ref);
+
+                    console.log('Atualizar textos de ', text_fields);
+
+                    text_fields.forEach(field => {
+
+                        console.log(field);
+
+                        const location_type = dash.vis.location_card.state.user_location_type;
+
+                        const field_type = field.dataset.text_field;
+
+                        field.innerHTML = this[location_type][field_type]();
+
+                    
+                    })
+
+                }
+
+            },
+
+            other_fields : {
+
+                category_field : {
+                    
+                    ref : '[data-category]',
+                    
+                    update : function() {
+
+                        const cat_field = document.querySelector(this.ref);
+
+                        cat_field.dataset.category = dash.vis.location_card.state.user_location_category;
+
+                    }
 
                 }
 
@@ -1060,99 +1145,99 @@ const dash = {
 
             },
 
-            update_text_fields : function() {
+            // update_text_fields : function() {
 
-                const refs = dash.vis.location_card.refs;
-                const state = dash.vis.location_card.state;
-                const user_category = state.user_location_category;
+            //     const refs = dash.vis.location_card.refs;
+            //     const state = dash.vis.location_card.state;
+            //     const user_category = state.user_location_category;
 
-                // helper function
+            //     // helper function
 
-                function populate_field(ref, origin_of_information, dataset = null) {
+            //     function populate_field(ref, origin_of_information, dataset = null) {
 
-                    const field = document.querySelector(refs[ref]);
+            //         const field = document.querySelector(refs[ref]);
 
-                    console.log(ref, field, refs[ref], origin_of_information);
+            //         console.log(ref, field, refs[ref], origin_of_information);
 
-                    field.innerHTML = (ref == 'type' & origin_of_information == 'cidade') ?
-                    ('departamento de ' + state.user_location_province) :
-                    origin_of_information;
+            //         field.innerHTML = (ref == 'type' & origin_of_information == 'cidade') ?
+            //         ('departamento de ' + state.user_location_province) :
+            //         origin_of_information;
 
-                    if (dataset) field.dataset[dataset] = origin_of_information;
+            //         if (dataset) field.dataset[dataset] = origin_of_information;
 
-                }
+            //     }
 
-                // name
+            //     // name
 
-                populate_field('name', state.user_location_name);
+            //     populate_field('name', state.user_location_name);
 
-                // type
+            //     // type
 
-                populate_field('type', state.user_location_type);
+            //     populate_field('type', state.user_location_type);
 
-                // main category field
+            //     // main category field
 
-                populate_field('main_category', user_category, dataset = 'category');
+            //     populate_field('main_category', user_category, dataset = 'category');
 
-                // description field
+            //     // description field
 
-                populate_field('category_description', dash.vis.location_card.texts[user_category].first);
+            //     populate_field('category_description', dash.vis.location_card.texts[user_category].first);
 
-                // category field in second page
+            //     // category field in second page
 
-                populate_field('category', user_category, dataset = 'categoryHighlight');
+            //     populate_field('category', user_category, dataset = 'categoryHighlight');
 
-                // remaining categories fields
+            //     // remaining categories fields
 
-                populate_field('remaining_category1', state.remaining_categories[0], dataset = 'categoryHighlight');
-                populate_field('remaining_category2', state.remaining_categories[1], dataset = 'categoryHighlight');
-                populate_field('remaining_category3', state.remaining_categories[2], dataset = 'categoryHighlight');
+            //     populate_field('remaining_category1', state.remaining_categories[0], dataset = 'categoryHighlight');
+            //     populate_field('remaining_category2', state.remaining_categories[1], dataset = 'categoryHighlight');
+            //     populate_field('remaining_category3', state.remaining_categories[2], dataset = 'categoryHighlight');
 
-                let remain_cat1 = state.remaining_categories[0];
+            //     let remain_cat1 = state.remaining_categories[0];
 
-                console.log('Remain cat1', remain_cat1);
+            //     console.log('Remain cat1', remain_cat1);
 
-                populate_field(
-                    'text_remaining_category1', 
-                    dash.vis.location_card.texts[remain_cat1].second
-                    );
+            //     populate_field(
+            //         'text_remaining_category1', 
+            //         dash.vis.location_card.texts[remain_cat1].second
+            //         );
 
-                populate_field(
-                    'random_location_' + remain_cat1, 
-                    state.remaining_categories_locations[0]
-                    );
-
-
-                let remain_cat2 = state.remaining_categories[1];
-
-                console.log('Remain cat2', remain_cat2);
-
-                populate_field(
-                    'text_remaining_category2', 
-                    dash.vis.location_card.texts[remain_cat2].second
-                    );
-
-                populate_field(
-                    'random_location_' + remain_cat2, 
-                    state.remaining_categories_locations[1]
-                    );
+            //     populate_field(
+            //         'random_location_' + remain_cat1, 
+            //         state.remaining_categories_locations[0]
+            //         );
 
 
-                let remain_cat3 = state.remaining_categories[2];
+            //     let remain_cat2 = state.remaining_categories[1];
 
-                console.log('Remain cat3', remain_cat3);
+            //     console.log('Remain cat2', remain_cat2);
 
-                populate_field(
-                    'text_remaining_category3', 
-                    dash.vis.location_card.texts[remain_cat3].second
-                    );
+            //     populate_field(
+            //         'text_remaining_category2', 
+            //         dash.vis.location_card.texts[remain_cat2].second
+            //         );
 
-                populate_field(
-                    'random_location_' + remain_cat3, 
-                    state.remaining_categories_locations[2]
-                    );
+            //     populate_field(
+            //         'random_location_' + remain_cat2, 
+            //         state.remaining_categories_locations[1]
+            //         );
 
-            }
+
+            //     let remain_cat3 = state.remaining_categories[2];
+
+            //     console.log('Remain cat3', remain_cat3);
+
+            //     populate_field(
+            //         'text_remaining_category3', 
+            //         dash.vis.location_card.texts[remain_cat3].second
+            //         );
+
+            //     populate_field(
+            //         'random_location_' + remain_cat3, 
+            //         state.remaining_categories_locations[2]
+            //         );
+
+            // }
 
         },
 
@@ -1281,7 +1366,11 @@ const dash = {
 
                 cidade : [ 'pobXmedios', 'pobXperiodistas' ],
 
-                provincia : [ 'pobXmedios', 'pobXperiodistas', 'cat_media', 'Impacto de la publicidad oficial'],
+                provincia : [ 
+                    'Relación de periodistas por medio', 
+                    'Incidencia de la agenda de noticias locales', 
+                    'Impacto de la publicidad oficial'
+                ],
 
                 names : {
 
@@ -1583,14 +1672,6 @@ const dash = {
             dash.ctrl.monitors();
 
         },
-
-        interactions : {
-
-            story : {},
-
-            vis : {}
-
-        }
 
     }
 
