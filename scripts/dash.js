@@ -957,6 +957,7 @@ const dash = {
             dash.vis.stripplot.components.labels.render(local.tipo);
             dash.vis.stripplot.components.lines.render(local.tipo);
             dash.vis.stripplot.components.marks.render(local.tipo);
+            dash.vis.stripplot.components.label_selected.render(local.tipo);
 
             //updates maps
 
@@ -1640,6 +1641,50 @@ const dash = {
 
 
                         })
+
+                    }
+
+                },
+
+                label_selected : {
+
+                    render : function(type) {
+
+                        const datum = dash.data.fopea_data[type].filter(d => d.local == dash.vis.location_card.state.user_location_name)[0];
+
+                        const variables = dash.vis.stripplot.variables[type];
+
+                        let label = dash.vis.stripplot.sels.d3.container
+                            .selectAll("p.label-location-selected")
+                            .data(variables)
+                            .join('p')
+                            .classed('label-location-selected', true)
+                            .style('top', variable => {
+
+                                return (dash.vis.stripplot.scales.y[variable]
+                                -
+                                dash.vis.stripplot.dimensions.rect.highlight.height) + 'px'
+
+                            })
+                            .style('left', 0)
+                            .text(datum.local);
+
+                            label
+                              .style('left', function(variable) {
+
+                                let label_width = +d3.select(this).style('width').slice(0,-2);
+
+                                let pos_left = dash.vis.stripplot.scales.x[variable]( datum[variable] ) - dash.vis.stripplot.dimensions.rect.highlight.width/2;
+
+                                if (pos_left - label_width < 0) {
+                                    return (pos_left + dash.vis.stripplot.dimensions.rect.highlight.width) + 'px'
+                                } else {
+                                    return pos_left - label_width + 'px'
+                                }
+
+                              }
+                              )
+                            ;
 
                     }
 
