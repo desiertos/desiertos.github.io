@@ -339,13 +339,14 @@ input#location-search {
 
 .story-step {
 
-    height: 100vh;
+    /*height: 100vh;*/
     position: relative;
-    display: flex;
+    /*display: flex;
     flex-direction: column;
     justify-content: center;
 
-    scroll-snap-align: start;
+    scroll-snap-align: start;*/
+    margin-top: var(--header-height);
 
 
 }
@@ -437,7 +438,7 @@ input#location-search {
 p[data-text_field="category_description"] {
 
     color: var(--color-grey);
-    font-size: 0.8125rem;
+    font-size: 0.7rem;
     font-weight: normal;
 
 }
@@ -445,7 +446,7 @@ p[data-text_field="category_description"] {
 .dashboard--basic-info-table { 
 
     display: flex;
-    font-size: 0.8125rem;
+    font-size: 0.7rem;
     color: var(--font-color);
 
 }
@@ -493,10 +494,10 @@ p[data-text_field="category_description"] {
 
 }
 
-[data-text_field='medio_prototipico'] {
+p[data-text_field='medio_prototipico'] {
 
     color: var(--font-color);
-    font-size: 0.8125rem;
+    font-size: 0.8rem;
     font-weight: normal;
     font-family: var(--font-title);
 
