@@ -951,12 +951,12 @@ const dash = {
 
             // with the fields updated, resize svg
 
-            // dash.vis.stripplot.dimensions.set_size();
-            // dash.vis.stripplot.scales.range.set();
-            // dash.vis.stripplot.scales.set(local.tipo);
-            // dash.vis.stripplot.components.labels.render(local.tipo);
-            // dash.vis.stripplot.components.lines.render(local.tipo);
-            // dash.vis.stripplot.components.marks.render(local.tipo);
+            dash.vis.stripplot.dimensions.set_size();
+            dash.vis.stripplot.scales.range.set();
+            dash.vis.stripplot.scales.set(local.tipo);
+            dash.vis.stripplot.components.labels.render(local.tipo);
+            dash.vis.stripplot.components.lines.render(local.tipo);
+            dash.vis.stripplot.components.marks.render(local.tipo);
 
             //updates maps
 
@@ -1274,8 +1274,8 @@ const dash = {
 
             refs : {
 
-                svg : '.vis-story-stripplot',
-                container : 'div.vis-story-container'
+                svg : '.vis-dash-stripplot',
+                container : 'div.vis-dash-container'
 
             },
         
@@ -1326,10 +1326,28 @@ const dash = {
 
                 },
 
-                dots_radius : {
+                separation_line : {
 
-                    highlight: 14,
-                    other : 4
+                    width : 1,
+                    bottom: 7
+
+                },
+
+                rect : {
+
+                    highlight: {
+                        
+                        height: 30,
+                        width: 6
+
+                    },
+
+                    other : {
+                        
+                        height: 15,
+                        width: 3
+
+                    }
 
                 },
 
@@ -1366,11 +1384,11 @@ const dash = {
 
                     let height_svg_new = height_step - height_header - ( height_inner_step - height_svg_initial ) - 2*height_header; // usando height_header como margem;
 
-                    if (height_svg_new > 0) { 
+                    // if (height_svg_new > 0) { 
 
-                        svg.style.height = height_svg_new ;
+                    //     svg.style.height = height_svg_new ;
 
-                    }
+                    // }
 
                     dash.vis.stripplot.dimensions.svg_width = svg.getBoundingClientRect().width;
 
@@ -1382,10 +1400,19 @@ const dash = {
                       dimensions.location_label.top + 
                       dimensions.location_label.height +
                       dimensions.axis_line.top +
-                      dimensions.axis_line.bottom;
+                      dimensions.axis_line.width +
+                      dimensions.axis_line.bottom +
+                      dimensions.separation_line.width +
+                      dimensions.separation_line.bottom;
 
                     dash.vis.stripplot.dimensions.strip_height = height;
                     dash.vis.stripplot.dimensions.strip_line_relative = height - dimensions.axis_line.bottom;
+
+                    const nof_variables = dash.vis.stripplot.variables[
+                        dash.vis.location_card.state.user_location_type
+                    ].length;
+
+                    svg.style.height = nof_variables * height;
                     
                 }
 
@@ -1452,45 +1479,48 @@ const dash = {
 
                         // x
 
-                        let domain;
+                        let domain = d3.extent(
+                            dash.data.fopea_data[type], 
+                            d => d[variable]
+                        )
 
-                        if (variable == 'cat_media') {
+                        // if (variable == 'cat_media') {
 
-                            domain = [1,4]
+                        //     domain = [1,4]
 
-                        } else if (variable == 'Impacto de la publicidad oficial') {
+                        // } else if (variable == 'Impacto de la publicidad oficial' | 'Incidencia de la agenda de noticias locales') {
 
-                            domain = [0, 1]
+                        //     domain = [0, 1]
 
-                        } else {
+                        // } else {
 
-                            let key, location_stats;
+                            // let key, location_stats;
 
-                            if (type == 'cidade') {
+                            // if (type == 'cidade') {
 
-                                key = 'provincias';
+                            //     key = 'provincias';
 
-                                location_stats = dash.data.fopea_data.stats[key].filter(
-                                    d => d.provincia == dash.vis.location_card.state.user_location_province)[0]
+                            //     location_stats = dash.data.fopea_data.stats[key].filter(
+                            //         d => d.provincia == dash.vis.location_card.state.user_location_province)[0]
 
-                                console.log("Location stats", location_stats)
+                            //     console.log("Location stats", location_stats)
 
-                            } else {
+                            // } else {
 
-                                key = 'nacional';
+                            //     key = 'nacional';
 
-                                location_stats = dash.data.fopea_data.stats[key][0]
+                            //     location_stats = dash.data.fopea_data.stats[key][0]
 
-                            }
+                            // }
 
-                            domain = [
+                            // domain = [
 
-                                location_stats[variable + '_min'],
-                                location_stats[variable + '_max']
+                            //     location_stats[variable + '_min'],
+                            //     location_stats[variable + '_max']
 
-                            ];
+                            // ];
 
-                        }
+                        //}
 
 
                         scales.x[variable] = d3.scaleLinear()
@@ -1516,13 +1546,13 @@ const dash = {
                         console.log(variables);
 
                         dash.vis.stripplot.sels.d3.container
-                          .selectAll("p.vis-story-stripplot-labels-variables")
+                          .selectAll("p.vis-dash-stripplot-labels-variables")
                           .data(variables)
                           .join("p")
-                          .classed("vis-story-stripplot-labels-variables", true)
+                          .classed("vis-dash-stripplot-labels-variables", true)
                           .style("left", 0)
                           .style("top", (d,i) => dash.vis.stripplot.dimensions.strip_height*i + "px")
-                          .text(d => dash.vis.stripplot.variables.names[d]);
+                          .text((d,i) => dash.vis.stripplot.variables[type][i]);
 
                     }
 
@@ -1535,10 +1565,10 @@ const dash = {
                         const variables = dash.vis.stripplot.variables[type];
 
                         dash.vis.stripplot.sels.d3.svg
-                          .selectAll("line.vis-story-stripplot-axis")
+                          .selectAll("line.vis-dash-stripplot-axis")
                           .data(variables)
                           .join("line")
-                          .classed("vis-story-stripplot-axis", true)
+                          .classed("vis-dash-stripplot-axis", true)
                           .attr("x1", 0)
                           .attr("x2", dash.vis.stripplot.dimensions.svg_width)
                           .attr("y1", d => dash.vis.stripplot.scales.y[d])
@@ -1571,28 +1601,43 @@ const dash = {
                             console.log('circulos da variavel... ', variable);
 
                             dash.vis.stripplot.sels.d3.svg
-                              .selectAll("circle.vis-story-stripplot-marks[data-variable='" + variable + "']")
+                              .selectAll("rect.vis-dash-stripplot-marks[data-variable='" + variable + "']")
                               .data(data)
-                              .join('circle')
-                              .classed('vis-story-stripplot-marks', true)
+                              .join('rect')
+                              .classed('vis-dash-stripplot-marks', true)
                               .classed('marks-na', d => !dash.vis.stripplot.scales.x[variable](d[variable])) // se der undefined vai dar true
                               .classed('marks-location-highlighted', d => d.local == dash.vis.location_card.state.user_location_name)
                               .attr('data-variable', variable)
                               .attr('data-location', d => d.local)
-                              .attr('cx', d => dash.vis.stripplot.scales.x[variable](d[variable]))
-                              .attr('cy', dash.vis.stripplot.scales.y[variable])
-                              .attr('r', d => d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.dots_radius.highlight : dash.vis.stripplot.dimensions.dots_radius.other)
                               .attr('fill', function(d) {
 
-                                //console.log(d.local, d.categoria);
+                                if (type == 'provincia') return 'hotpink'
+                                else {
+                                    const cat = Math.ceil(+d.categoria);
 
-                                const cat = Math.ceil(+d.categoria);
+                                    const categoria = dash.params.categories[cat-1]
 
-                                const categoria = dash.params.categories[cat-1]
+                                    return dash.params.colors[categoria];
 
-                                return dash.params.colors[categoria];
+                                }
                                   
-                              });
+                              })
+                              .transition()
+                              .duration(500)
+                              .attr('x', d =>
+                              dash.vis.stripplot.scales.x[variable](d[variable])
+                              -
+                              (d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                              )
+                              .attr('y', d => 
+                              dash.vis.stripplot.scales.y[variable]
+                              -
+                              (d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.height : dash.vis.stripplot.dimensions.rect.other.height))
+                              .attr('height', d => d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.height : dash.vis.stripplot.dimensions.rect.other.height)
+                              .attr('width', d => d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)
+                            ;
+
+
 
                         })
 

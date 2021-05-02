@@ -601,43 +601,45 @@ p[data-text_field='medio_prototipico'] {
 
 */
 
-/* vis */
+/* vis dash */
 
-.vis-story-container {
+.vis-dash-container {
 
     width: 100%;
     position: relative;
 
 }
 
-.vis-story-stripplot {
+.vis-dash-stripplot {
 
     width: 100%;
 
 }
 
-.vis-story-container .vis-story-stripplot-labels-variables {
+.vis-dash-container .vis-dash-stripplot-labels-variables {
 
     position: absolute;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: 10px;
     line-height: 15px;
     color : var(--color-vis-variable-label);
 
 }
 
-line.vis-story-stripplot-axis {
+line.vis-dash-stripplot-axis {
 
     stroke: var(--color-vis-axis);
     stroke-width: 1;
 
 }
 
-.vis-story-stripplot-marks {
+.vis-dash-stripplot-marks {
 
     opacity : .5;
+    stroke-width: 0;
+    /*transform : translate(-50%, -50%);*/
 
 }
 
