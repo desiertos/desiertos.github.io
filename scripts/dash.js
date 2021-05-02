@@ -295,7 +295,7 @@ const dash = {
                       'line-color': 'black',
                       'line-width': 5
                     },
-                    'filter': ['==', 'nam', '']}); // puts behind road-label
+                    'filter': ['==', 'provincia', '']}); // puts behind road-label
 
             },
 
