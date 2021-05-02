@@ -1570,7 +1570,7 @@ const dash = {
                 dash.map.fit_Argentina();
 
                 // inicializa o scroller
-                dash.scroller.config();
+                //dash.scroller.config();
 
                 // image
 
