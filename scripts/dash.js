@@ -128,6 +128,39 @@ const dash = {
 
         },
 
+        debounce : function(func, wait) {
+
+            // taken from: https://levelup.gitconnected.com/debounce-in-javascript-improve-your-applications-performance-5b01855e086
+
+            let timeout;
+          
+            // This is the function that is returned and will be executed many times
+            // We spread (...args) to capture any number of parameters we want to pass
+
+            return function executedFunction(...args) {
+          
+              // The callback function to be executed after 
+              // the debounce time has elapsed
+              const later = () => {
+                // null timeout to indicate the debounce ended
+                timeout = null;
+                
+                // Execute the callback
+                func(...args);
+              };
+              // This will reset the waiting every function execution.
+              // This is the step that prevents the function from
+              // being executed because it will never reach the 
+              // inside of the previous setTimeout  
+              clearTimeout(timeout);
+              
+              // Restart the debounce waiting period.
+              // setTimeout returns a truthy value (it differs in web vs Node)
+              timeout = setTimeout(later, wait);
+            };
+
+        },
+
         colors : {
 
             get_from_css : function(color) {
@@ -272,17 +305,47 @@ const dash = {
 
                 dash.map_obj.addSource('provincia', {
                     type: 'geojson',
-                    'data' : dash.data.provincia
+                    'data' : dash.data.provincia,
+                    'promoteId' : 'nam'
                 });
 
                 dash.map_obj.addLayer({
                     'id': 'provincia',
+                    'type': 'fill',
+                    'source': 'provincia',
+                    'layout': {},
+                    'paint': {
+                      'fill-color': 'hotpink',
+                      'fill-opacity': [
+                        'case',
+                        [
+                            'boolean', 
+                            ['feature-state', 'hover'], 
+                            false
+                        ],
+                        .5,
+                        0
+                    ]
+                    }
+                }); 
+
+                dash.map_obj.addLayer({
+                    'id': 'provincia-border-hover',
                     'type': 'line',
                     'source': 'provincia',
                     'layout': {},
                     'paint': {
-                      'line-width': 0,
-                      'line-color': 'black'
+                      'line-width': 4,
+                      'line-color': [
+                        'case',
+                        [
+                            'boolean', 
+                            ['feature-state', 'hover'], 
+                            false
+                        ],
+                        "hotpink",
+                        "transparent"
+                    ]
                     }
                 }); 
 
@@ -307,6 +370,74 @@ const dash = {
                         ['get', 'nam'],
                         provincia
                 ]);
+
+            },
+
+            monitor_hover_event : function() {
+
+                let hoveredStateId = null;
+
+                function highlight_on_hover(e) {
+
+                    // precisa desse if aqui para fazer tirar o estado de hover da provincia anterior quando passa para outra provincia
+
+                    if (hoveredStateId) {
+                        dash.map_obj.setFeatureState(
+                            { 
+                                source: 'provincia',
+                                id: hoveredStateId
+                            },
+
+                            { hover : false }
+                        )
+
+                        //console.log(' Quando eu venho aqui? ')
+                    }
+
+                    hoveredStateId = e.features[0].properties.nam;
+
+                    dash.map_obj.setFeatureState(
+                        { 
+                            source: 'provincia',
+                            id: hoveredStateId
+                        },
+
+                        { hover : true }
+                    )
+
+                    //console.log('Hover no ', hoveredStateId)
+
+                    // algo mais a fazer aqui
+
+                };
+
+                // function debounced(e) {
+                //     dash.utils.debounce(highlight_on_hover(e), wait = 10000);
+                // }
+
+                dash.map_obj.on('mousemove', 'provincia', highlight_on_hover);
+
+                // dash.map_obj.on('mouseleave', 'provincia', function () {
+    
+                //     if (hoveredStateId) {
+                //         map.setFeatureState(
+                //             { source: 'provincia', id: hoveredStateId },
+                //             { hover: false }
+                //         );
+                //     }
+                
+                //     hoveredStateId = null;
+                // });
+
+            },
+
+            monitor_click_event : function() {
+
+                dash.map_obj.on('click', 'provincia', function(e) {
+
+                    console.log("Clicou em ", e.features[0].properties.nam);
+
+                })
 
             }
 
@@ -1375,7 +1506,7 @@ const dash = {
         init : function() {
 
             dash.utils.colors.populate();
-            dash.scroller.steps.get();
+            //dash.scroller.steps.get();
             dash.vis.stripplot.sels.d3.set(); // sets up d3 selections;
             dash.utils.load_data();
             
@@ -1423,10 +1554,17 @@ const dash = {
 
             dash.map_obj.on('load', function() {
 
+                // initialize map
+
                 dash.map.world_mask.initialize();
                 dash.map.province.initialize();
                 dash.map.localidad.initialize();
                 dash.map.fog_of_war.initialize(); 
+
+                // monitor hover and click events on provinces
+
+                dash.map.province.monitor_hover_event();
+                dash.map.province.monitor_click_event();
 
                 //fit map to continental Argentina
                 dash.map.fit_Argentina();
