@@ -959,11 +959,18 @@ const dash = {
             dash.vis.stripplot.dimensions.set_size();
             dash.vis.stripplot.scales.range.set();
             dash.vis.stripplot.scales.set(local.tipo);
+
+            // render
+
             dash.vis.stripplot.components.labels.render(local.tipo);
             dash.vis.stripplot.components.lines.render(local.tipo);
             dash.vis.stripplot.components.marks.render(local.tipo);
             dash.vis.stripplot.components.label_selected.render(local.tipo);
             dash.vis.stripplot.components.separation_lines.render(local.tipo);
+
+            // listeners
+
+            dash.vis.stripplot.interactions.hover_on_strip.monitor();
 
             //updates maps
 
@@ -1318,6 +1325,8 @@ const dash = {
 
                     svg : null,
                     container : null,
+
+                    strips : null,
 
                     set : function() {
 
@@ -1756,6 +1765,49 @@ const dash = {
 
                 }
 
+            },
+
+            interactions : {
+
+                hover_on_strip : {
+
+                    monitor : function() {
+
+                        const strips = dash.vis.stripplot.sels.d3.svg
+                        .selectAll('rect.vis-dash-stripplot-marks');
+                      
+                      strips.on('mouseover', this.showTooltip);
+                      strips.on('mouseout', this.hideTooltip);
+
+
+                    },
+
+                    showTooltip : function(e) {
+
+                        let data = d3.select(this).datum();
+
+                        const local_hovered = data.local;
+
+                        let this_strip = d3.select(this);
+
+                        const strips = dash.vis.stripplot.sels.d3.svg
+                        .selectAll('rect.vis-dash-stripplot-marks');
+
+                        console.log('pra ver quantas vezes dispara');
+
+                        strips.classed('vis-dash-stripplot-marks-hovered', d => d.local == local_hovered);
+
+                    },
+
+                    hideTooltip : function(e) {
+
+                        dash.vis.stripplot.sels.d3.svg
+                        .selectAll('rect.vis-dash-stripplot-marks').classed('vis-dash-stripplot-marks-hovered', false);
+
+
+
+                    }
+                }
             }
 
 

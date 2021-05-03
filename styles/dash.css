@@ -697,8 +697,15 @@ line.vis-dash-stripplot-separation {
     opacity : .5;
     stroke-width: 0;
     /*transform : translate(-50%, -50%);*/
-    transition: opacity .5s;
+    transition: opacity .5s, fill .5s;
 
+}
+
+.vis-dash-stripplot-marks-hovered {
+
+    opacity : 1;
+    fill : gold;
+    transition: all .5s;
 }
 
 .marks-na {
@@ -723,6 +730,13 @@ p.label-location-selected {
     margin: 0;
     padding: 0 2px;
 
+
+}
+
+.stripplot-tooltip {
+
+    opacity: 0;
+    position: absolute;
 
 }
 
