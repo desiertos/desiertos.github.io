@@ -136,7 +136,7 @@ nav {
     flex-direction: row;
     height: var(--header-height);
     width: 100vw;
-    position: absolute;
+    position: fixed;
     top: var(--header-height);
     z-index: 2;
     align-items: center;
@@ -287,7 +287,7 @@ h2 {
     top: calc(var(--header-height) * 2 );
     right: 0;
     width: calc(100% - 50vw);
-    background-color: white /* transparent;*/
+    background-color: white; /* transparent;*/
 
 }
 
@@ -426,11 +426,11 @@ input#location-search {
 
 }
 
-.story-step:last-child {
+/*.story-step:last-child {
 
     margin-bottom: 100vh;
 
-}
+}*/
 
 .story-step p {
 
