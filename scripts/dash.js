@@ -447,8 +447,6 @@ const dash = {
 
                     console.log("Clicou em ", province_name, local);
 
-                    dash.map.highlight_feature(province_name, type = 'provincia');
-
                     dash.vis.render_selected_place(local);
 
                 })
@@ -938,6 +936,13 @@ const dash = {
 
             console.log(data);
 
+            // if province, highlight on map
+
+            if (local.tipo == 'provincia') {
+                dash.map.highlight_feature(local.local, type = 'provincia');
+                dash.map.province.toggle_highlight_border_provincia(local.local);
+            }
+
             //// seria o caso de levar isso para o render step do scroller?
 
             // set vis state, calls vis render
@@ -971,6 +976,7 @@ const dash = {
             // listeners
 
             dash.vis.stripplot.interactions.hover_on_strip.monitor();
+            dash.vis.stripplot.interactions.click_on_strip.monitor();
 
             //updates maps
 
@@ -1843,6 +1849,40 @@ const dash = {
                         dash.vis.stripplot.sels.d3.container.select('p.dash-stripplot-tooltip').classed('dash-stripplot-tooltip-visible', false);
 
                     }
+                },
+
+                click_on_strip : {
+
+                    monitor : function() {
+                        
+                        const strips = dash.vis.stripplot.sels.d3.svg
+                          .selectAll('rect.vis-dash-stripplot-marks')
+                        ;
+                          
+                          
+                        strips.on('click', this.clicked);
+
+                    },
+
+                    clicked : function(e) {
+
+                        let datum = d3.select(this).datum();
+
+                        const type =  dash.vis.location_card.state.user_location_type;
+
+                        const local = {
+
+                            local : datum.local,
+                            tipo : type,
+                            text : datum.local
+
+                        }
+
+                        dash.vis.render_selected_place(local);
+
+
+                    }                     
+
                 }
             }
 
