@@ -733,12 +733,26 @@ p.label-location-selected {
 
 }
 
-.stripplot-tooltip {
+p.dash-stripplot-tooltip {
 
     opacity: 0;
     position: absolute;
+    transform: translateY(-100%);
+    font-family: var(--font-body);
+    font-size: 10px;
+    color: gold;
+    transition: opacity .5s;
+    pointer-events: none;
 
 }
+
+p.dash-stripplot-tooltip-visible {
+
+    opacity: 1;
+    transition: opacity .5s;
+
+}
+
 
 
 @media screen and (max-width: 620px) {

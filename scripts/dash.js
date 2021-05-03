@@ -1784,18 +1784,54 @@ const dash = {
 
                     showTooltip : function(e) {
 
-                        let data = d3.select(this).datum();
+                        let datum = d3.select(this).datum();
 
-                        const local_hovered = data.local;
+                        const type =  dash.vis.location_card.state.user_location_type;
+
+                        console.log(datum);
+
+                        const local_hovered = datum.local;
 
                         let this_strip = d3.select(this);
+
+                        const variable = this_strip.node().dataset.variable;
 
                         const strips = dash.vis.stripplot.sels.d3.svg
                         .selectAll('rect.vis-dash-stripplot-marks');
 
-                        console.log('pra ver quantas vezes dispara');
+                        //console.log('pra ver quantas vezes dispara');
 
                         strips.classed('vis-dash-stripplot-marks-hovered', d => d.local == local_hovered);
+
+                        //console.log(local_hovered, dash.vis.location_card.state.user_location_name);
+
+                        if (local_hovered != dash.vis.location_card.state.user_location_name) {
+
+                            let tt = dash.vis.stripplot.sels.d3.container.select('p.dash-stripplot-tooltip');
+
+                            tt
+                              .text(local_hovered)
+                              .style('top', (dash.vis.stripplot.scales.y[variable] - dash.vis.stripplot.dimensions.rect.other.height) + 'px');
+
+                            tt
+                              .style('left', function() {
+
+                                let label_width = +d3.select(this).style('width').slice(0,-2);
+
+                                let pos_left = dash.vis.stripplot.scales.x[variable]( datum[variable] ) - dash.vis.stripplot.dimensions.rect.other.width/2 ;
+
+                                if (pos_left - label_width < 0) {
+                                    return (pos_left + dash.vis.stripplot.dimensions.rect.other.width + 5) + 'px'
+                                } else {
+                                    return (pos_left - label_width - 5) + 'px'
+                                }
+                            });
+
+                            tt.classed('dash-stripplot-tooltip-visible', true);
+
+                        }
+
+
 
                     },
 
@@ -1804,7 +1840,7 @@ const dash = {
                         dash.vis.stripplot.sels.d3.svg
                         .selectAll('rect.vis-dash-stripplot-marks').classed('vis-dash-stripplot-marks-hovered', false);
 
-
+                        dash.vis.stripplot.sels.d3.container.select('p.dash-stripplot-tooltip').classed('dash-stripplot-tooltip-visible', false);
 
                     }
                 }
