@@ -297,6 +297,30 @@ const dash = {
                     }
                 }); 
 
+                dash.map_obj.addLayer({
+                    'id': 'localidad-highlight',
+                    'type': 'circle',
+                    'source': 'localidad',
+                    'layout': {},
+                    'paint': {
+                      'circle-color': 'transparent',
+                      'circle-radius': 15,
+                      'circle-stroke-width': 2,
+                      'circle-stroke-color': 'black'
+                    }, 'filter': ['==', 'localidad', '']
+                }); 
+
+            },
+
+            toggle_highlight_circle : function(localidad) {
+
+                dash.map_obj.setFilter(
+                    'localidad-highlight', [
+                        '==',
+                        ['get', 'localidad'],
+                        localidad
+                ]);
+
             },
                 
             popup: new mapboxgl.Popup(
@@ -1059,6 +1083,8 @@ const dash = {
             if (local.tipo == 'provincia') {
                 dash.map.highlight_feature(local.local, type = 'provincia');
                 dash.map.province.toggle_highlight_border_provincia(local.local);
+            } else if (local.tipo == 'localidad') {
+                dash.map.localidad.toggle_highlight_circle(local.local);
             }
 
             //// seria o caso de levar isso para o render step do scroller?
@@ -1853,11 +1879,22 @@ const dash = {
                               marks
                               .transition()
                               .duration(500)
-                              .attr('x', d =>
-                              dash.vis.stripplot.scales.x[variable](d[variable])
-                              -
-                              (d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
-                              )
+                              .attr('x', d => {
+
+                                console.log(d.variable);
+
+                                if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+
+                                    return dash.vis.stripplot.scales.x[variable](d[variable])
+                                    -
+                                    (d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                            
+                                } else {
+
+                                    return 0
+
+                                }
+                              })
                               .attr('y', d => 
                               dash.vis.stripplot.scales.y[variable]
                               -
