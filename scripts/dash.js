@@ -447,7 +447,7 @@ const dash = {
 
                     console.log("Clicou em ", province_name, local);
 
-                    // dash.map.highlight_feature(location = province_name, type = 'provincia');
+                    dash.map.highlight_feature(province_name, type = 'provincia');
 
                     dash.vis.render_selected_place(local);
 
@@ -567,7 +567,7 @@ const dash = {
 
         highlight_feature : function(location, type = 'provincia', pitch = 0, bearing = 0) {
 
-            console.log(type, location);
+            console.log(type, location, pitch, bearing);
 
             // type provincia, cidade
 
@@ -604,7 +604,9 @@ const dash = {
             console.log(bbox_highlighted);
         
             dash.map_obj.fitBounds(
+
                 bbox_highlighted, 
+
                 {
                     linear : false, // false means the map transitions using map.flyTo()
                     speed: 1, 
