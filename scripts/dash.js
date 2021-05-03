@@ -374,22 +374,31 @@ const dash = {
 
                 });
 
+            },
+
+            monitor_click_event : function() {
+
+                dash.map_obj.on('click', 'localidad', function(e) {
+
+                    const localidad = e.features[0].properties.localidad;
+                    const provincia = e.features[0].properties.provincia;
+
+                    const local = {
+
+                        local : localidad,
+                        tipo  : "localidad",
+                        text  : localidad + '(' + provincia + ')',
+                        provincia : provincia
+
+                    };
+
+                    console.log("Clicou em ", localidad, local);
+
+                    dash.vis.render_selected_place(local);
+
+                })
+
             }
-
-
-                 
-                
-
-            // toggle_highlight_border : function(cidade) {
-
-            //     dash.map_obj.setFilter(
-            //         'cidade-border', [
-            //             '==',
-            //             ['get', 'nam'],
-            //             cidade
-            //     ]);
-
-            // }
 
         },
 
@@ -1172,7 +1181,17 @@ const dash = {
 
                 },
 
-                localidad : {},
+                localidad : {
+
+                    name : () => dash.vis.location_card.state.user_location_name,
+
+                    category : () => dash.vis.location_card.state.user_location_category,
+
+                    category_description : () => dash.vis.location_card.texts[dash.vis.location_card.state.user_location_category].first,
+
+                    medio_prototipico : () => ''
+
+                },
 
                 update : function() {
 
@@ -1577,7 +1596,12 @@ const dash = {
 
             variables : {
 
-                cidade : [ 'pobXmedios', 'pobXperiodistas' ],
+                localidad : [ 
+
+                    'pobXmedios', 
+                    'pobXperiodistas' 
+
+                ],
 
                 provincia : [ 
                     'Relación de periodistas por medio', 
@@ -1626,7 +1650,11 @@ const dash = {
                     const dimensions = dash.vis.stripplot.dimensions;
                     const scales = dash.vis.stripplot.scales;
 
-                    console.log("setting scales...", type, variables)
+                    console.log("setting scales...", type, variables);
+
+                    // resets scales
+                    scales.y = {};
+                    scales.x = {};
 
                     variables.forEach((variable,i) => {
 
@@ -1636,8 +1664,24 @@ const dash = {
 
                         // x
 
+                        let data;
+
+                        if (type == 'provincia') {
+
+                            data = dash.data.fopea_data[type];
+
+                        } else {
+
+                            const provincia = dash.vis.location_card.state.user_location_province;
+
+                            data = dash.data.fopea_data[type].filter(d => d.provincia == provincia);
+
+                            console.log('dominio', type, provincia, variable, data);
+
+                        }
+
                         let domain = d3.extent(
-                            dash.data.fopea_data[type], 
+                            data, 
                             d => d[variable]
                         )
 
@@ -1741,25 +1785,48 @@ const dash = {
 
                         const variables = dash.vis.stripplot.variables[type];
 
-                        let data;
+                        let data, variables_not_present;
 
-                        if (type == 'cidade') {
+                        if (type == 'localidad') {
 
                             const provincia = dash.vis.location_card.state.user_location_province;
 
                             // gets departments that belong to the current province
 
-                            data = dash.data.fopea_data.cidade.filter(d => d.provincia == provincia);
+                            data = dash.data.fopea_data.localidad.filter(d => d.provincia == provincia);
 
-                        } else data = dash.data.fopea_data.provincia;
+                            // to clean rects
+                            variables_not_present = dash.vis.stripplot.variables.provincia;
+
+
+                        } else {
+                            
+                            data = dash.data.fopea_data.provincia;
+
+                            variables_not_present = dash.vis.stripplot.variables.localidad;
+
+                        }
+
+                        // removes marks from other levels
+
+                        variables_not_present.forEach(variable => {
+
+                            dash.vis.stripplot.sels.d3.svg
+                              .selectAll("rect.vis-dash-stripplot-marks[data-variable='" + variable + "']")
+                              .transition()
+                              .duration(500)
+                              .attr('width', 0)
+                              .remove();
+
+                        });
 
                         variables.forEach(variable => {
 
                             console.log('circulos da variavel... ', variable);
 
-                            dash.vis.stripplot.sels.d3.svg
+                            const marks = dash.vis.stripplot.sels.d3.svg
                               .selectAll("rect.vis-dash-stripplot-marks[data-variable='" + variable + "']")
-                              .data(data)
+                              .data(data, d => d.local)
                               .join('rect')
                               .classed('vis-dash-stripplot-marks', true)
                               .classed('marks-na', d => !dash.vis.stripplot.scales.x[variable](d[variable])) // se der undefined vai dar true
@@ -1778,7 +1845,12 @@ const dash = {
 
                                 }
                                   
-                              })
+                              });
+
+                              marks.enter().attr('y', d => 
+                              dash.vis.stripplot.scales.y[variable]);
+
+                              marks
                               .transition()
                               .duration(500)
                               .attr('x', d =>
@@ -1793,8 +1865,6 @@ const dash = {
                               .attr('height', d => d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.height : dash.vis.stripplot.dimensions.rect.other.height)
                               .attr('width', d => d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)
                             ;
-
-
 
                         })
 
@@ -1983,7 +2053,8 @@ const dash = {
 
                             local : datum.local,
                             tipo : type,
-                            text : datum.local
+                            text : datum.local,
+                            provincia : datum.provincia
 
                         }
 
@@ -2068,6 +2139,7 @@ const dash = {
                 // monitor hover and click events on localidads
 
                 dash.map.localidad.monitor_hover_event();
+                dash.map.localidad.monitor_click_event();
 
                 //fit map to continental Argentina
                 dash.map.fit_Argentina();
