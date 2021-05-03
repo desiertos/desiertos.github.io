@@ -754,6 +754,14 @@ p.dash-stripplot-tooltip-visible {
 }
 
 
+/* map */
+.mapboxgl-control-container {
+
+    font-family: var(--font-body);
+
+}
+
+
 
 @media screen and (max-width: 620px) {
 
@@ -800,3 +808,4 @@ p.dash-stripplot-tooltip-visible {
 
 
 }
+

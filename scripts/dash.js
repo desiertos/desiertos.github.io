@@ -259,7 +259,8 @@ const dash = {
 
                 dash.map_obj.addSource('localidad', {
                     type: 'geojson',
-                    'data' : dash.data.localidad
+                    'data' : dash.data.localidad,
+                    'promoteId' : 'link'
                 });
 
                 dash.map_obj.addLayer({
@@ -269,22 +270,115 @@ const dash = {
                     'layout': {},
                     'paint': {
                       'circle-color': ['get', 'color_real'],
-                      'circle-radius' : 5 
+                      'circle-radius' : [
+                          'case', [
+                              'boolean', 
+                              ['feature-state', 'hover'], 
+                              false
+                            ], 10,
+                            2,
+                        ],
+                      'circle-stroke-width': [
+                        'case', [
+                            'boolean', 
+                            ['feature-state', 'hover'], 
+                            false
+                          ], 2,
+                          0,
+                        ],
+                      'circle-stroke-color': [
+                        'case', [
+                            'boolean', 
+                            ['feature-state', 'hover'], 
+                            false
+                          ], '#ffffff',
+                          'transparent',
+                        ] 
                     }
-                }); // puts behind road-label
-
-                // dash.map_obj.addLayer({
-                //     'id': 'cidade-border',
-                //     'type': 'line',
-                //     'source': 'cidade',
-                //     'layout': {},
-                //     'paint': {
-                //       'line-color': 'black',
-                //       'line-width': 5
-                //     },
-                //     'filter': ['==', 'cidade', '']}); // puts behind road-label
+                }); 
 
             },
+                
+            popup: new mapboxgl.Popup(
+                    {
+                        closeButton: false,
+                        loseOnClick: false
+                    }),
+
+            monitor_hover_event : function() {
+
+                let hoveredStateId = null;
+
+                dash.map_obj.on('mouseenter', 'localidad', function (e) {
+                    // Change the cursor style as a UI indicator.
+                    dash.map_obj.getCanvas().style.cursor = 'pointer';
+
+                    console.log(e);
+                     
+                    let coordinates = e.features[0].geometry.coordinates.slice();
+                    let name = e.features[0].properties.localidad;
+                     
+                    // Ensure that if the map is zoomed out such that multiple
+                    // copies of the feature are visible, the popup appears
+                    // over the copy being pointed to.
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+                     
+                    // Populate the popup and set its coordinates
+                    // based on the feature found.
+                    dash.map.localidad.popup.setLngLat(coordinates).setHTML(name).addTo(dash.map_obj);
+
+                    ////////////
+                    // highlight circle
+
+                    if (hoveredStateId) {
+                        dash.map_obj.setFeatureState(
+                            { 
+                                source: 'localidad',
+                                id: hoveredStateId
+                            },
+
+                            { hover : false }
+                        )
+
+                        //console.log(' Quando eu venho aqui? ')
+                    }
+
+                    hoveredStateId = e.features[0].properties.link;
+
+                    dash.map_obj.setFeatureState(
+                        { 
+                            source: 'localidad',
+                            id: hoveredStateId
+                        },
+
+                        { hover : true }
+                    )
+                });
+                     
+                dash.map_obj.on('mouseleave', 'localidad', function () {
+
+                    dash.map_obj.getCanvas().style.cursor = '';
+                    dash.map.localidad.popup.remove();
+
+                    // return circle to normal sizing and color
+                    if (hoveredStateId) {
+                        dash.map_obj.setFeatureState(
+                            { source: 'localidad', id: hoveredStateId },
+                            { hover: false }
+                        );
+                    }
+                
+                    hoveredStateId = null;
+
+                });
+
+            }
+
+
+                 
+                
 
             // toggle_highlight_border : function(cidade) {
 
@@ -323,7 +417,7 @@ const dash = {
                             ['feature-state', 'hover'], 
                             false
                         ],
-                        .5,
+                        .1,
                         0
                     ]
                     }
@@ -417,17 +511,17 @@ const dash = {
 
                 dash.map_obj.on('mousemove', 'provincia', highlight_on_hover);
 
-                // dash.map_obj.on('mouseleave', 'provincia', function () {
+                dash.map_obj.on('mouseleave', 'provincia', function () {
     
-                //     if (hoveredStateId) {
-                //         map.setFeatureState(
-                //             { source: 'provincia', id: hoveredStateId },
-                //             { hover: false }
-                //         );
-                //     }
+                    if (hoveredStateId) {
+                        dash.map_obj.setFeatureState(
+                            { source: 'provincia', id: hoveredStateId },
+                            { hover: false }
+                        );
+                    }
                 
-                //     hoveredStateId = null;
-                // });
+                    hoveredStateId = null;
+                });
 
             },
 
@@ -612,6 +706,21 @@ const dash = {
                     pitch: pitch,
                     bearing: bearing
                 }
+            );
+
+            // increases circle radius when zooming
+
+            dash.map_obj.setPaintProperty(
+                'localidad', 
+                'circle-radius', 
+                [
+                    'case', [
+                        'boolean', 
+                        ['feature-state', 'hover'], 
+                        false
+                    ], 10,
+                    5,
+                ]
             );
 
         }
@@ -1955,6 +2064,10 @@ const dash = {
 
                 dash.map.province.monitor_hover_event();
                 dash.map.province.monitor_click_event();
+
+                // monitor hover and click events on localidads
+
+                dash.map.localidad.monitor_hover_event();
 
                 //fit map to continental Argentina
                 dash.map.fit_Argentina();
