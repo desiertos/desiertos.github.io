@@ -116,15 +116,62 @@ nav {
 .dashboard--title {
 
     text-transform: uppercase;
-    font-size : 1rem;
+    font-size : .8rem;
     font-family: var(--font-body);
     margin: 0;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    color: black;
 
 }
+
+.dashboard--menu {
+
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    height: var(--header-height);
+    width: 100vw;
+    position: absolute;
+    top: var(--header-height);
+    z-index: 2;
+    align-items: center;
+
+
+}
+
+.dashboard--menu li {
+
+    flex: 1;
+    border-top: 1px solid var(--font-color);
+    border-bottom: 1px solid var(--font-color);
+    line-height: var(--header-height);
+    padding-left: 0;
+    display: flex;
+    color: var(--font-color);
+    text-transform: uppercase;
+    font-size: .7rem;
+    font-weight: bold;
+    letter-spacing: .07rem;
+
+}
+
+.dashboard--menu li::before {
+
+    content: "";
+    width: var(--header-height);
+    height: var(--header-height);
+    display: inline;
+    margin-right: 1rem;
+    border-right: 1px solid var(--font-color);
+    border-left: 1px solid var(--font-color);
+
+}
+
 
 
 
@@ -217,8 +264,9 @@ h2 {
 .map-container {
 
     position: fixed;
-    width: calc(100% - 50vw);
-    height: 100vh;  
+    width: 50vw;
+    top: calc(var(--header-height) * 2 );
+    height: calc(100vh - var(--header-height) - var(--header-height));  
     z-index: 1;
 
 }
@@ -236,9 +284,9 @@ h2 {
 .story-container {
 
     position: absolute;
-    top: 0;
+    top: calc(var(--header-height) * 2 );
     right: 0;
-    width: 50vw;
+    width: calc(100% - 50vw);
     background-color: white /* transparent;*/
 
 }
@@ -346,8 +394,8 @@ input#location-search {
     flex-direction: column;
     justify-content: center;
 
-    scroll-snap-align: start;*/
-    margin-top: var(--header-height);
+    scroll-snap-align: start;
+    margin-top: var(--header-height);*/
 
 
 }
@@ -507,7 +555,7 @@ p[data-text_field='medio_prototipico'] {
 
 /* bosque */
 
-[data-category='bosque'] {
+[data-category='bosque'], [data-menu-option="bosque"] {
 
     background-color: var(--color-bosque);
 
@@ -527,7 +575,7 @@ p[data-text_field='medio_prototipico'] {
 
 /* semibosque */
 
-[data-category='semibosque'] {
+[data-category='semibosque'], [data-menu-option="semibosque"] {
 
     background-color: var(--color-semibosque);
 
@@ -547,7 +595,7 @@ p[data-text_field='medio_prototipico'] {
 
 /* semidesierto */
 
-[data-category='semidesierto'] {
+[data-category='semidesierto'], [data-menu-option="semidesierto"] {
 
     background-color: var(--color-semidesierto);
 
@@ -567,7 +615,7 @@ p[data-text_field='medio_prototipico'] {
 
 /* desierto */
 
-[data-category='desierto'] {
+[data-category='desierto'], [data-menu-option="desierto"] {
 
     background-color: var(--color-desierto);
 
