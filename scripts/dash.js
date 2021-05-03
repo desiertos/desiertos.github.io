@@ -961,6 +961,7 @@ const dash = {
             dash.vis.stripplot.components.lines.render(local.tipo);
             dash.vis.stripplot.components.marks.render(local.tipo);
             dash.vis.stripplot.components.label_selected.render(local.tipo);
+            dash.vis.stripplot.components.separation_lines.render(local.tipo);
 
             //updates maps
 
@@ -1714,6 +1715,28 @@ const dash = {
                               }
                               )
                             ;
+
+                    }
+
+                },
+
+                separation_lines : {
+
+                    render : function(type) {
+
+                        const variables = dash.vis.stripplot.variables[type];
+
+                        const adj = dash.vis.stripplot.dimensions.axis_line.bottom - 1;
+
+                        dash.vis.stripplot.sels.d3.svg
+                          .selectAll("line.vis-dash-stripplot-separation")
+                          .data(variables)
+                          .join("line")
+                          .classed("vis-dash-stripplot-separation", true)
+                          .attr("x1", 0)
+                          .attr("x2", dash.vis.stripplot.dimensions.svg_width)
+                          .attr("y1", d => dash.vis.stripplot.scales.y[d] + adj)
+                          .attr("y2", d => dash.vis.stripplot.scales.y[d] + adj);
 
                     }
 

@@ -685,6 +685,13 @@ line.vis-dash-stripplot-axis {
 
 }
 
+line.vis-dash-stripplot-separation {
+
+    stroke: var(--font-color);
+    stroke-width: 1;
+
+}
+
 .vis-dash-stripplot-marks {
 
     opacity : .5;
