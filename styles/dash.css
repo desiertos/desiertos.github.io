@@ -244,8 +244,18 @@ h2 {
 
     color: var(--color-grey);
     border: 1px solid currentColor;
-    display: inline;
+    display: inline-block;
     padding: 2px;
+    cursor: pointer;
+    transition: transform .5s;
+
+}
+
+.dashboard--breadcrumbs li:hover {
+
+    /*transform: scale(1.1); /*translate(1px, 1px);*/
+    box-shadow: 0 0 5px #212121;
+    transition: transform .5s;
 
 }
 
