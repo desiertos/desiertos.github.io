@@ -124,6 +124,7 @@ nav {
     top: 50%;
     transform: translate(-50%, -50%);
     color: black;
+    transition: opacity .5s;
 
 }
 
@@ -152,23 +153,30 @@ nav {
     line-height: var(--header-height);
     padding-left: 0;
     display: flex;
-    color: var(--font-color);
-    text-transform: uppercase;
-    font-size: .7rem;
-    font-weight: bold;
-    letter-spacing: .07rem;
+
 
 }
 
 .dashboard--menu li::before {
 
-    content: "";
     width: var(--header-height);
     height: var(--header-height);
     display: inline;
+    text-align: center;
     margin-right: 1rem;
     border-right: 1px solid var(--font-color);
     border-left: 1px solid var(--font-color);
+
+}
+
+.dashboard--menu li::after {
+
+    color: var(--font-color);
+    text-transform: uppercase;
+    font-size: .7rem;
+    font-weight: bold;
+    letter-spacing: .07rem;
+    content: attr(data-menu-option);
 
 }
 
@@ -555,13 +563,16 @@ p[data-text_field='medio_prototipico'] {
 
 /* bosque */
 
-[data-category='bosque'], [data-menu-option="bosque"] {
+[data-category='bosque'], 
+[data-menu-option="bosque"] {
 
     background-color: var(--color-bosque);
 
 }
 
-[data-category='bosque']::before, [data-category-highlight='bosque']::before {
+[data-category='bosque']::before, 
+[data-category-highlight='bosque']::before,
+[data-menu-option='bosque']::before {
 
     content: var(--emoji-bosque);
 
@@ -581,7 +592,9 @@ p[data-text_field='medio_prototipico'] {
 
 }
 
-[data-category='semibosque']::before, [data-category-highlight='semibosque']::before {
+[data-category='semibosque']::before, 
+[data-category-highlight='semibosque']::before,
+[data-menu-option='semibosque']::before {
 
     content: var(--emoji-semibosque);
 
@@ -601,7 +614,9 @@ p[data-text_field='medio_prototipico'] {
 
 }
 
-[data-category='semidesierto']::before, [data-category-highlight='semidesierto']::before {
+[data-category='semidesierto']::before, 
+[data-category-highlight='semidesierto']::before,
+[data-menu-option='semidesierto']::before {
 
     content: var(--emoji-semidesierto);
 
@@ -621,7 +636,9 @@ p[data-text_field='medio_prototipico'] {
 
 }
 
-[data-category='desierto']::before, [data-category-highlight='desierto']::before {
+[data-category='desierto']::before, 
+[data-category-highlight='desierto']::before,
+[data-menu-option='desierto']::before {
 
     content: var(--emoji-desierto);
 
@@ -802,6 +819,34 @@ p.dash-stripplot-tooltip-visible {
     a.go-to-dashboard {
 
         width: 100vw;
+
+    }
+
+    .dashboard--menu li::after {
+
+        color: var(--font-color);
+        text-transform: uppercase;
+        font-size: .7rem;
+        font-weight: bold;
+        letter-spacing: .07rem;
+        content: '';
+        display: none;
+    
+    }
+
+    .dashboard--menu li::before {
+
+        border-right: none;
+        width: 100%;
+        margin-right: 0;
+        transition: width .5s;
+    
+    }
+
+    .dashboard--title {
+
+        opacity: 0;
+        transition: opacity .5s;
 
     }
 
