@@ -1113,7 +1113,7 @@ const dash = {
 
             dash.vis.stripplot.components.labels.render(local.tipo);
             dash.vis.stripplot.components.lines.render(local.tipo);
-            dash.vis.stripplot.components.marks.render(local.tipo);
+            dash.vis.stripplot.components.marks.render[local.tipo]();
             dash.vis.stripplot.components.label_selected.render(local.tipo);
             dash.vis.stripplot.components.separation_lines.render(local.tipo);
 
@@ -1807,13 +1807,97 @@ const dash = {
 
                 marks : {
 
-                    render : function(type) {
+                    render : {
+                        
+                        provincia : function() {
 
-                        const variables = dash.vis.stripplot.variables[type];
+                            const type = 'provincia';
 
-                        let data, variables_not_present;
+                            const variables = dash.vis.stripplot.variables[type];
+                                
+                            const data = dash.data.fopea_data.provincia;
 
-                        if (type == 'localidad') {
+                            const variables_not_present = dash.vis.stripplot.variables.localidad;
+
+                            // removes marks from other levels
+
+                            variables_not_present.forEach(variable => {
+
+                                dash.vis.stripplot.sels.d3.svg
+                                .selectAll("circle.vis-dash-stripplot-marks[data-variable='" + variable + "']")
+                                .transition()
+                                .duration(500)
+                                .attr('r', 0)
+                                .remove();
+
+                            });
+
+                            variables.forEach(variable => {
+
+                                console.log('circulos da variavel... ', variable);
+
+                                const marks = dash.vis.stripplot.sels.d3.svg
+                                .selectAll("rect.vis-dash-stripplot-marks[data-variable='" + variable + "']")
+                                .data(data, d => d.local)
+                                .join('rect')
+                                .classed('vis-dash-stripplot-marks', true)
+                                .classed('marks-na', d => !dash.vis.stripplot.scales.x[variable](d[variable])) // se der undefined vai dar true
+                                .classed('marks-location-highlighted', d => d.local == dash.vis.location_card.state.user_location_name)
+                                .attr('data-variable', variable)
+                                .attr('data-location', d => d.local)
+                                .attr('fill', function(d) {
+
+                                    if (type == 'provincia') return 'hotpink'
+                                    else {
+                                        const cat = Math.ceil(+d.categoria);
+
+                                        const categoria = dash.params.categories[cat-1]
+
+                                        return dash.params.colors[categoria];
+
+                                    }
+                                    
+                                });
+
+                                marks.enter().attr('y', d => 
+                                dash.vis.stripplot.scales.y[variable]);
+
+                                marks
+                                .transition()
+                                .duration(500)
+                                .attr('x', d => {
+
+                                    console.log(d.variable);
+
+                                    if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+
+                                        return dash.vis.stripplot.scales.x[variable](d[variable])
+                                        -
+                                        (d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                                
+                                    } else {
+
+                                        return 0
+
+                                    }
+                                })
+                                .attr('y', d => 
+                                dash.vis.stripplot.scales.y[variable]
+                                -
+                                (d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.height : dash.vis.stripplot.dimensions.rect.other.height))
+                                .attr('height', d => d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.height : dash.vis.stripplot.dimensions.rect.other.height)
+                                .attr('width', d => d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)
+                                ;
+
+                            })
+
+                        },
+
+                        localidad : function() {
+
+                            const type = 'localidad';
+
+                            const variables = dash.vis.stripplot.variables[type];
 
                             const provincia = dash.vis.location_card.state.user_location_province;
 
@@ -1824,86 +1908,80 @@ const dash = {
                             // to clean rects
                             variables_not_present = dash.vis.stripplot.variables.provincia;
 
+                            // removes marks from other levels
 
-                        } else {
-                            
-                            data = dash.data.fopea_data.provincia;
+                            variables_not_present.forEach(variable => {
 
-                            variables_not_present = dash.vis.stripplot.variables.localidad;
+                                dash.vis.stripplot.sels.d3.svg
+                                .selectAll("rect.vis-dash-stripplot-marks[data-variable='" + variable + "']")
+                                .transition()
+                                .duration(500)
+                                .attr('width', 0)
+                                .remove();
+
+                            });
+
+                            variables.forEach(variable => {
+
+                                console.log('circulos da variavel... ', variable);
+
+                                const marks = dash.vis.stripplot.sels.d3.svg
+                                .selectAll("circle.vis-dash-stripplot-marks[data-variable='" + variable + "']")
+                                .data(data, d => d.local)
+                                .join('circle')
+                                .classed('vis-dash-stripplot-marks', true)
+                                .classed('marks-na', d => !dash.vis.stripplot.scales.x[variable](d[variable])) // se der undefined vai dar true
+                                .classed('marks-location-highlighted', d => d.local == dash.vis.location_card.state.user_location_name)
+                                .attr('data-variable', variable)
+                                .attr('data-location', d => d.local)
+                                .attr('fill', function(d) {
+
+                                    if (type == 'provincia') return 'hotpink'
+                                    else {
+                                        const cat = Math.ceil(+d.categoria);
+
+                                        const categoria = dash.params.categories[cat-1]
+
+                                        return dash.params.colors[categoria];
+
+                                    }
+                                    
+                                })
+                                .attr('cy', d => 
+                                dash.vis.stripplot.scales.y[variable]);
+
+                                // marks.enter().attr('cy', d => 
+                                //dash.vis.stripplot.scales.y[variable]);
+
+                                marks
+                                .transition()
+                                .duration(500)
+                                .attr('cx', d => {
+
+                                    console.log(d.variable);
+
+                                    if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+
+                                        return dash.vis.stripplot.scales.x[variable](d[variable])
+                                        -
+                                        (d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                                
+                                    } else {
+
+                                        return 0
+
+                                    }
+                                })
+                                .attr('r', d => 
+                                d.local == dash.vis.location_card.state.user_location_name ?
+                                dash.vis.stripplot.dimensions.rect.highlight.height/4 :
+                                dash.vis.stripplot.dimensions.rect.other.height/4)
+                                ;
+
+                            })
+
 
                         }
-
-                        // removes marks from other levels
-
-                        variables_not_present.forEach(variable => {
-
-                            dash.vis.stripplot.sels.d3.svg
-                              .selectAll("rect.vis-dash-stripplot-marks[data-variable='" + variable + "']")
-                              .transition()
-                              .duration(500)
-                              .attr('width', 0)
-                              .remove();
-
-                        });
-
-                        variables.forEach(variable => {
-
-                            console.log('circulos da variavel... ', variable);
-
-                            const marks = dash.vis.stripplot.sels.d3.svg
-                              .selectAll("rect.vis-dash-stripplot-marks[data-variable='" + variable + "']")
-                              .data(data, d => d.local)
-                              .join('rect')
-                              .classed('vis-dash-stripplot-marks', true)
-                              .classed('marks-na', d => !dash.vis.stripplot.scales.x[variable](d[variable])) // se der undefined vai dar true
-                              .classed('marks-location-highlighted', d => d.local == dash.vis.location_card.state.user_location_name)
-                              .attr('data-variable', variable)
-                              .attr('data-location', d => d.local)
-                              .attr('fill', function(d) {
-
-                                if (type == 'provincia') return 'hotpink'
-                                else {
-                                    const cat = Math.ceil(+d.categoria);
-
-                                    const categoria = dash.params.categories[cat-1]
-
-                                    return dash.params.colors[categoria];
-
-                                }
-                                  
-                              });
-
-                              marks.enter().attr('y', d => 
-                              dash.vis.stripplot.scales.y[variable]);
-
-                              marks
-                              .transition()
-                              .duration(500)
-                              .attr('x', d => {
-
-                                console.log(d.variable);
-
-                                if (dash.vis.stripplot.scales.x[variable](d[variable])) {
-
-                                    return dash.vis.stripplot.scales.x[variable](d[variable])
-                                    -
-                                    (d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
-                            
-                                } else {
-
-                                    return 0
-
-                                }
-                              })
-                              .attr('y', d => 
-                              dash.vis.stripplot.scales.y[variable]
-                              -
-                              (d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.height : dash.vis.stripplot.dimensions.rect.other.height))
-                              .attr('height', d => d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.height : dash.vis.stripplot.dimensions.rect.other.height)
-                              .attr('width', d => d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)
-                            ;
-
-                        })
 
                     }
 
@@ -1996,7 +2074,7 @@ const dash = {
                     monitor : function() {
 
                         const strips = dash.vis.stripplot.sels.d3.svg
-                        .selectAll('rect.vis-dash-stripplot-marks');
+                        .selectAll('.vis-dash-stripplot-marks');
                       
                       strips.on('mouseover', this.showTooltip);
                       strips.on('mouseout', this.hideTooltip);
@@ -2019,7 +2097,7 @@ const dash = {
                         const variable = this_strip.node().dataset.variable;
 
                         const strips = dash.vis.stripplot.sels.d3.svg
-                        .selectAll('rect.vis-dash-stripplot-marks');
+                        .selectAll('.vis-dash-stripplot-marks');
 
                         //console.log('pra ver quantas vezes dispara');
 
@@ -2060,7 +2138,7 @@ const dash = {
                     hideTooltip : function(e) {
 
                         dash.vis.stripplot.sels.d3.svg
-                        .selectAll('rect.vis-dash-stripplot-marks').classed('vis-dash-stripplot-marks-hovered', false);
+                        .selectAll('.vis-dash-stripplot-marks').classed('vis-dash-stripplot-marks-hovered', false);
 
                         dash.vis.stripplot.sels.d3.container.select('p.dash-stripplot-tooltip').classed('dash-stripplot-tooltip-visible', false);
 
@@ -2072,7 +2150,7 @@ const dash = {
                     monitor : function() {
                         
                         const strips = dash.vis.stripplot.sels.d3.svg
-                          .selectAll('rect.vis-dash-stripplot-marks')
+                          .selectAll('.vis-dash-stripplot-marks')
                         ;
                           
                           
