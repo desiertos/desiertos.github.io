@@ -1805,14 +1805,15 @@ const dash = {
 
                         const variables = dash.vis.stripplot.variables[type];
 
+                        labels = [];
+
                         variables.forEach(variable => {
 
-                            const top = dash.vis.stripplot.scales.y[variable];
-
-                            const labels = [
+                            labels.push(
 
                                 {
                                     type : 'min',
+                                    top : dash.vis.stripplot.scales.y[variable],
                                     left : dash.vis.stripplot.scales.x[variable].range()[0],
                                     value : dash.utils.format_value(
                                         dash.vis.stripplot.scales.x[variable].domain()[0]
@@ -1822,26 +1823,27 @@ const dash = {
 
                                 {
                                     type : 'max',
+                                    top : dash.vis.stripplot.scales.y[variable],
                                     left : dash.vis.stripplot.scales.x[variable].range()[1],
                                     value : dash.utils.format_value(
                                         dash.vis.stripplot.scales.x[variable].domain()[1]
                                     )
 
-                                },
+                                }
 
-                            ];
+                            );
+                        });
 
-                            dash.vis.stripplot.sels.d3.container
-                              .selectAll("p.vis-dash-stripplot-labels-minmax")
-                              .data(labels)
-                              .join("p")
-                              .classed("vis-dash-stripplot-labels-minmax", true)
-                              .attr("data-label-minmax", d => d.type)
-                              .style("left", d => d.left + 'px')
-                              .style("top", top + "px")
-                              .text(d => d.value);
-
-                        })
+                        dash.vis.stripplot.sels.d3.container
+                            .selectAll("span.vis-dash-stripplot-labels-minmax")
+                            .data(labels)
+                            .join("span")
+                            .classed("vis-dash-stripplot-labels-minmax", true)
+                            .attr("data-label-minmax", d => d.type)
+                            .style("left", d => d.left + 'px')
+                            .style("top", d => d.top + "px")
+                            .text(d => d.value)
+                        ;
 
                     }
 

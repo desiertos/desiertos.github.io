@@ -702,21 +702,21 @@ p[data-text_field='medio_prototipico'] {
     font-size: 10px;
     line-height: 15px;
     color : var(--color-vis-variable-label);
-
 }
 
-p.vis-dash-stripplot-labels-minmax {
+span.vis-dash-stripplot-labels-minmax {
 
     position: absolute;
     font-family: var(--font-body);
     font-size: 8px;
+    transform: translateX(-50%);
+    padding-top: 1em;
 
 }
 
 [data-label-minmax='max'] {
 
     text-align: right;
-    transform: translateX(-100%);
 
 }
 
