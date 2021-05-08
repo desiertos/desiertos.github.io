@@ -2000,6 +2000,7 @@ const dash = {
                                     
                                     copy = {...d}
                                     copy['variable'] = variable;
+                                    copy['highlighted'] = d.local == dash.vis.location_card.state.user_location_name;
 
                                     data_complete.push(copy);
 
@@ -2036,32 +2037,33 @@ const dash = {
                                     
                                 })
                                 .attr('cy', d => 
-                                dash.vis.stripplot.scales.y[d.variable]);
-
-                                // marks.enter().attr('cy', d => 
-                                //dash.vis.stripplot.scales.y[variable]);
-
-                                marks
-                                //.transition()
-                                //.duration(500)
+                                dash.vis.stripplot.scales.y[d.variable])
                                 .attr('cx', d => {
-
-                                    console.log(d.variable);
+                                    //console.log(d.variable);
 
                                     const variable = d.variable;
 
                                     if (dash.vis.stripplot.scales.x[variable](d[variable])) {
 
+                                        console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+
                                         return dash.vis.stripplot.scales.x[variable](d[variable])
-                                        -
-                                        (d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                                        //-
+                                        //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
                                 
                                     } else {
+
+                                        console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
 
                                         return 0
 
                                     }
                                 })
+                                .attr('r', 0);
+
+                                marks
+                                .transition()
+                                .duration(1000)
                                 .attr('r', d => 
                                 d.local == dash.vis.location_card.state.user_location_name ?
                                 dash.vis.stripplot.dimensions.rect.highlight.height/4 :
@@ -2079,18 +2081,18 @@ const dash = {
 
                             sim.nodes(data_complete);
 
-                            sim
-                              .force('x', d3.forceX().strength(force.config.strength).x(function(d) {
+                            //sim
+                            //   .force('x', d3.forceX().strength(force.config.strength).x(function(d) {
 
-                                const variable = d.variable;
-                                console.log(variable, d.local, dash.vis.stripplot.scales.x[variable](d[variable]), dash.vis.stripplot.scales.y[d.variable])
+                            //     const variable = d.variable;
+                            //     console.log(variable, d.local, dash.vis.stripplot.scales.x[variable](d[variable]), dash.vis.stripplot.scales.y[d.variable])
 
-                                return dash.vis.stripplot.scales.x[variable](d[variable])
+                            //     return dash.vis.stripplot.scales.x[variable](d[variable])
 
-                              }))
-                              .force('y', d3.forceY().strength(force.config.strength).y(d => dash.vis.stripplot.scales.y[d.variable]))
+                            //   }))
+                            //   .force('y', d3.forceY().strength(force.config.strength).y(d => dash.vis.stripplot.scales.y[d.variable]))
                               //.force('charge', d3.forceManyBody().strength(force.config.charge()))
-                              .force('collision',d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height/4))
+                            //  .force('collision',d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height/4))
 
                             sim.alpha(1).restart();
 
@@ -2200,12 +2202,40 @@ const dash = {
 
                     dash.vis.stripplot.force.simulation = d3.forceSimulation()
                         .velocityDecay(0.2)
-                        //.force('x', d3.forceX().strength(strength).x(dash.vis.stripplot.dimensions.svg_width/2))
-                        //.force('y', d3.forceY().strength(strength).y(100))
+
+                        .force('x', d3.forceX().strength(strength).x(function(d) {
+
+                            const variable = d.variable;
+
+                            if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+
+                               // console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+
+                                return dash.vis.stripplot.scales.x[variable](d[variable])
+                                //-
+                                //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                        
+                            } else {
+
+                                //console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+
+                                return 0
+
+                            }
+                            //return dash.vis.stripplot.scales.x[variable](d[variable])
+
+                        }))
+                        .force('y', d3.forceY().strength(strength).y(d => dash.vis.stripplot.scales.y[d.variable]))
                         //.force('charge', d3.forceManyBody().strength(charge))
-                        .force('colisao', d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height/4))
+                        .force('collision', d3.forceCollide().radius(function(d) {
+                            
+                            if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+
+                            return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 : dash.vis.stripplot.dimensions.rect.other.height/4}))
                         .alphaMin(0.25)
                         .on('tick', dash.vis.stripplot.force.tick_update);
+
+                        // quando faz o dataset data_complete, poderia usar um d.tipo_highlight = other/highlight, e aí usar um dash...rect[d.tipo_highlight].height
 
                     dash.vis.stripplot.force.simulation.stop();
 
