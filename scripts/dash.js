@@ -2000,6 +2000,8 @@ const dash = {
                                 .attr('data-location', d => d.local)
                                 .attr('fill', function(d) {
 
+                                    //console.log(this.dataset.variable);
+
                                     if (type == 'provincia') return 'hotpink'
                                     else {
                                         const cat = Math.ceil(+d.categoria);
@@ -2128,6 +2130,30 @@ const dash = {
                     render : function() {}
 
                 }
+
+            },
+
+            force : {
+
+                init : function() {
+
+                    dash.vis.stripplot.force.simulation = d3.forceSimulation()
+                        .velocityDecay(0.2)
+                        .force('x', d3.forceX().strength(magnitudeForca).x(dimensoes["principal"].w_numerico/2))
+                        .force('y', d3.forceY().strength(magnitudeForca).y(function(d) {
+                            const variable = this.dataset.variable;
+                            return dash.vis.stripplot.scales.y[variable]
+                         }))
+                        .force('charge', d3.forceManyBody().strength(carga))
+                        .force('colisao', d3.forceCollide().radius(d => d.raio))
+                        .alphaMin(0.25)
+                        .on('tick', atualiza_tick);
+
+
+
+                },
+
+                simulation : null,
 
             },
 
