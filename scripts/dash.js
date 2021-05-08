@@ -1898,6 +1898,10 @@ const dash = {
 
                             variables.forEach(variable => {
 
+
+
+
+
                                 console.log('circulos da variavel... ', variable);
 
                                 const marks = dash.vis.stripplot.sels.d3.svg
@@ -1985,7 +1989,20 @@ const dash = {
 
                             });
 
+                            let data_complete = [];
+
                             variables.forEach(variable => {
+
+                                // cria um dataset para o force_layout
+
+                                let data_variable = [...data]; 
+                                data_variable.forEach(d => d['variable'] = variable);
+                            
+                                console.log(variable, data_variable);
+
+                                data_complete.push(...data_variable);
+
+                                /// done.
 
                                 console.log('circulos da variavel... ', variable);
 
@@ -2045,6 +2062,30 @@ const dash = {
                                 ;
 
                             })
+
+                            // simulation
+
+                            const force = dash.vis.stripplot.force;
+                            const sim = force.simulation;
+
+                            console.log(data_complete);
+
+                            sim.nodes(data_complete);
+
+                            sim
+                              .force('x', d3.forceX().strength(force.config.strength).x(function(d) {
+
+                                const variable = d.variable;
+                                console.log(variable, dash.vis.stripplot.scales.x[variable](d[variable]), dash.vis.stripplot.scales.y[d.variable])
+
+                                return dash.vis.stripplot.scales.x[variable](d[variable])
+
+                              }))
+                              .force('y', d3.forceY().strength(force.config.strength).y(d => dash.vis.stripplot.scales.y[d.variable]))
+                              //.force('charge', d3.forceManyBody().strength(force.config.charge()))
+                              .force('collision', d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height/2))
+
+                            sim.alpha(1).restart();
 
 
                         }
@@ -2135,25 +2176,39 @@ const dash = {
 
             force : {
 
-                init : function() {
+                simulation : null,
 
-                    dash.vis.stripplot.force.simulation = d3.forceSimulation()
-                        .velocityDecay(0.2)
-                        .force('x', d3.forceX().strength(magnitudeForca).x(dimensoes["principal"].w_numerico/2))
-                        .force('y', d3.forceY().strength(magnitudeForca).y(function(d) {
-                            const variable = this.dataset.variable;
-                            return dash.vis.stripplot.scales.y[variable]
-                         }))
-                        .force('charge', d3.forceManyBody().strength(carga))
-                        .force('colisao', d3.forceCollide().radius(d => d.raio))
-                        .alphaMin(0.25)
-                        .on('tick', atualiza_tick);
+                config : {
 
+                    strength : 0.04,
 
+                    charge : () => -Math.pow(dash.vis.stripplot.dimensions.rect.other.height, 2) * dash.vis.stripplot.force.config.strength
 
                 },
 
-                simulation : null,
+                init : function() {
+
+                    const charge = dash.vis.stripplot.force.config.charge();
+                    const strength = dash.vis.stripplot.force.config.strength;
+
+                    dash.vis.stripplot.force.simulation = d3.forceSimulation()
+                        .velocityDecay(0.2)
+                        //.force('x', d3.forceX().strength(strength).x(dash.vis.stripplot.dimensions.svg_width/2))
+                        //.force('y', d3.forceY().strength(strength).y())
+                        //.force('charge', d3.forceManyBody().strength(charge))
+                        //.force('colisao', d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height))
+                        .alphaMin(0.25)
+                        .on('tick', dash.vis.stripplot.force.tick_update);
+
+                    dash.vis.stripplot.force.simulation.stop();
+
+                },
+
+                tick_update : () => {
+                    d3.selectAll('circle.vis-dash-stripplot-marks')
+                      .attr('cx', d => d.x)
+                      .attr('cy', d => d.y)
+                }
 
             },
 
@@ -2283,6 +2338,7 @@ const dash = {
             dash.utils.colors.populate();
             //dash.scroller.steps.get();
             dash.vis.stripplot.sels.d3.set(); // sets up d3 selections;
+            dash.vis.stripplot.force.init();
             dash.utils.load_data();
             
         },
