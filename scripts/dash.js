@@ -1995,12 +1995,15 @@ const dash = {
 
                                 // cria um dataset para o force_layout
 
-                                let data_variable = [...data]; 
-                                data_variable.forEach(d => d['variable'] = variable);
-                            
-                                console.log(variable, data_variable);
+                                //let data_variable = [...data]; 
+                                data.forEach(d => {
+                                    
+                                    copy = {...d}
+                                    copy['variable'] = variable;
 
-                                data_complete.push(...data_variable);
+                                    data_complete.push(copy);
+
+                                })
 
                                 /// done.
 
@@ -2193,10 +2196,10 @@ const dash = {
 
                     dash.vis.stripplot.force.simulation = d3.forceSimulation()
                         .velocityDecay(0.2)
-                        //.force('x', d3.forceX().strength(strength).x(dash.vis.stripplot.dimensions.svg_width/2))
-                        //.force('y', d3.forceY().strength(strength).y())
-                        //.force('charge', d3.forceManyBody().strength(charge))
-                        //.force('colisao', d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height))
+                        .force('x', d3.forceX().strength(strength).x(dash.vis.stripplot.dimensions.svg_width/2))
+                        .force('y', d3.forceY().strength(strength).y(100))
+                        .force('charge', d3.forceManyBody().strength(charge))
+                        .force('colisao', d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height))
                         .alphaMin(0.25)
                         .on('tick', dash.vis.stripplot.force.tick_update);
 
