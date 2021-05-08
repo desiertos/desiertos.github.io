@@ -2129,20 +2129,20 @@ const dash = {
 
                     render_lite : {
 
-                        localidad : function() {
+                        localidad : function(local = dash.vis.location_card.state.user_location_name) {
 
                             dash.vis.stripplot.sels.d3.svg
                                 .selectAll("circle.vis-dash-stripplot-marks")
-                                .classed('marks-location-highlighted', d => d.local == dash.vis.location_card.state.user_location_name)
+                                .classed('marks-location-highlighted', d => d.local == local)
                                 .transition()
                                 .duration(250)
                                 .attr('r', d => 
-                                d.local == dash.vis.location_card.state.user_location_name ?
+                                d.local == local ?
                                 dash.vis.stripplot.dimensions.rect.highlight.height/4 :
                                 dash.vis.stripplot.dimensions.rect.other.height/4);
 
                             dash.vis.stripplot.force.simulation.nodes().forEach(d =>
-                                d.highlighted = d.local == dash.vis.location_card.state.user_location_name
+                                d.highlighted = d.local == local
                             )
 
                             // pq preciso passar novamente a bixiga da força?
@@ -2393,6 +2393,10 @@ const dash = {
 
                             tt.classed('dash-stripplot-tooltip-visible', true);
 
+                        }
+
+                        if (type == 'localidad') {
+                            dash.vis.stripplot.components.marks.render_lite.localidad(local_hovered);
                         }
 
 
