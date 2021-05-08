@@ -2005,18 +2005,20 @@ const dash = {
 
                                 })
 
+                            })
+
                                 /// done.
 
-                                console.log('circulos da variavel... ', variable);
+                                //console.log('circulos da variavel... ', variable);
 
                                 const marks = dash.vis.stripplot.sels.d3.svg
-                                .selectAll("circle.vis-dash-stripplot-marks[data-variable='" + variable + "']")
-                                .data(data, d => d.local)
+                                .selectAll("circle.vis-dash-stripplot-marks")
+                                .data(data_complete, d => d.variable + d.local)
                                 .join('circle')
                                 .classed('vis-dash-stripplot-marks', true)
-                                .classed('marks-na', d => !dash.vis.stripplot.scales.x[variable](d[variable])) // se der undefined vai dar true
+                                .classed('marks-na', d => !dash.vis.stripplot.scales.x[d.variable](d[d.variable])) // se der undefined vai dar true
                                 .classed('marks-location-highlighted', d => d.local == dash.vis.location_card.state.user_location_name)
-                                .attr('data-variable', variable)
+                                .attr('data-variable', d => d.variable)
                                 .attr('data-location', d => d.local)
                                 .attr('fill', function(d) {
 
@@ -2034,17 +2036,19 @@ const dash = {
                                     
                                 })
                                 .attr('cy', d => 
-                                dash.vis.stripplot.scales.y[variable]);
+                                dash.vis.stripplot.scales.y[d.variable]);
 
                                 // marks.enter().attr('cy', d => 
                                 //dash.vis.stripplot.scales.y[variable]);
 
                                 marks
-                                .transition()
-                                .duration(500)
+                                //.transition()
+                                //.duration(500)
                                 .attr('cx', d => {
 
                                     console.log(d.variable);
+
+                                    const variable = d.variable;
 
                                     if (dash.vis.stripplot.scales.x[variable](d[variable])) {
 
@@ -2064,7 +2068,7 @@ const dash = {
                                 dash.vis.stripplot.dimensions.rect.other.height/4)
                                 ;
 
-                            })
+                            //})
 
                             // simulation
 
@@ -2079,14 +2083,14 @@ const dash = {
                               .force('x', d3.forceX().strength(force.config.strength).x(function(d) {
 
                                 const variable = d.variable;
-                                console.log(variable, dash.vis.stripplot.scales.x[variable](d[variable]), dash.vis.stripplot.scales.y[d.variable])
+                                console.log(variable, d.local, dash.vis.stripplot.scales.x[variable](d[variable]), dash.vis.stripplot.scales.y[d.variable])
 
                                 return dash.vis.stripplot.scales.x[variable](d[variable])
 
                               }))
                               .force('y', d3.forceY().strength(force.config.strength).y(d => dash.vis.stripplot.scales.y[d.variable]))
                               //.force('charge', d3.forceManyBody().strength(force.config.charge()))
-                              .force('collision', d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height/2))
+                              .force('collision',d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height/4))
 
                             sim.alpha(1).restart();
 
@@ -2185,7 +2189,7 @@ const dash = {
 
                     strength : 0.04,
 
-                    charge : () => -Math.pow(dash.vis.stripplot.dimensions.rect.other.height, 2) * dash.vis.stripplot.force.config.strength
+                    charge : () => -Math.pow(dash.vis.stripplot.dimensions.rect.other.height/4, 2) * dash.vis.stripplot.force.config.strength
 
                 },
 
@@ -2196,10 +2200,10 @@ const dash = {
 
                     dash.vis.stripplot.force.simulation = d3.forceSimulation()
                         .velocityDecay(0.2)
-                        .force('x', d3.forceX().strength(strength).x(dash.vis.stripplot.dimensions.svg_width/2))
-                        .force('y', d3.forceY().strength(strength).y(100))
-                        .force('charge', d3.forceManyBody().strength(charge))
-                        .force('colisao', d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height))
+                        //.force('x', d3.forceX().strength(strength).x(dash.vis.stripplot.dimensions.svg_width/2))
+                        //.force('y', d3.forceY().strength(strength).y(100))
+                        //.force('charge', d3.forceManyBody().strength(charge))
+                        .force('colisao', d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height/4))
                         .alphaMin(0.25)
                         .on('tick', dash.vis.stripplot.force.tick_update);
 
