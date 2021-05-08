@@ -1102,6 +1102,21 @@ const dash = {
 
             //// seria o caso de levar isso para o render step do scroller?
 
+            // check if new selection is another localidad in the same province, or if it is another province (in case a province was selected)
+
+            console.log(local.provincia, dash.vis.location_card.state.user_location_province);
+
+            let new_view = true;
+
+            if (local.provincia) {
+
+                new_view = local.provincia != dash.vis.location_card.state.user_location_province;
+
+            }
+
+            console.log('new view', new_view);
+            
+
             // set vis state, calls vis render
 
             dash.vis.location_card.state.set(local, data);
@@ -1124,12 +1139,23 @@ const dash = {
 
             // render
 
-            dash.vis.stripplot.components.labels.render(local.tipo);
-            dash.vis.stripplot.components.lines.render(local.tipo);
-            dash.vis.stripplot.components.marks.render[local.tipo]();
-            dash.vis.stripplot.components.label_selected.render(local.tipo);
-            dash.vis.stripplot.components.min_max_labels.render(local.tipo);
-            dash.vis.stripplot.components.separation_lines.render(local.tipo);
+            if (new_view) {
+
+                dash.vis.stripplot.components.labels.render(local.tipo);
+                dash.vis.stripplot.components.lines.render(local.tipo);
+                dash.vis.stripplot.components.marks.render[local.tipo]();
+                dash.vis.stripplot.components.label_selected.render(local.tipo);
+                dash.vis.stripplot.components.min_max_labels.render(local.tipo);
+                dash.vis.stripplot.components.separation_lines.render(local.tipo);
+
+            } else {
+
+                dash.vis.stripplot.components.marks.render_lite[local.tipo]();
+                dash.vis.stripplot.components.label_selected.render(local.tipo);
+
+            }
+
+
 
             // listeners
 
@@ -2094,8 +2120,64 @@ const dash = {
                               //.force('charge', d3.forceManyBody().strength(force.config.charge()))
                             //  .force('collision',d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height/4))
 
-                            sim.alpha(1).restart();
+                            sim.velocityDecay(0.2).alpha(1).restart();
 
+
+                        }
+
+                    },
+
+                    render_lite : {
+
+                        localidad : function() {
+
+                            dash.vis.stripplot.sels.d3.svg
+                                .selectAll("circle.vis-dash-stripplot-marks")
+                                .classed('marks-location-highlighted', d => d.local == dash.vis.location_card.state.user_location_name)
+                                .transition()
+                                .duration(250)
+                                .attr('r', d => 
+                                d.local == dash.vis.location_card.state.user_location_name ?
+                                dash.vis.stripplot.dimensions.rect.highlight.height/4 :
+                                dash.vis.stripplot.dimensions.rect.other.height/4);
+
+                            dash.vis.stripplot.force.simulation.nodes().forEach(d =>
+                                d.highlighted = d.local == dash.vis.location_card.state.user_location_name
+                            )
+
+                            // pq preciso passar novamente a bixiga da força?
+
+                            const strength = dash.vis.stripplot.force.config.strength;
+
+                            dash.vis.stripplot.force.simulation.force('collision', d3.forceCollide().radius(function(d) {
+                            
+                                if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+    
+                                return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 : dash.vis.stripplot.dimensions.rect.other.height/4}))
+                                .force('x', d3.forceX().strength(strength).x(function(d) {
+
+                                    const variable = d.variable;
+        
+                                    if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+        
+                                       // console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+        
+                                        return dash.vis.stripplot.scales.x[variable](d[variable])
+                                        //-
+                                        //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                                
+                                    } else {
+        
+                                        //console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+        
+                                        return 0
+        
+                                    }
+                                    //return dash.vis.stripplot.scales.x[variable](d[variable])
+        
+                                }))
+                                .force('y', d3.forceY().strength(strength).y(d => dash.vis.stripplot.scales.y[d.variable]))
+                            .velocityDecay(0.1).alpha(.5).restart();
 
                         }
 

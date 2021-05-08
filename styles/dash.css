@@ -711,6 +711,7 @@ span.vis-dash-stripplot-labels-minmax {
     font-size: 8px;
     transform: translateX(-50%);
     padding-top: 1em;
+    pointer-events: none;
 
 }
 
@@ -724,6 +725,7 @@ line.vis-dash-stripplot-axis {
 
     stroke: var(--color-vis-axis);
     stroke-width: 1;
+
 
 }
 
