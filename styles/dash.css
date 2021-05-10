@@ -493,29 +493,34 @@ button.relato.clicked {
     top: calc( var(--header-height) * 2 + 1px);
     left: 0;
     width: 19rem;
-    padding: 1.7rem;
-    padding-top: 2rem;
     font-size: .8rem;
     line-height: 1.5;
-    height: calc(100vh - var(--header-height) * 2 );
+
     opacity: 1;
-    overflow-y: scroll;
+
     /*pointer-events: unset;*/
     font-family: var(--font-title);
-    background-color: white;
-    transition: opacity 1s;
+    transition: opacity .1s;
 
 }
 .scene3d.folded {
     opacity: 0;
+    transition: opacity .5s .5s;
 }
 
 aside {
 
+    position: relative;
+
+    height: calc(100vh - var(--header-height) * 2 );
+    overflow-y: scroll;
+    padding: 1.7rem;
+    padding-top: 2rem;
     transform-style: preserve-3d;
     transform-origin: center left;
     transform: rotateY(0deg);/*translateX(0);*/
     transition: transform 1s;
+    background-color: white;
     
 }
 
