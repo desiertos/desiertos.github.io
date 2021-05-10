@@ -266,6 +266,8 @@ const dash = {
 
     map : {
 
+        fired_on_localidad : false, // this will flag if the click event was already fired on the localidad handler, to avoid running the provincia handler function.
+
         localidad : {
 
             initialize : function() {
@@ -417,6 +419,8 @@ const dash = {
 
                 dash.map_obj.on('click', 'localidad', function(e) {
 
+                    dash.map.fired_on_localidad = true;
+
                     const localidad = e.features[0].properties.localidad;
                     const provincia = e.features[0].properties.provincia;
 
@@ -429,7 +433,7 @@ const dash = {
 
                     };
 
-                    console.log("Clicou em ", localidad, local);
+                    console.log("Clicou em ", localidad, local, dash.vis.location_card.state.user_location_province);
 
                     dash.vis.render_selected_place(local);
 
@@ -575,19 +579,33 @@ const dash = {
 
                 dash.map_obj.on('click', 'provincia', function(e) {
 
-                    const province_name = e.features[0].properties.nam;
+                    if (dash.map.fired_on_localidad) {
 
-                    const local = {
+                        console.log('ok, the click was also on a localidad, that takes precedence, ignore the provincia handler');
 
-                        local : province_name,
-                        tipo  : "provincia",
-                        text  : province_name
+                        dash.map.fired_on_localidad = false;
 
-                    };
+                    } else {
 
-                    console.log("Clicou em ", province_name, local);
+                        const province_name = e.features[0].properties.nam;
 
-                    dash.vis.render_selected_place(local);
+                        if (province_name != dash.vis.location_card.state.user_location_name) {
+    
+                            const local = {
+    
+                                local : province_name,
+                                tipo  : "provincia",
+                                text  : province_name
+    
+                            };
+    
+                            console.log("Clicou em ", province_name, local);
+    
+                            dash.vis.render_selected_place(local);
+    
+                        } else console.log('Clicou na mesma provincia, nao precisa renderizar.')
+
+                    }
 
                 })
 
