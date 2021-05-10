@@ -1109,9 +1109,25 @@ const dash = {
 
                 console.log('called', e);
 
-                document.querySelector(dash.interactions.relato_periodista.refs.text).classList.toggle('folded');
+                const aside = document.querySelector(dash.interactions.relato_periodista.refs.text);
+
+                const aside_is_folded = aside.classList.contains('folded');
+                
+                aside.classList.toggle('folded');
+                
                 document.querySelector(dash.interactions.relato_periodista.refs.toggle_button).classList.toggle('clicked');
-                document.documentElement.classList.toggle('aside-shown-no-overflow-here');
+
+                if (aside_is_folded) {
+                    console.log('está folded e vai aparecer, esconde o overflow')
+                    document.documentElement.classList.toggle('aside-shown-no-overflow-here')
+                }
+                else { 
+                    console.log('está visível, espera o fim da transição para deixar o overflow normal.')              
+                    aside.addEventListener('transitionend', () => {
+                        console.log('transition end.')
+                        document.documentElement.classList.toggle('aside-shown-no-overflow-here')
+                    });
+                }
 
             },
 
