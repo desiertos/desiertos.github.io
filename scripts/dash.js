@@ -1111,6 +1111,7 @@ const dash = {
 
                 document.querySelector(dash.interactions.relato_periodista.refs.text).classList.toggle('folded');
                 document.querySelector(dash.interactions.relato_periodista.refs.toggle_button).classList.toggle('clicked');
+                document.documentElement.classList.toggle('aside-shown-no-overflow-here');
 
             },
 

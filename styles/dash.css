@@ -498,7 +498,7 @@ aside {
     background-color: white;
     font-family: var(--font-title);
     transform: translateX(0);
-    transition: opacity .25s, transform .5s;
+    transition: opacity .15s, transform .5s;
 }
 
 aside h2 {
@@ -517,10 +517,15 @@ aside h3 {
 
 aside.folded {
 
-    transform: translateX(-100px);
+    transform: translateX(-19rem);
     opacity: 0;
     pointer-events: none;
+    transition: opacity .5s, transform .5s;
 
+}
+
+html.aside-shown-no-overflow-here {
+    overflow-y: hidden;
 }
 
 aside button.close-aside {
