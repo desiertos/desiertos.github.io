@@ -1091,9 +1091,40 @@ const dash = {
 
                 }
 
-            }
+            },
 
         },
+
+        relato_periodista : {
+
+            refs : {
+
+                text : '.investigator-story',
+                close_button : 'button.close-aside',
+                toggle_button : 'button.relato'
+
+            },
+
+            open_close : function(e) {
+
+                console.log('called', e);
+
+                document.querySelector(dash.interactions.relato_periodista.refs.text).classList.toggle('folded');
+                document.querySelector(dash.interactions.relato_periodista.refs.toggle_button).classList.toggle('clicked');
+
+            },
+
+            monitor : function(which_button) {
+
+                const btn = document.querySelector(dash.interactions.relato_periodista.refs[which_button + '_button']);
+
+                console.log('monitoring ', which_button, '...');
+
+                btn.addEventListener('click', dash.interactions.relato_periodista.open_close);
+
+            }
+
+        }
 
     },
 
@@ -2480,6 +2511,8 @@ const dash = {
             //dash.scroller.steps.get();
             dash.vis.stripplot.sels.d3.set(); // sets up d3 selections;
             dash.vis.stripplot.force.init();
+            dash.interactions.relato_periodista.monitor('close');
+            dash.interactions.relato_periodista.monitor('toggle');
             dash.utils.load_data();
             
         },
