@@ -458,6 +458,47 @@ input#location-search {
 
 }
 
+/* Aside - investigator */
+
+aside {
+
+    position: absolute;
+    z-index: 2;
+    top: calc( var(--header-height) * 2 + 1px);
+    left: 0;
+    width: 19rem;
+    padding: 1.7rem;
+    font-size: .8rem;
+    line-height: 1.5;
+    pointer-events: none;
+    background-color: white;
+    font-family: var(--font-title);
+    transform: translateX(0);
+    transition: opacity .25s, transform .5s;
+}
+
+aside h2 {
+
+    font-size: 1.4rem;
+    margin-bottom: .5rem;
+        
+}
+
+aside h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-family: var(--font-body);
+    font-weight: normal;
+}
+
+aside.folded {
+
+    transform: translateX(-100px);
+    opacity: 1;
+    pointer-events: unset;
+
+}
+
 /* Story - location card*/
 
 #location-card [data-content]::before {
