@@ -474,7 +474,12 @@ button.relato {
 
 }
 
-button.relato:hover,
+button.relato:hover {
+
+    background-color: grey;
+    color: white;
+}
+
 button.relato.clicked {
     background-color: var(--font-color);
     color: white;
