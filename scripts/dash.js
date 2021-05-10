@@ -266,8 +266,6 @@ const dash = {
 
     map : {
 
-        fired_on_localidad : false, // this will flag if the click event was already fired on the localidad handler, to avoid running the provincia handler function.
-
         localidad : {
 
             initialize : function() {
@@ -415,29 +413,24 @@ const dash = {
 
             },
 
-            monitor_click_event : function() {
+            click_event_handler : function(feature) {
 
-                dash.map_obj.on('click', 'localidad', function(e) {
 
-                    dash.map.fired_on_localidad = true;
+                const localidad = feature.properties.localidad; //e.features[0].properties.localidad;
+                const provincia = feature.properties.provincia // e.features[0].properties.provincia;
 
-                    const localidad = e.features[0].properties.localidad;
-                    const provincia = e.features[0].properties.provincia;
+                const local = {
 
-                    const local = {
+                    local : localidad,
+                    tipo  : "localidad",
+                    text  : localidad + '(' + provincia + ')',
+                    provincia : provincia
 
-                        local : localidad,
-                        tipo  : "localidad",
-                        text  : localidad + '(' + provincia + ')',
-                        provincia : provincia
+                };
 
-                    };
+                console.log("Clicou em ", localidad, local, dash.vis.location_card.state.user_location_province);
 
-                    console.log("Clicou em ", localidad, local, dash.vis.location_card.state.user_location_province);
-
-                    dash.vis.render_selected_place(local);
-
-                })
+                dash.vis.render_selected_place(local);
 
             }
 
@@ -575,39 +568,25 @@ const dash = {
 
             },
 
-            monitor_click_event : function() {
+            click_event_handler : function(feature) {
 
-                dash.map_obj.on('click', 'provincia', function(e) {
+                const province_name = feature.properties.nam; //e.features[0].properties.nam;
 
-                    if (dash.map.fired_on_localidad) {
+                if (province_name != dash.vis.location_card.state.user_location_name) {
 
-                        console.log('ok, the click was also on a localidad, that takes precedence, ignore the provincia handler');
+                    const local = {
 
-                        dash.map.fired_on_localidad = false;
+                        local : province_name,
+                        tipo  : "provincia",
+                        text  : province_name
 
-                    } else {
+                    };
 
-                        const province_name = e.features[0].properties.nam;
+                    console.log("Clicou em ", province_name, local);
 
-                        if (province_name != dash.vis.location_card.state.user_location_name) {
-    
-                            const local = {
-    
-                                local : province_name,
-                                tipo  : "provincia",
-                                text  : province_name
-    
-                            };
-    
-                            console.log("Clicou em ", province_name, local);
-    
-                            dash.vis.render_selected_place(local);
-    
-                        } else console.log('Clicou na mesma provincia, nao precisa renderizar.')
+                    dash.vis.render_selected_place(local);
 
-                    }
-
-                })
+                } else console.log('Clicou na mesma provincia, nao precisa renderizar.')
 
             }
 
@@ -786,6 +765,27 @@ const dash = {
                     5,
                 ]
             );
+
+        },
+
+        monitor_click_event : function() {
+
+            dash.map_obj.on('click', function(e) {
+                let features = dash.map_obj.queryRenderedFeatures(e.point, { layers: ['localidad', 'provincia'] });
+
+                if (features.length) {
+
+                    let type = features[0].layer.id;
+
+                    if (type == 'provincia') type = 'province';
+
+                    console.log("Clicked on a", type, ". Detalhes: ", features, e);
+
+                    dash.map[type].click_event_handler(features[0]);
+
+                }
+
+            });
 
         }
 
@@ -2536,12 +2536,15 @@ const dash = {
                 // monitor hover and click events on provinces
 
                 dash.map.province.monitor_hover_event();
-                dash.map.province.monitor_click_event();
+                  //dash.map.province.monitor_click_event();
 
                 // monitor hover and click events on localidads
 
                 dash.map.localidad.monitor_hover_event();
-                dash.map.localidad.monitor_click_event();
+                  //dash.map.localidad.monitor_click_event();
+
+                // monitor click events on localidad or provincia
+                dash.map.monitor_click_event();
 
                 //fit map to continental Argentina
                 dash.map.fit_Argentina();
