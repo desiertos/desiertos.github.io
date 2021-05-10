@@ -1410,6 +1410,8 @@ const dash = {
 
                 ref : '[data-breadcrumbs-type]',
 
+                ref_container : 'ul.dashboard--breadcrumbs',
+
                 activeName : 'dashboard--breadcrumbs-active',
 
                 update : function(type) {
@@ -1427,6 +1429,51 @@ const dash = {
                         }
 
                     });
+
+                },
+
+                monitor_click : function() {
+
+                    console.log('monitoring crumbs');
+
+                    const crumbs = document.querySelector(this.ref_container);
+
+                    crumbs.addEventListener('click', function(e) {
+
+                        const btn_clicked = e.target;
+
+                        const type = btn_clicked.dataset.breadcrumbsType;
+
+                        console.log('clicou no breadcrumb', type);
+
+                        if (type == 'pais') { 
+
+                            dash.vis.location_card.breadcrumbs.update(type);
+                            //montar um local pais
+                            dash.map.fit_Argentina();
+
+                        } else if (type == 'provincia' & dash.vis.location_card.state.user_location_type == 'localidad') {
+
+                            const current_provincia = dash.vis.location_card.state.user_location_province;
+
+                            const local = {
+
+                                local : current_provincia,
+                                tipo : 'provincia',
+                                text : current_provincia,
+                                provincia : null
+    
+                            }
+
+                            dash.vis.render_selected_place(local);
+
+                        }
+
+                        
+
+                    })
+
+                    
 
                 }
 
@@ -2611,8 +2658,11 @@ const dash = {
             //dash.scroller.steps.get();
             dash.vis.stripplot.sels.d3.set(); // sets up d3 selections;
             dash.vis.stripplot.force.init();
+
             dash.interactions.relato_periodista.monitor('close');
             dash.interactions.relato_periodista.monitor('toggle');
+            dash.vis.location_card.breadcrumbs.monitor_click();
+
             dash.utils.load_data();
             
         },
