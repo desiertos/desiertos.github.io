@@ -1382,11 +1382,11 @@ const dash = {
 
                 ref : '[data-infotable_field]',
 
-                poblacion : () =>  dash.vis.location_card.state.location_data['pob'],
+                poblacion : () =>  dash.utils.format_value(dash.vis.location_card.state.location_data['pob']),
 
-                medios : () =>  dash.vis.location_card.state.location_data['cant_medios'],
+                medios : () =>  dash.utils.format_value(dash.vis.location_card.state.location_data['cant_medios']),
                 
-                periodistas : () =>  dash.vis.location_card.state.location_data['cant_periodistas'],
+                periodistas : () =>  dash.utils.format_value(dash.vis.location_card.state.location_data['cant_periodistas']),
 
                 update : function() {
 
