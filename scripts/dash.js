@@ -1165,7 +1165,27 @@ const dash = {
 
             console.log('Renderizando ', local.local, local.tipo);
 
-            const data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
+            let data;
+
+            if (local.tipo == 'pais') {
+
+                data = {
+
+                    'pob' : '44,94 milliones',
+                    'cant_medios' : '1.000',
+                    'cant_periodistas' : '100.000'
+
+                }
+
+                dash.vis.location_card.info_table.styles_country_view(true);
+
+            } else {
+
+                data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
+
+                dash.vis.location_card.info_table.styles_country_view(false);
+
+            }
 
             console.log(data);
 
@@ -1313,6 +1333,12 @@ const dash = {
 
                 ref: '.js--text-field',
 
+                pais : {
+
+                    name : () => 'Argentina'
+
+                },
+
                 provincia : {
 
                     name : () => dash.vis.location_card.state.user_location_name,
@@ -1394,13 +1420,21 @@ const dash = {
 
                     console.log('Atualizar números de');
 
-                    info_table_fields .forEach(field => {
+                    info_table_fields.forEach(field => {
 
                         const field_type = field.dataset.infotable_field;
 
                         field.innerHTML = this[field_type]();
 
                     })
+
+                },
+
+                styles_country_view : function(on_off) {
+
+                    let method = on_off ? 'add' : 'remove';
+
+                    document.querySelector('.story-step-inner').classList[method]('argentina');
 
                 }
 
@@ -1463,6 +1497,18 @@ const dash = {
                                 text : current_provincia,
                                 provincia : null
     
+                            }
+
+                            dash.vis.render_selected_place(local);
+
+                        } else if (type == 'pais') {
+
+                            const local = {
+
+                                local: 'Argentina',
+                                tipo : 'pais',
+                                text : 'Argentina'
+
                             }
 
                             dash.vis.render_selected_place(local);
