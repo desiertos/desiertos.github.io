@@ -660,6 +660,59 @@ p[data-text_field='medio_prototipico'] {
 
 }
 
+/* Argentina card */
+
+.argentina [data-text_field*='category'] {
+
+    display: none;
+
+}
+
+.argentina .dashboard--basic-info-table,
+.argentina .dashboard-basic-info-table-group {
+
+    flex-direction: column;
+
+
+}
+
+.argentina .dashboard--basic-info-table {
+
+    margin-top: 1rem;
+
+}
+
+.argentina .dashboard-basic-info-table-group {
+
+    padding-left: 0;
+    border-left: none;
+
+}
+
+.argentina .dashboard-basic-info-table-group + .dashboard-basic-info-table-group {
+
+    border-top: none;
+
+}
+
+.argentina .dashboard-basic-info-table-group .name {
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: .6rem;
+    margin: .5rem 0;
+}
+
+.argentina .dashboard-basic-info-table-group [data-infotable_field] {
+
+    font-size: 2.5rem;
+
+}
+
+
+
+/* fim argentina card */
+
 /* bosque */
 
 [data-category='bosque'], 
