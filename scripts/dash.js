@@ -2231,7 +2231,7 @@ const dash = {
                             
                                 if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
     
-                                return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 : dash.vis.stripplot.dimensions.rect.other.height/4}))
+                                return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}))
                                 .force('x', d3.forceX().strength(strength).x(function(d) {
 
                                     const variable = d.variable;
@@ -2391,7 +2391,7 @@ const dash = {
                             
                             if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
 
-                            return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 : dash.vis.stripplot.dimensions.rect.other.height/4}))
+                            return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}))
                         .alphaMin(0.25)
                         .on('tick', dash.vis.stripplot.force.tick_update);
 
@@ -2474,10 +2474,12 @@ const dash = {
                         }
 
                         if (type == 'localidad') {
-                            dash.vis.stripplot.components.marks.render_lite.localidad(local_hovered);
+
+                            console.log('eh localidad, eh o ', local_hovered);
+                            
+                            dash.vis.stripplot.interactions.hover_on_strip.highlight_localidad_on_hover(local_hovered);
+                            //dash.vis.stripplot.components.marks.render_lite.localidad(local_hovered);
                         }
-
-
 
                     },
 
@@ -2487,6 +2489,75 @@ const dash = {
                         .selectAll('.vis-dash-stripplot-marks').classed('vis-dash-stripplot-marks-hovered', false);
 
                         dash.vis.stripplot.sels.d3.container.select('p.dash-stripplot-tooltip').classed('dash-stripplot-tooltip-visible', false);
+
+                        dash.vis.stripplot.sels.d3.svg
+                        .selectAll("circle.vis-dash-stripplot-marks")
+                        .classed('marks-location-hovered', false)
+                        .transition()
+                        .duration(250)
+                        .attr('r', d => 
+                        d.highlighted ?
+                        dash.vis.stripplot.dimensions.rect.highlight.height/4 :
+                        dash.vis.stripplot.dimensions.rect.other.height/4);
+
+                        dash.vis.stripplot.force.simulation
+                        .force('collision', d3.forceCollide().radius(function(d) {
+                            
+                            if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+
+                            return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}));
+
+                    },
+
+                    highlight_localidad_on_hover : function(local) {
+
+                        dash.vis.stripplot.sels.d3.svg
+                            .selectAll("circle.vis-dash-stripplot-marks")
+                            .classed('marks-location-hovered', d => d.local == local)
+                            .transition()
+                            .duration(250)
+                            .attr('r', d => 
+                            (d.local == local) | (d.highlighted) ?
+                            dash.vis.stripplot.dimensions.rect.highlight.height/4 :
+                            dash.vis.stripplot.dimensions.rect.other.height/4);
+
+                        dash.vis.stripplot.force.simulation.nodes().forEach(d =>
+                            d.hovered = d.local == local
+                        )
+
+                        // pq preciso passar novamente a bixiga da força?
+
+                        const strength = dash.vis.stripplot.force.config.strength;
+
+                        dash.vis.stripplot.force.simulation.force('collision', d3.forceCollide().radius(function(d) {
+                        
+                            if (d.hovered) { console.log("esse é o hovered. ", d.local, )}
+
+                            return d.hovered ? dash.vis.stripplot.dimensions.rect.highlight.height/4 : dash.vis.stripplot.dimensions.rect.other.height/4}))
+                            .force('x', d3.forceX().strength(strength).x(function(d) {
+
+                                const variable = d.variable;
+    
+                                if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+    
+                                   // console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+    
+                                    return dash.vis.stripplot.scales.x[variable](d[variable])
+                                    //-
+                                    //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                            
+                                } else {
+    
+                                    //console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+    
+                                    return 0
+    
+                                }
+                                //return dash.vis.stripplot.scales.x[variable](d[variable])
+    
+                            }))
+                            .force('y', d3.forceY().strength(strength).y(d => dash.vis.stripplot.scales.y[d.variable]))
+                        .velocityDecay(0.1).alpha(.5).restart();
 
                     }
                 },

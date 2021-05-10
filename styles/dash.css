@@ -850,15 +850,22 @@ line.vis-dash-stripplot-separation {
 .marks-location-highlighted {
 
     opacity : 1;
-    /*stroke : black;*/
+    
+
+}
+
+.marks-location-hovered {
+
+
 
 }
 
 circle.marks-location-highlighted {
 
     /*transform: scale(1.5);
-    transition: transform 0.5s;
-    stroke : black;*/
+    transition: transform 0.5s;*/
+    stroke : var(--font-color);
+    stroke-width: 2;
 
 }
 
