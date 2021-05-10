@@ -485,8 +485,9 @@ button.relato.clicked {
     color: white;
 }
 
-aside {
+.scene3d {
 
+    perspective: 600px;
     position: absolute;
     z-index: 2;
     top: calc( var(--header-height) * 2 + 1px);
@@ -500,10 +501,22 @@ aside {
     opacity: 1;
     overflow-y: scroll;
     /*pointer-events: unset;*/
-    background-color: white;
     font-family: var(--font-title);
-    transform: translateX(0);
-    transition: opacity .15s, transform .5s;
+    background-color: white;
+    transition: opacity 1s;
+
+}
+.scene3d.folded {
+    opacity: 0;
+}
+
+aside {
+
+    transform-style: preserve-3d;
+    transform-origin: center left;
+    transform: rotateY(0deg);/*translateX(0);*/
+    transition: transform 1s;
+    
 }
 
 aside h2 {
@@ -522,10 +535,11 @@ aside h3 {
 
 aside.folded {
 
-    transform: translateX(-19rem);
-    opacity: 0;
+    transform-style: preserve-3d;
+    transform: rotateY(-90deg);/*translateX(-19rem);*/
+    opacity: 1;
     pointer-events: none;
-    transition: opacity .5s, transform .5s;
+    transition: transform 1s;
 
 }
 
@@ -533,7 +547,7 @@ html.aside-shown-no-overflow-here {
     overflow-y: hidden;
 }
 
-aside button.close-aside {
+.scene3d button.close-aside {
     border: none;
     background-color: transparent;
     position: absolute;
@@ -542,7 +556,7 @@ aside button.close-aside {
     font-size: 1.5rem;
 }
 
-aside button.close-aside:hover {
+.scene3d button.close-aside:hover {
     transform-origin: center center;
     transform: scale(1.1);
 }

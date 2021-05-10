@@ -1100,6 +1100,7 @@ const dash = {
             refs : {
 
                 text : '.investigator-story',
+                scene3d : '.scene3d',
                 close_button : 'button.close-aside',
                 toggle_button : 'button.relato'
 
@@ -1110,36 +1111,38 @@ const dash = {
                 console.log('called', e);
 
                 const aside = document.querySelector(dash.interactions.relato_periodista.refs.text);
+                const scene3d = document.querySelector(dash.interactions.relato_periodista.refs.scene3d);
 
                 const aside_is_folded = aside.classList.contains('folded');
                 
                 aside.classList.toggle('folded');
+                scene3d.classList.toggle('folded');
                 
                 document.querySelector(dash.interactions.relato_periodista.refs.toggle_button).classList.toggle('clicked');
 
-                if (aside_is_folded) {
+                // if (aside_is_folded) {
 
-                    // aside is folded and has just been called: hide overflow rightaway
-                    console.log('está folded e vai aparecer, esconde o overflow');
-                    document.documentElement.classList.toggle('aside-shown-no-overflow-here');
+                //     // aside is folded and has just been called: hide overflow rightaway
+                //     console.log('está folded e vai aparecer, esconde o overflow');
+                //     document.documentElement.classList.toggle('aside-shown-no-overflow-here');
 
-                } else { 
+                // } else { 
 
-                    // aside is visible and is about to close: keep overflow hidden until the transition end.
-                    // BUT! until the OPACITY transition end. if we do not specify the propertyName, it will toggle the class twice.
-                    console.log('está visível, espera o fim da transição para deixar o overflow normal.')              
-                    aside.addEventListener('transitionend', (e) => {
+                //     // aside is visible and is about to close: keep overflow hidden until the transition end.
+                //     // BUT! until the OPACITY transition end. if we do not specify the propertyName, it will toggle the class twice.
+                //     console.log('está visível, espera o fim da transição para deixar o overflow normal.')              
+                //     aside.addEventListener('transitionend', (e) => {
 
-                        console.log('transition ', e.propertyName, ' end.');
+                //         console.log('transition ', e.propertyName, ' end.');
 
-                        if (e.propertyName == 'opacity') {
+                //         if (e.propertyName == 'transform') {
 
-                            document.documentElement.classList.toggle('aside-shown-no-overflow-here')
+                //             document.documentElement.classList.toggle('aside-shown-no-overflow-here')
 
-                        }
+                //         }
                         
-                    }, {once : true});
-                }
+                //     }, {once : true});
+                // }
 
             },
 
