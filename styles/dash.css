@@ -749,7 +749,7 @@ line.vis-dash-stripplot-separation {
 
     opacity : 1;
     fill : gold;
-    transition: all .5s;
+    transition: all .25s;
 }
 
 .marks-na {
