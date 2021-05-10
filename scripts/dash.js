@@ -1118,15 +1118,27 @@ const dash = {
                 document.querySelector(dash.interactions.relato_periodista.refs.toggle_button).classList.toggle('clicked');
 
                 if (aside_is_folded) {
-                    console.log('está folded e vai aparecer, esconde o overflow')
-                    document.documentElement.classList.toggle('aside-shown-no-overflow-here')
-                }
-                else { 
+
+                    // aside is folded and has just been called: hide overflow rightaway
+                    console.log('está folded e vai aparecer, esconde o overflow');
+                    document.documentElement.classList.toggle('aside-shown-no-overflow-here');
+
+                } else { 
+
+                    // aside is visible and is about to close: keep overflow hidden until the transition end.
+                    // BUT! until the OPACITY transition end. if we do not specify the propertyName, it will toggle the class twice.
                     console.log('está visível, espera o fim da transição para deixar o overflow normal.')              
-                    aside.addEventListener('transitionend', () => {
-                        console.log('transition end.')
-                        document.documentElement.classList.toggle('aside-shown-no-overflow-here')
-                    });
+                    aside.addEventListener('transitionend', (e) => {
+
+                        console.log('transition ', e.propertyName, ' end.');
+
+                        if (e.propertyName == 'opacity') {
+
+                            document.documentElement.classList.toggle('aside-shown-no-overflow-here')
+
+                        }
+                        
+                    }, {once : true});
                 }
 
             },
