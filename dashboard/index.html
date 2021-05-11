@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lusitana:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,600;1,700;1,800&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/dash.css">
+    <title>Desiertos Informativos</title>
+</head>
+<body>
+
+    <header>
+
+        <div class="brands-wrapper">
+            <div class="brands">
+              <a href="https://www.fopea.org/" target="_blank"><img src="../img/brands/logo-fopea.png" alt="Logotipo de Fopea"></a>
+              <div class="pipe"></div>
+              <a href="https://newsinitiative.withgoogle.com/" target="_blank"><img src="../img/brands/google.svg" alt="Logotipo da Google News Initiative"></a>
+            </div>
+        </div>
+        <h1 class="dashboard--title">Desiertos de Noticias</h1>
+        <nav>
+            <button class="menu-toggle">&#8801;</button>
+        </nav>
+
+    </header>
+
+    <ul class="dashboard--menu">
+        <li data-menu-option="desierto"></li>
+        <li data-menu-option="semidesierto" ></li>
+        <li data-menu-option="semibosque" ></li>
+        <li data-menu-option="bosque" ></li>
+    </ul>
+
+    <div class="outer-container">
+
+        <div class="map-container">
+
+            <div id="map"></div>
+
+        </div>
+
+        <div class="story-container">
+
+            <div class="story-step" data-step="location-card" id="location-card">
+
+                <div class="story-step-inner argentina">
+
+                    <ul class="dashboard--breadcrumbs">
+                        <li class="dashboard--breadcrumbs-active" data-breadcrumbs-type="pais">pais</li>
+                        <li data-breadcrumbs-type="provincia">provincia</li>
+                        <li data-breadcrumbs-type="localidad">localidad</li>
+                    </ul>
+
+                    <button class="relato">Relato</button>
+
+                    <h2>
+                        <span class="js--text-field" data-text_field='name'>Argentina</span>
+                    </h2>
+
+                    <p class="js--text-field" data-text_field='category' data-category>categoria</p>
+
+                    <p class="js--text-field" data-text_field='category_description'></p>
+
+                    <div class="dashboard--basic-info-table">
+
+                        <div class="dashboard-basic-info-table-group" data-infotable-group="poblacion">
+                            <span class="name">Población</span>
+                            <span data-infotable_field="poblacion">44,94 milliones</span>
+                        </div>
+
+                        <div class="dashboard-basic-info-table-group" data-infotable-group="medios">
+                            <span class="name">Medios</span>
+                            <span data-infotable_field="medios">1.000</span>
+                        </div>
+
+                        <div class="dashboard-basic-info-table-group" data-infotable-group="periodistas">
+                            <span class="name">Periodistas</span>
+                            <span data-infotable_field="periodistas">100.000</span>
+                        </div>
+                    </div>
+
+                    <div class="vis-dash-container">
+
+                        <svg class="vis-dash-stripplot"></svg>
+
+                        <p class="dash-stripplot-tooltip"></p>
+
+                    </div>
+
+                    <p class="js--text-field" data-text_field='medio_prototipico'></p>
+
+                </div>
+    
+            </div>
+
+        </div>
+
+        <aside class="investigator-story folded">
+
+            <button class="close-aside">&#215;</button>
+
+            <h2>Chubut: la escasez de medios y de periodistas alcanza a 22 de los 27 municipios explorados</h2>
+
+            <h3 class="investigator">Por Adrián Sandler</h3>
+
+            <p>
+                La información recogida en Chubut en el marco de la investigación de los llamados desiertos informativos vino a ratificar, de manera más precisa, ciertas percepciones vinculadas con el ejercicio del periodismo y la comunicación cultivadas en los últimos 15 años. Pero sobre todo, y como consecuencia de su carácter inédito, la indagación posibilitó un acercamiento con mayor rigurosidad a un escenario cuya diversidad se corresponde, en general, con particularidades demográficas, regionales, profesionales y tecnológicas.
+            </p>
+            <p>
+                Chubut es una de las provincias más grandes del país, pero su densidad poblacional resulta muy baja y desigual. Según los datos del último censo, cerca del 80% de los pobladores se concentra en cinco ciudades: Comodoro Rivadavia, Trelew, Puerto Madryn, Esquel y Rawson, la capital. 
+            </p>
+            <p>
+                En total, hay 47 localidades institucionalizadas: 27 de ellas tienen la categoría de municipalidad -condición tomada en cuenta para la investigación en el caso de Chubut- y las 20 restantes son comunas rurales dispersas en entre la Costa atlántica y la Cordillera, y con poblaciones que no superan los 1.000 habitantes. Esta breve caracterización sociodemográfica se corresponde con los resultados locales de la investigación: de los 62 medios de comunicación encuestados, 37 pertenecen a las cinco ciudades más pobladas, donde se consideró a las empresas con mayor influencia y representatividad, pero que no agotan el menú de posibilidades. 
+            </p>
+            <p>
+                Los restantes 25 medios detectados están situados en las otras 22 municipalidades. En estos casos la indagación fue direccionada a todos los medios existentes que cumpliesen con los requisitos establecidos en el programa. En esta área aparecieron los desiertos informativos: las fuentes consultadas mencionaron la existencia de radios municipales; radios dependientes de alguna biblioteca popular; repetidoras de radios ubicadas en las localidades más pobladas, pero en todos estos casos, carentes de periodismo local. En uno de esos lugares se advirtió el cierre reciente del único medio de comunicación que encuadraba en los cánones del trabajo.  
+            </p>
+            <p>
+                Como contrapartida, la importante proporción de medios de comunicación hallada en las cinco ciudades más pobladas y también -aunque en menor medida- en otras regiones puede responder, en una primera aproximación, a características geográficas -por ejemplo, por la vida integrada en la Comarca Andina, donde las localidades se encuentran muy próximas entre sí-, y al escenario económico y productivo de Chubut. 
+            </p>
+            <p>
+                El Estado provincial y las municipalidades ocupan un rol central debido a sus grandes dimensiones y a la escasez de empresas privadas, con cierta excepción en la zona sur donde, con epicentro en Comodoro Rivadavia, se desarrolla la industria petrolera. La alta proporción de medios de comunicación que dijeron contar con pauta oficial como principal sustento o como una de las fuentes de ingresos más importantes es una consecuencia del escenario descrito y en expansión durante los últimos años, más allá de la actual crisis del Estado provincial. 
+            </p>
+            <p>
+                A pesar de las dificultades o de cierta reticencia a colaborar por parte de algunos pocos medios de comunicación, el resultado de la investigación es muy positivo, sobre todo por el hecho de ser parte de un trabajo con alcance nacional inédito, que permitirá trazar un panorama amplio y legítimo del ecosistema de los medios de comunicación. Este primer paso puede sentar las bases para continuar con la indagación, y llegar a las poblaciones más pequeñas y dispersas donde, al menos en Chubut, la falta de conectividad y las distancias con respecto a los centros urbanos así como las grandes dificultades en el acceso a la tecnología y a la educación tienen su correlato en la escasez o nula existencia de medios de comunicación y, por ende, de periodistas, que permitan a las comunidades disfrutar de la libertad de expresión, y del derecho a la información y a la comunicación.  
+            </p>
+
+        </aside>
+
+
+
+
+    
+    </div>
+    <script src='https://unpkg.com/@turf/turf@6.3.0/turf.min.js'></script>
+    <!--<script src="../scripts/enter-view.min.js"></script>-->
+    <script src="../scripts/d3.v6.min.js"></script>
+    <script src="../scripts/dash.js"></script>
+    
+</body>
+</html>
