@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lusitana:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,600;1,700;1,800&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/style.css">
+    <title>Desiertos Informativos</title>
+</head>
+<body>
+
+    <header>
+        <div class="brands-wrapper">
+            <div class="brands">
+              <a href="https://www.fopea.org/" target="_blank"><img src="img/brands/logo-fopea.png" alt="Logotipo de Fopea"></a>
+              <div class="pipe"></div>
+              <a href="https://newsinitiative.withgoogle.com/" target="_blank"><img src="img/brands/google.svg" alt="Logotipo da Google News Initiative"></a>
+            </div>
+        </div>
+        <nav>
+            <button class="menu-toggle">&#8801;</button>
+        </nav>
+
+    </header>
+
+    <div class="outer-container">
+
+        <div class="vis-capa-container">
+
+            <svg id="vis-capa"></svg>
+
+        </div>
+
+
+
+        <div class="story-container">
+
+            <div class="story-step" data-step="abertura">
+
+                <div class="story-step-inner">
+
+                    <div class="retranca"> 🏜 ⛰ 🌳 🌲 </div>
+
+                    <h1>
+                        <span class="kicker">Búsqueda de Datos</span>
+                        <span>¿Vives en un desierto o en un bosque?</span>
+                    </h1>
+
+                    <p>
+                        No estamos hablando de vegetación y clima, sino de acceso a la información. Las regiones donde hay un periodismo profesional activo e independiente son como <span data-category-highlight="bosque"> bosques</span>, donde abunda la vida democrática. Las regiones que no tienen tanta suerte son como  <span data-category-highlight="desierto"> desiertos</span>, donde es mucho más difícil que algo así prospere.
+                    </p>
+
+                    <a href="#step-search" class="button-go-on">Continue</a>
+                
+                </div>
+    
+            </div>
+
+            <div class="story-step" data-step="pesquisa" id="step-search">
+
+                <div class="story-step-inner">
+
+                    <h2>
+                        <span class="kicker">Vamos a empezar</span>
+                        <span>¿Y tu donde estas?</span>
+                    </h2>
+    
+                    <div class="container-search">
+                        <button type="submit" class="search-button" id="story-search-place">
+                            <img src="./img/search.png">
+                        </button>
+                        <input type="search" id="location-search" name="q" list="locations" aria-label="Search through list of locations in Argentina">
+                        <datalist id="locations"></datalist>
+                    </div>
+
+                </div>
+
+                <a href="#" class="go-to-dashboard"><p>explorar los datos directamente</p></a>
+    
+            </div>
+
+            <div class="story-step" data-step="location-card" id="location-card">
+
+                <div class="story-step-inner">
+
+                    <h2>
+                        <span class="kicker js--location-type"></span>
+                        <span class="js--location-name"></span>
+                    </h2>
+
+                    <p class="js--location-category-main" data-category="bosque"></p>
+
+                    <p class="js--location-category-description card-text">Estás en un 🌳 bosque. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.</p>
+
+                    <div class="vis-story-container">
+
+                        <svg class="vis-story-stripplot"></svg>
+
+                    </div>
+
+                </div>
+
+    
+            </div>
+
+            <div class="story-step" data-step="importancia-periodismo">
+           
+
+                <div class="story-step-inner">
+
+                    <p class="card-text card-only-text">El acceso a un periodismo de calidad es importante para que florezcan la democracia y la vida pública, ya que una prensa independiente garantiza que los ciudadanos estén en mejores condiciones de gobernarse a sí mismos y tomar decisiones.</p>
+
+                </div>
+
+    
+            </div>
+
+            <div class="story-step" data-step="real-colors">
+           
+                <div class="story-step-inner">
+
+                    <p class="card-text card-only-text">Además de regiones como la tuya, que es un <span class="js--location-category" data-category-highlight="bosque">bosque</span>, también hay ciudades que se clasifican como <span class="js--remaining-category1" data-category-highlight="semibosque"></span>, <span class="js--remaining-category2" data-category-highlight="semidesierto"></span> y <span class="js--remaining-category3" data-category-highlight="desierto"></span>.'</p>
+
+                </div>
+
+            </div>
+
+            <div class="story-step" data-step="remaining-category1">
+           
+                <div class="story-step-inner">
+
+                    <p class="js--location-remaining-category1-text card-text card-only-text"></p>
+
+                </div>
+
+            </div>
+
+            <div class="story-step" data-step="remaining-category2">
+           
+                <div class="story-step-inner">
+
+                    <p class="js--location-remaining-category2-text card-text card-only-text"></p>
+
+                </div>
+
+            </div>
+
+            <div class="story-step" data-step="remaining-category3">
+           
+                <div class="story-step-inner">
+
+                    <p class="js--location-remaining-category3-text card-text card-only-text"></p>
+
+                </div>
+
+            </div>
+
+            <div class="story-step" data-step="penultimo">
+           
+
+                <div class="story-step-inner">
+
+                    <p class="card-text card-only-text">En el mapa elaborado por <strong>FOPEA</strong>, la vegetación argentina ha sido reemplazada por estos bosques y desiertos para que puedas ver qué regiones del país sufren más la ausencia de un periodismo de calidad.</p>
+
+                </div>
+    
+            </div>
+
+            <div class="story-step" data-step="fecho">
+           
+
+                <div class="story-step-inner">
+
+                    <p class="card-text card-only-text">Puede explorar los datos a nivel de provincia o acercar y conocer más sobre el ecosistema de información de ciudades de todo el país y barrios de la ciudad de Buenos Aires.</p>
+
+                </div>
+
+                <a href="#" class="go-to-dashboard"><p>explorar los datos directamente</p></a>
+    
+            </div>
+
+        </div>
+
+
+    </div>
+    <script src='https://unpkg.com/@turf/turf@6.3.0/turf.min.js'></script>
+    <script src="../scripts/enter-view.min.js"></script>
+    <script src="../scripts/d3.v6.min.js"></script>
+    <script src="../scripts/capa.js"></script>
+    
+</body>
+</html>
