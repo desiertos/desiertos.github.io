@@ -413,27 +413,24 @@ const dash = {
 
             },
 
-            monitor_click_event : function() {
+            click_event_handler : function(feature) {
 
-                dash.map_obj.on('click', 'localidad', function(e) {
 
-                    const localidad = e.features[0].properties.localidad;
-                    const provincia = e.features[0].properties.provincia;
+                const localidad = feature.properties.localidad; //e.features[0].properties.localidad;
+                const provincia = feature.properties.provincia // e.features[0].properties.provincia;
 
-                    const local = {
+                const local = {
 
-                        local : localidad,
-                        tipo  : "localidad",
-                        text  : localidad + '(' + provincia + ')',
-                        provincia : provincia
+                    local : localidad,
+                    tipo  : "localidad",
+                    text  : localidad + '(' + provincia + ')',
+                    provincia : provincia
 
-                    };
+                };
 
-                    console.log("Clicou em ", localidad, local);
+                console.log("Clicou em ", localidad, local, dash.vis.location_card.state.user_location_province);
 
-                    dash.vis.render_selected_place(local);
-
-                })
+                dash.vis.render_selected_place(local);
 
             }
 
@@ -571,11 +568,11 @@ const dash = {
 
             },
 
-            monitor_click_event : function() {
+            click_event_handler : function(feature) {
 
-                dash.map_obj.on('click', 'provincia', function(e) {
+                const province_name = feature.properties.nam; //e.features[0].properties.nam;
 
-                    const province_name = e.features[0].properties.nam;
+                if (province_name != dash.vis.location_card.state.user_location_name) {
 
                     const local = {
 
@@ -589,7 +586,7 @@ const dash = {
 
                     dash.vis.render_selected_place(local);
 
-                })
+                } else console.log('Clicou na mesma provincia, nao precisa renderizar.')
 
             }
 
@@ -768,6 +765,27 @@ const dash = {
                     5,
                 ]
             );
+
+        },
+
+        monitor_click_event : function() {
+
+            dash.map_obj.on('click', function(e) {
+                let features = dash.map_obj.queryRenderedFeatures(e.point, { layers: ['localidad', 'provincia'] });
+
+                if (features.length) {
+
+                    let type = features[0].layer.id;
+
+                    if (type == 'provincia') type = 'province';
+
+                    console.log("Clicked on a", type, ". Detalhes: ", features, e);
+
+                    dash.map[type].click_event_handler(features[0]);
+
+                }
+
+            });
 
         }
 
@@ -1073,9 +1091,69 @@ const dash = {
 
                 }
 
-            }
+            },
 
         },
+
+        relato_periodista : {
+
+            refs : {
+
+                text : '.investigator-story',
+                close_button : 'button.close-aside',
+                toggle_button : 'button.relato'
+
+            },
+
+            open_close : function(e) {
+
+                console.log('called', e);
+
+                const aside = document.querySelector(dash.interactions.relato_periodista.refs.text);
+
+                const aside_is_folded = aside.classList.contains('folded');
+                
+                aside.classList.toggle('folded');
+                
+                document.querySelector(dash.interactions.relato_periodista.refs.toggle_button).classList.toggle('clicked');
+
+                if (aside_is_folded) {
+
+                    // aside is folded and has just been called: hide overflow rightaway
+                    console.log('está folded e vai aparecer, esconde o overflow');
+                    document.documentElement.classList.toggle('aside-shown-no-overflow-here');
+
+                } else { 
+
+                    // aside is visible and is about to close: keep overflow hidden until the transition end.
+                    // BUT! until the OPACITY transition end. if we do not specify the propertyName, it will toggle the class twice.
+                    console.log('está visível, espera o fim da transição para deixar o overflow normal.')              
+                    aside.addEventListener('transitionend', (e) => {
+
+                        console.log('transition ', e.propertyName, ' end.');
+
+                        if (e.propertyName == 'opacity') {
+
+                            document.documentElement.classList.toggle('aside-shown-no-overflow-here')
+
+                        }
+                        
+                    }, {once : true});
+                }
+
+            },
+
+            monitor : function(which_button) {
+
+                const btn = document.querySelector(dash.interactions.relato_periodista.refs[which_button + '_button']);
+
+                console.log('monitoring ', which_button, '...');
+
+                btn.addEventListener('click', dash.interactions.relato_periodista.open_close);
+
+            }
+
+        }
 
     },
 
@@ -1087,7 +1165,27 @@ const dash = {
 
             console.log('Renderizando ', local.local, local.tipo);
 
-            const data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
+            let data;
+
+            if (local.tipo == 'pais') {
+
+                data = {
+
+                    'pob' : '44,94 milliones',
+                    'cant_medios' : '1.000',
+                    'cant_periodistas' : '100.000'
+
+                }
+
+                dash.vis.location_card.info_table.styles_country_view(true);
+
+            } else {
+
+                data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
+
+                dash.vis.location_card.info_table.styles_country_view(false);
+
+            }
 
             console.log(data);
 
@@ -1101,6 +1199,21 @@ const dash = {
             }
 
             //// seria o caso de levar isso para o render step do scroller?
+
+            // check if new selection is another localidad in the same province, or if it is another province (in case a province was selected)
+
+            console.log(local.provincia, dash.vis.location_card.state.user_location_province);
+
+            let new_view = true;
+
+            if (local.provincia) {
+
+                new_view = local.provincia != dash.vis.location_card.state.user_location_province;
+
+            }
+
+            console.log('new view', new_view);
+            
 
             // set vis state, calls vis render
 
@@ -1124,12 +1237,23 @@ const dash = {
 
             // render
 
-            dash.vis.stripplot.components.labels.render(local.tipo);
-            dash.vis.stripplot.components.lines.render(local.tipo);
-            dash.vis.stripplot.components.marks.render[local.tipo]();
-            dash.vis.stripplot.components.label_selected.render(local.tipo);
-            dash.vis.stripplot.components.min_max_labels.render(local.tipo);
-            dash.vis.stripplot.components.separation_lines.render(local.tipo);
+            if (new_view) {
+
+                dash.vis.stripplot.components.labels.render(local.tipo);
+                dash.vis.stripplot.components.lines.render(local.tipo);
+                dash.vis.stripplot.components.marks.render[local.tipo]();
+                dash.vis.stripplot.components.label_selected.render(local.tipo);
+                dash.vis.stripplot.components.min_max_labels.render(local.tipo);
+                dash.vis.stripplot.components.separation_lines.render(local.tipo);
+
+            } else {
+
+                dash.vis.stripplot.components.marks.render_lite[local.tipo]();
+                dash.vis.stripplot.components.label_selected.render(local.tipo);
+
+            }
+
+
 
             // listeners
 
@@ -1209,6 +1333,12 @@ const dash = {
 
                 ref: '.js--text-field',
 
+                pais : {
+
+                    name : () => 'Argentina'
+
+                },
+
                 provincia : {
 
                     name : () => dash.vis.location_card.state.user_location_name,
@@ -1278,11 +1408,11 @@ const dash = {
 
                 ref : '[data-infotable_field]',
 
-                poblacion : () =>  dash.vis.location_card.state.location_data['pob'],
+                poblacion : () =>  dash.utils.format_value(dash.vis.location_card.state.location_data['pob']),
 
-                medios : () =>  dash.vis.location_card.state.location_data['cant_medios'],
+                medios : () =>  dash.utils.format_value(dash.vis.location_card.state.location_data['cant_medios']),
                 
-                periodistas : () =>  dash.vis.location_card.state.location_data['cant_periodistas'],
+                periodistas : () =>  dash.utils.format_value(dash.vis.location_card.state.location_data['cant_periodistas']),
 
                 update : function() {
 
@@ -1290,13 +1420,21 @@ const dash = {
 
                     console.log('Atualizar números de');
 
-                    info_table_fields .forEach(field => {
+                    info_table_fields.forEach(field => {
 
                         const field_type = field.dataset.infotable_field;
 
                         field.innerHTML = this[field_type]();
 
                     })
+
+                },
+
+                styles_country_view : function(on_off) {
+
+                    let method = on_off ? 'add' : 'remove';
+
+                    document.querySelector('.story-step-inner').classList[method]('argentina');
 
                 }
 
@@ -1305,6 +1443,8 @@ const dash = {
             breadcrumbs : {
 
                 ref : '[data-breadcrumbs-type]',
+
+                ref_container : 'ul.dashboard--breadcrumbs',
 
                 activeName : 'dashboard--breadcrumbs-active',
 
@@ -1323,6 +1463,63 @@ const dash = {
                         }
 
                     });
+
+                },
+
+                monitor_click : function() {
+
+                    console.log('monitoring crumbs');
+
+                    const crumbs = document.querySelector(this.ref_container);
+
+                    crumbs.addEventListener('click', function(e) {
+
+                        const btn_clicked = e.target;
+
+                        const type = btn_clicked.dataset.breadcrumbsType;
+
+                        console.log('clicou no breadcrumb', type);
+
+                        if (type == 'pais') { 
+
+                            dash.vis.location_card.breadcrumbs.update(type);
+                            //montar um local pais
+                            dash.map.fit_Argentina();
+
+                        } else if (type == 'provincia' & dash.vis.location_card.state.user_location_type == 'localidad') {
+
+                            const current_provincia = dash.vis.location_card.state.user_location_province;
+
+                            const local = {
+
+                                local : current_provincia,
+                                tipo : 'provincia',
+                                text : current_provincia,
+                                provincia : null
+    
+                            }
+
+                            dash.vis.render_selected_place(local);
+
+                        } else if (type == 'pais') {
+
+                            const local = {
+
+                                local: 'Argentina',
+                                tipo : 'pais',
+                                text : 'Argentina'
+
+                            }
+
+                            dash.vis.render_selected_place(local);
+
+                        }
+
+                        
+
+                    })
+
+                    
 
                 }
 
@@ -1898,6 +2095,10 @@ const dash = {
 
                             variables.forEach(variable => {
 
+
+
+
+
                                 console.log('circulos da variavel... ', variable);
 
                                 const marks = dash.vis.stripplot.sels.d3.svg
@@ -1985,20 +2186,41 @@ const dash = {
 
                             });
 
+                            let data_complete = [];
+
                             variables.forEach(variable => {
 
-                                console.log('circulos da variavel... ', variable);
+                                // cria um dataset para o force_layout
+
+                                //let data_variable = [...data]; 
+                                data.forEach(d => {
+                                    
+                                    copy = {...d}
+                                    copy['variable'] = variable;
+                                    copy['highlighted'] = d.local == dash.vis.location_card.state.user_location_name;
+
+                                    data_complete.push(copy);
+
+                                })
+
+                            })
+
+                                /// done.
+
+                                //console.log('circulos da variavel... ', variable);
 
                                 const marks = dash.vis.stripplot.sels.d3.svg
-                                .selectAll("circle.vis-dash-stripplot-marks[data-variable='" + variable + "']")
-                                .data(data, d => d.local)
+                                .selectAll("circle.vis-dash-stripplot-marks")
+                                .data(data_complete, d => d.variable + d.local)
                                 .join('circle')
                                 .classed('vis-dash-stripplot-marks', true)
-                                .classed('marks-na', d => !dash.vis.stripplot.scales.x[variable](d[variable])) // se der undefined vai dar true
+                                .classed('marks-na', d => !dash.vis.stripplot.scales.x[d.variable](d[d.variable])) // se der undefined vai dar true
                                 .classed('marks-location-highlighted', d => d.local == dash.vis.location_card.state.user_location_name)
-                                .attr('data-variable', variable)
+                                .attr('data-variable', d => d.variable)
                                 .attr('data-location', d => d.local)
                                 .attr('fill', function(d) {
+
+                                    //console.log(this.dataset.variable);
 
                                     if (type == 'provincia') return 'hotpink'
                                     else {
@@ -2012,38 +2234,121 @@ const dash = {
                                     
                                 })
                                 .attr('cy', d => 
-                                dash.vis.stripplot.scales.y[variable]);
-
-                                // marks.enter().attr('cy', d => 
-                                //dash.vis.stripplot.scales.y[variable]);
-
-                                marks
-                                .transition()
-                                .duration(500)
+                                dash.vis.stripplot.scales.y[d.variable])
                                 .attr('cx', d => {
+                                    //console.log(d.variable);
 
-                                    console.log(d.variable);
+                                    const variable = d.variable;
 
                                     if (dash.vis.stripplot.scales.x[variable](d[variable])) {
 
+                                        console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+
                                         return dash.vis.stripplot.scales.x[variable](d[variable])
-                                        -
-                                        (d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                                        //-
+                                        //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
                                 
                                     } else {
+
+                                        console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
 
                                         return 0
 
                                     }
                                 })
+                                .attr('r', 0);
+
+                                marks
+                                .transition()
+                                .duration(1000)
                                 .attr('r', d => 
                                 d.local == dash.vis.location_card.state.user_location_name ?
                                 dash.vis.stripplot.dimensions.rect.highlight.height/4 :
                                 dash.vis.stripplot.dimensions.rect.other.height/4)
                                 ;
 
-                            })
+                            //})
 
+                            // simulation
+
+                            const force = dash.vis.stripplot.force;
+                            const sim = force.simulation;
+
+                            console.log(data_complete);
+
+                            sim.nodes(data_complete);
+
+                            //sim
+                            //   .force('x', d3.forceX().strength(force.config.strength).x(function(d) {
+
+                            //     const variable = d.variable;
+                            //     console.log(variable, d.local, dash.vis.stripplot.scales.x[variable](d[variable]), dash.vis.stripplot.scales.y[d.variable])
+
+                            //     return dash.vis.stripplot.scales.x[variable](d[variable])
+
+                            //   }))
+                            //   .force('y', d3.forceY().strength(force.config.strength).y(d => dash.vis.stripplot.scales.y[d.variable]))
+                              //.force('charge', d3.forceManyBody().strength(force.config.charge()))
+                            //  .force('collision',d3.forceCollide().radius(dash.vis.stripplot.dimensions.rect.other.height/4))
+
+                            sim.velocityDecay(0.2).alpha(1).restart();
+
+
+                        }
+
+                    },
+
+                    render_lite : {
+
+                        localidad : function(local = dash.vis.location_card.state.user_location_name) {
+
+                            dash.vis.stripplot.sels.d3.svg
+                                .selectAll("circle.vis-dash-stripplot-marks")
+                                .classed('marks-location-highlighted', d => d.local == local)
+                                .transition()
+                                .duration(250)
+                                .attr('r', d => 
+                                d.local == local ?
+                                dash.vis.stripplot.dimensions.rect.highlight.height/4 :
+                                dash.vis.stripplot.dimensions.rect.other.height/4);
+
+                            dash.vis.stripplot.force.simulation.nodes().forEach(d =>
+                                d.highlighted = d.local == local
+                            )
+
+                            // pq preciso passar novamente a bixiga da força?
+
+                            const strength = dash.vis.stripplot.force.config.strength;
+
+                            dash.vis.stripplot.force.simulation.force('collision', d3.forceCollide().radius(function(d) {
+                            
+                                if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+    
+                                return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}))
+                                .force('x', d3.forceX().strength(strength).x(function(d) {
+
+                                    const variable = d.variable;
+        
+                                    if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+        
+                                       // console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+        
+                                        return dash.vis.stripplot.scales.x[variable](d[variable])
+                                        //-
+                                        //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                                
+                                    } else {
+        
+                                        //console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+        
+                                        return 0
+        
+                                    }
+                                    //return dash.vis.stripplot.scales.x[variable](d[variable])
+        
+                                }))
+                                .force('y', d3.forceY().strength(strength).y(d => dash.vis.stripplot.scales.y[d.variable]))
+                            .velocityDecay(0.1).alpha(.5).restart();
 
                         }
 
@@ -2131,6 +2436,72 @@ const dash = {
 
             },
 
+            force : {
+
+                simulation : null,
+
+                config : {
+
+                    strength : 0.04,
+
+                    charge : () => -Math.pow(dash.vis.stripplot.dimensions.rect.other.height/4, 2) * dash.vis.stripplot.force.config.strength
+
+                },
+
+                init : function() {
+
+                    const charge = dash.vis.stripplot.force.config.charge();
+                    const strength = dash.vis.stripplot.force.config.strength;
+
+                    dash.vis.stripplot.force.simulation = d3.forceSimulation()
+                        .velocityDecay(0.2)
+
+                        .force('x', d3.forceX().strength(strength).x(function(d) {
+
+                            const variable = d.variable;
+
+                            if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+
+                               // console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+
+                                return dash.vis.stripplot.scales.x[variable](d[variable])
+                                //-
+                                //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                        
+                            } else {
+
+                                //console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+
+                                return 0
+
+                            }
+                            //return dash.vis.stripplot.scales.x[variable](d[variable])
+
+                        }))
+                        .force('y', d3.forceY().strength(strength).y(d => dash.vis.stripplot.scales.y[d.variable]))
+                        //.force('charge', d3.forceManyBody().strength(charge))
+                        .force('collision', d3.forceCollide().radius(function(d) {
+                            
+                            if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+
+                            return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}))
+                        .alphaMin(0.25)
+                        .on('tick', dash.vis.stripplot.force.tick_update);
+
+                        // quando faz o dataset data_complete, poderia usar um d.tipo_highlight = other/highlight, e aí usar um dash...rect[d.tipo_highlight].height
+
+                    dash.vis.stripplot.force.simulation.stop();
+
+                },
+
+                tick_update : () => {
+                    d3.selectAll('circle.vis-dash-stripplot-marks')
+                      .attr('cx', d => d.x)
+                      .attr('cy', d => d.y)
+                }
+
+            },
+
             interactions : {
 
                 hover_on_strip : {
@@ -2195,7 +2566,13 @@ const dash = {
 
                         }
 
+                        if (type == 'localidad') {
 
+                            console.log('eh localidad, eh o ', local_hovered);
+                            
+                            dash.vis.stripplot.interactions.hover_on_strip.highlight_localidad_on_hover(local_hovered);
+                            //dash.vis.stripplot.components.marks.render_lite.localidad(local_hovered);
+                        }
 
                     },
 
@@ -2205,6 +2582,75 @@ const dash = {
                         .selectAll('.vis-dash-stripplot-marks').classed('vis-dash-stripplot-marks-hovered', false);
 
                         dash.vis.stripplot.sels.d3.container.select('p.dash-stripplot-tooltip').classed('dash-stripplot-tooltip-visible', false);
+
+                        dash.vis.stripplot.sels.d3.svg
+                        .selectAll("circle.vis-dash-stripplot-marks")
+                        .classed('marks-location-hovered', false)
+                        .transition()
+                        .duration(250)
+                        .attr('r', d => 
+                        d.highlighted ?
+                        dash.vis.stripplot.dimensions.rect.highlight.height/4 :
+                        dash.vis.stripplot.dimensions.rect.other.height/4);
+
+                        dash.vis.stripplot.force.simulation
+                        .force('collision', d3.forceCollide().radius(function(d) {
+                            
+                            if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+
+                            return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}));
+
+                    },
+
+                    highlight_localidad_on_hover : function(local) {
+
+                        dash.vis.stripplot.sels.d3.svg
+                            .selectAll("circle.vis-dash-stripplot-marks")
+                            .classed('marks-location-hovered', d => d.local == local)
+                            .transition()
+                            .duration(250)
+                            .attr('r', d => 
+                            (d.local == local) | (d.highlighted) ?
+                            dash.vis.stripplot.dimensions.rect.highlight.height/4 :
+                            dash.vis.stripplot.dimensions.rect.other.height/4);
+
+                        dash.vis.stripplot.force.simulation.nodes().forEach(d =>
+                            d.hovered = d.local == local
+                        )
+
+                        // pq preciso passar novamente a bixiga da força?
+
+                        const strength = dash.vis.stripplot.force.config.strength;
+
+                        dash.vis.stripplot.force.simulation.force('collision', d3.forceCollide().radius(function(d) {
+                        
+                            if (d.hovered) { console.log("esse é o hovered. ", d.local, )}
+
+                            return d.hovered ? dash.vis.stripplot.dimensions.rect.highlight.height/4 : dash.vis.stripplot.dimensions.rect.other.height/4}))
+                            .force('x', d3.forceX().strength(strength).x(function(d) {
+
+                                const variable = d.variable;
+    
+                                if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+    
+                                   // console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+    
+                                    return dash.vis.stripplot.scales.x[variable](d[variable])
+                                    //-
+                                    //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
+                            
+                                } else {
+    
+                                    //console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+    
+                                    return 0
+    
+                                }
+                                //return dash.vis.stripplot.scales.x[variable](d[variable])
+    
+                            }))
+                            .force('y', d3.forceY().strength(strength).y(d => dash.vis.stripplot.scales.y[d.variable]))
+                        .velocityDecay(0.1).alpha(.5).restart();
 
                     }
                 },
@@ -2257,6 +2703,12 @@ const dash = {
             dash.utils.colors.populate();
             //dash.scroller.steps.get();
             dash.vis.stripplot.sels.d3.set(); // sets up d3 selections;
+            dash.vis.stripplot.force.init();
+
+            dash.interactions.relato_periodista.monitor('close');
+            dash.interactions.relato_periodista.monitor('toggle');
+            dash.vis.location_card.breadcrumbs.monitor_click();
+
             dash.utils.load_data();
             
         },
@@ -2313,12 +2765,15 @@ const dash = {
                 // monitor hover and click events on provinces
 
                 dash.map.province.monitor_hover_event();
-                dash.map.province.monitor_click_event();
+                  //dash.map.province.monitor_click_event();
 
                 // monitor hover and click events on localidads
 
                 dash.map.localidad.monitor_hover_event();
-                dash.map.localidad.monitor_click_event();
+                  //dash.map.localidad.monitor_click_event();
+
+                // monitor click events on localidad or provincia
+                dash.map.monitor_click_event();
 
                 //fit map to continental Argentina
                 dash.map.fit_Argentina();

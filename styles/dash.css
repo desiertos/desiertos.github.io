@@ -458,6 +458,95 @@ input#location-search {
 
 }
 
+/* Aside - investigator */
+
+button.relato {
+
+    position: absolute;
+    top: 1.5rem;
+    right: 1rem;
+    font-family: var(--font-body);
+    background-color: white;
+    color: var(--font-color);
+    border: 2px solid var(--font-color);
+    padding: .2rem .4rem;
+    font-size: .7rem;
+
+}
+
+button.relato:hover {
+
+    background-color: grey;
+    color: white;
+}
+
+button.relato.clicked {
+    background-color: var(--font-color);
+    color: white;
+}
+
+aside {
+
+    position: absolute;
+    z-index: 2;
+    top: calc( var(--header-height) * 2 + 1px);
+    left: 0;
+    width: 19rem;
+    padding: 1.7rem;
+    padding-top: 2rem;
+    font-size: .8rem;
+    line-height: 1.5;
+    height: calc(100vh - var(--header-height) * 2 );
+    opacity: 1;
+    overflow-y: scroll;
+    /*pointer-events: unset;*/
+    background-color: white;
+    font-family: var(--font-title);
+    transform: translateX(0);
+    transition: opacity .15s, transform .5s;
+}
+
+aside h2 {
+
+    font-size: 1.4rem;
+    margin-bottom: .5rem;
+        
+}
+
+aside h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-family: var(--font-body);
+    font-weight: normal;
+}
+
+aside.folded {
+
+    transform: translateX(-19rem);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .5s, transform .5s;
+
+}
+
+html.aside-shown-no-overflow-here {
+    overflow-y: hidden;
+}
+
+aside button.close-aside {
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 1.5rem;
+}
+
+aside button.close-aside:hover {
+    transform-origin: center center;
+    transform: scale(1.1);
+}
+
 /* Story - location card*/
 
 #location-card [data-content]::before {
@@ -570,6 +659,59 @@ p[data-text_field='medio_prototipico'] {
     font-family: var(--font-title);
 
 }
+
+/* Argentina card */
+
+.argentina [data-text_field*='category'] {
+
+    display: none;
+
+}
+
+.argentina .dashboard--basic-info-table,
+.argentina .dashboard-basic-info-table-group {
+
+    flex-direction: column;
+
+
+}
+
+.argentina .dashboard--basic-info-table {
+
+    margin-top: 1rem;
+
+}
+
+.argentina .dashboard-basic-info-table-group {
+
+    padding-left: 0;
+    border-left: none;
+
+}
+
+.argentina .dashboard-basic-info-table-group + .dashboard-basic-info-table-group {
+
+    border-top: none;
+
+}
+
+.argentina .dashboard-basic-info-table-group .name {
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: .6rem;
+    margin: .5rem 0;
+}
+
+.argentina .dashboard-basic-info-table-group [data-infotable_field] {
+
+    font-size: 2.5rem;
+
+}
+
+
+
+/* fim argentina card */
 
 /* bosque */
 
@@ -711,6 +853,7 @@ span.vis-dash-stripplot-labels-minmax {
     font-size: 8px;
     transform: translateX(-50%);
     padding-top: 1em;
+    pointer-events: none;
 
 }
 
@@ -725,6 +868,7 @@ line.vis-dash-stripplot-axis {
     stroke: var(--color-vis-axis);
     stroke-width: 1;
 
+
 }
 
 line.vis-dash-stripplot-separation {
@@ -736,7 +880,7 @@ line.vis-dash-stripplot-separation {
 
 .vis-dash-stripplot-marks {
 
-    opacity : .5;
+    /*opacity : .5;*/
     stroke-width: 0;
     /*transform : translate(-50%, -50%);*/
     transition: opacity .5s, fill .5s;
@@ -747,7 +891,7 @@ line.vis-dash-stripplot-separation {
 
     opacity : 1;
     fill : gold;
-    transition: all .5s;
+    transition: all .25s;
 }
 
 .marks-na {
@@ -759,15 +903,22 @@ line.vis-dash-stripplot-separation {
 .marks-location-highlighted {
 
     opacity : 1;
-    /*stroke : black;*/
+    
+
+}
+
+.marks-location-hovered {
+
+
 
 }
 
 circle.marks-location-highlighted {
 
     /*transform: scale(1.5);
-    transition: transform 0.5s;
-    stroke : black;*/
+    transition: transform 0.5s;*/
+    stroke : var(--font-color);
+    stroke-width: 2;
 
 }
 
