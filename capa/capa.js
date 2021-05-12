@@ -135,6 +135,8 @@ const capa = {
 
             space_between_dots :  1,
 
+            margin : 40,
+
             calc : {
 
                 margin : null
@@ -244,7 +246,7 @@ const capa = {
 
                     const h = capa.utils.dims.height;
                     const w = capa.utils.dims.width;
-                    const base_margin = capa.vis.params.calc.margin;
+                    const base_margin = capa.vis.params.margin;
 
                     console.log(base_margin);
 
@@ -264,6 +266,48 @@ const capa = {
 
             },
 
+            axis : {
+
+                x : null,
+                x_log : null,
+                y : null,
+
+                set : function() {
+
+                    capa.vis.scatterplot.axis.x = d3.axisBottom(capa.vis.scatterplot.scales.x);
+                    capa.vis.scatterplot.axis.x_log = d3.axisBottom(capa.vis.scatterplot.scales.x_log);
+                    capa.vis.scatterplot.axis.y = d3.axisLeft(capa.vis.scatterplot.scales.y)
+
+                },
+
+                render : function() {
+
+                    const margin = capa.vis.params.margin;
+
+                    d3.select('svg#vis-capa')
+                      .append('g')
+                      .classed('axis', true)
+                      .classed('x-axis', true)
+                      .style('transform', 'translate( 0px, ' + (capa.utils.dims.height - margin) + 'px )')
+                      .call(capa.vis.scatterplot.axis.x);
+
+                    d3.select('svg#vis-capa')
+                      .append('g')
+                      .classed('axis', true)
+                      .classed('y-axis', true)
+                      .style('transform', 'translate( ' + margin + 'px, 0px )')
+                      .call(capa.vis.scatterplot.axis.y);  
+
+                },
+
+                change_to_log : function() {
+
+                    d3.select('.x-axis').transition().duration(1000).call(capa.vis.scatterplot.axis.x_log);
+
+                }
+
+            },
+
             render : function() {
 
                 const x = capa.vis.scatterplot.scales.x;
@@ -276,6 +320,8 @@ const capa = {
                 .attr('cy', d => y(+d.properties.cantidad_de_medios))
                 .attr('cx', d => x(+d.properties.poblacion_residente));
 
+                capa.vis.scatterplot.axis.render();
+
             },
 
             change_to_log : function() {
@@ -286,6 +332,8 @@ const capa = {
                 .transition()
                 .duration(1000)
                 .attr('cx', d => x(+d.properties.poblacion_residente));
+
+                capa.vis.scatterplot.axis.change_to_log();
 
 
             }
@@ -445,6 +493,7 @@ const capa = {
 
             capa.vis.calc_margin();
             capa.vis.scatterplot.scales.set();
+            capa.vis.scatterplot.axis.set();
 
         }
 

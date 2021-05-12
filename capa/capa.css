@@ -1080,5 +1080,11 @@ g.container-provinces {
 g.container-provinces.fade {
 
     opacity: 0;
-    
+
+}
+
+g.axis {
+
+    font-family: var(--font-body);
+
 }
