@@ -40,8 +40,6 @@ const capa = {
 
                 let data = capa.map.data.prov;
 
-                console.log(data);
-
                 let feats = data.features;
                 //   topojson.feature(
                 //     topodata, 
@@ -91,7 +89,8 @@ const capa = {
 
                 let svg = d3.select("svg#vis-capa");
 
-                //console.log(feats[0], proj(feats[0].geometry.coordinates));
+                // to help remember its structure
+                console.log(feats[0]);
 
                 svg.selectAll("circle.vis-cities")
                     .data(feats)
@@ -134,7 +133,41 @@ const capa = {
 
             radius: 2,
 
-            space_between_dots :  1
+            space_between_dots :  1,
+
+            calc : {
+
+                margin : null
+
+            }
+
+        },
+
+        calc_margin : function() {
+
+            const h = capa.utils.dims.height;
+            const w = capa.utils.dims.width;
+            const r = capa.vis.params.radius;
+            const spacing = capa.vis.params.space_between_dots;
+            
+            const data = capa.map.data.mun.features;
+
+            const nof_dots_side = Math.ceil(Math.sqrt(data.length));
+
+            //console.log(nof_dots_side);
+
+            // each dot occupies : 2r + spacing
+
+            const grid_size = nof_dots_side * (2*r + spacing) - spacing; // minus the last spacing
+
+            // margins
+
+            const lesser_dim = w > h ? w : h;
+
+            const margin = (lesser_dim - grid_size) / 2;
+
+            capa.vis.params.calc.margin = margin;
+            capa.vis.params.calc.nofs_dots_side = nof_dots_side;
 
         },
 
@@ -142,28 +175,32 @@ const capa = {
 
             render : function() {
 
-                const h = capa.utils.dims.height;
-                const w = capa.utils.dims.width;
+               // const h = capa.utils.dims.height;
+               // const w = capa.utils.dims.width;
+
                 const r = capa.vis.params.radius;
                 const spacing = capa.vis.params.space_between_dots;
                 
-                const data = capa.map.data.mun.features;
+                // const data = capa.map.data.mun.features;
 
-                const nof_dots_side = Math.ceil(Math.sqrt(data.length));
+                const nof_dots_side = capa.vis.params.calc.nofs_dots_side;
+                const margin = capa.vis.params.calc.margin;
 
-                //console.log(nof_dots_side);
+                // //console.log(nof_dots_side);
 
-                // each dot occupies : 2r + spacing
+                // // each dot occupies : 2r + spacing
 
-                const grid_size = nof_dots_side * (2*r + spacing) - spacing; // minus the last spacing
+                // const grid_size = nof_dots_side * (2*r + spacing) - spacing; // minus the last spacing
 
-                // margins
+                // // margins
 
-                const lesser_dim = w > h ? w : h;
+                // const lesser_dim = w > h ? w : h;
 
-                const margin = (lesser_dim - grid_size) / 2;
+                // const margin = (lesser_dim - grid_size) / 2;
 
-                console.log(grid_size, lesser_dim, margin);
+                // capa.vis.params.calc.margin = margin;
+
+                // console.log(grid_size, lesser_dim, margin);
 
                 function get_x(index) {
 
@@ -196,6 +233,47 @@ const capa = {
         },
 
         scatterplot : {
+
+            scales : {
+
+                x : d3.scaleLinear(),
+                y : d3.scaleLinear(),
+
+                set : function() {
+
+                    const h = capa.utils.dims.height;
+                    const w = capa.utils.dims.width;
+                    const base_margin = capa.vis.params.calc.margin;
+
+                    console.log(base_margin);
+
+                    capa.vis.scatterplot.scales.x.range([base_margin, w-base_margin]);
+                    capa.vis.scatterplot.scales.y.range([h-base_margin, base_margin]);
+
+                    // domains
+
+                    const data = capa.map.data.mun.features;
+
+                    capa.vis.scatterplot.scales.y.domain(d3.extent(data, d => +d.properties.cantidad_de_medios));
+                    capa.vis.scatterplot.scales.x.domain(d3.extent(data, d => +d.properties.poblacion_residente));
+                    
+                }
+
+            },
+
+            render : function() {
+
+                const x = capa.vis.scatterplot.scales.x;
+                const y = capa.vis.scatterplot.scales.y;
+
+
+                d3.selectAll('circle.vis-cities')
+                .transition()
+                .duration(1000)
+                .attr('cy', d => y(+d.properties.cantidad_de_medios))
+                .attr('cx', d => x(+d.properties.poblacion_residente));
+
+            }
 
             
         }
@@ -308,6 +386,15 @@ const capa = {
                 capa.map.mun.return();
 
             }
+        },
+
+        'scatterplot' : {
+
+            play : function() {
+
+                capa.vis.scatterplot.render();
+
+            }
         }
         
     },
@@ -324,11 +411,16 @@ const capa = {
 
         begin : function() {
 
+            // after data is loaded
+
 
             capa.utils.orders_muns();
             capa.utils.dims.get();
             capa.map.prov.render();
             capa.map.mun.render();
+
+            capa.vis.calc_margin();
+            capa.vis.scatterplot.scales.set();
 
         }
 
