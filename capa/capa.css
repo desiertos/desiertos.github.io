@@ -1070,3 +1070,15 @@ p.dash-stripplot-tooltip-visible {
     background-color: khaki;
 
 }
+
+g.container-provinces {
+
+    transition: opacity 1s;
+
+}
+
+g.container-provinces.fade {
+
+    opacity: 0;
+    
+}

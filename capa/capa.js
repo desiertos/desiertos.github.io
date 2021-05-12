@@ -28,9 +28,9 @@ const capa = {
               .translate([w / 2, h / 2])
         },
 
-        render : {
+        prov : {
             
-            prov : function() {
+            render : function() {
 
                 let data = capa.map.data.prov;
 
@@ -49,6 +49,7 @@ const capa = {
                 let svg = d3.select("svg#vis-capa");
 
                 svg.append("g")
+                .classed('container-provinces', true)
                 .selectAll("path.vis-provinces")
                 .data(feats)
                 .join("path")
@@ -60,7 +61,17 @@ const capa = {
 
             },
 
-            mun : function() {
+            fade : function() {
+
+                document.querySelector('g.container-provinces').classList.toggle('fade');
+
+            }
+
+        },
+
+        mun : {
+            
+            render : function() {
 
                 let data = capa.map.data.mun;
 
@@ -85,6 +96,19 @@ const capa = {
                     .attr("cx", d => d.geometry ? proj(d.geometry.coordinates)[0] : 0)
                     .attr("cy", d => d.geometry ? proj(d.geometry.coordinates)[1] : 0)
                     .attr("r", capa.vis.params.radius)
+                ;
+
+            },
+
+            return : function() {
+
+                let proj = capa.map.proj();
+
+                d3.selectAll("circle.vis-cities")
+                  .transition()
+                  .duration(1000)
+                  .attr("cx", d => d.geometry ? proj(d.geometry.coordinates)[0] : 0)
+                  .attr("cy", d => d.geometry ? proj(d.geometry.coordinates)[1] : 0)
                 ;
 
             }
@@ -260,6 +284,29 @@ const capa = {
  
     },
 
+    interactions : {
+
+        // timelines gsap?
+
+        'dotplot' : {
+
+            play : function() {
+
+                capa.map.prov.fade();
+                capa.vis.dotplot.render();
+    
+            },
+
+            reverse : function() {
+
+                capa.map.prov.fade();
+                capa.map.mun.return();
+
+            }
+        }
+        
+    },
+
     ctrl : {
 
         init : function() {
@@ -275,8 +322,8 @@ const capa = {
 
             capa.utils.orders_muns();
             capa.utils.dims.get();
-            capa.map.render.prov();
-            capa.map.render.mun();
+            capa.map.prov.render();
+            capa.map.mun.render();
 
         }
 
