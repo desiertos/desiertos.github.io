@@ -74,6 +74,48 @@ const capa = {
         },
 
         mun : {
+
+            prepare_muns : function() {
+
+                // orders and saves initial x/y value to be used in the force simulation
+
+                let proj = capa.map.proj();
+    
+                const feats = capa.map.data.mun.features;
+    
+                feats.sort( (a, b) => a.properties.categoria - b.properties.categoria )
+    
+                feats.forEach(d => {
+    
+                    if (d.geometry) {
+                        
+                        d.x0 = proj(d.geometry.coordinates)[0];
+                        d.x  = proj(d.geometry.coordinates)[0];
+                        d.y0 = proj(d.geometry.coordinates)[1];
+                        d.y  = proj(d.geometry.coordinates)[1];
+    
+                    } else {
+    
+                        d.no_geom = true;
+                        d.x = 0;
+                        d.y = 0;
+                        d.x0 = 0;
+                        d.y0 = 0;
+    
+                    }
+    
+                })
+
+                console.log(feats);
+    
+                capa.map.data.mun = {
+    
+                    type: "FeatureCollection",
+                    features : feats
+    
+                }
+    
+            },
             
             render : function() {
 
@@ -85,7 +127,7 @@ const capa = {
                 //     topodata.objects.provincia)
                 //   .features;
 
-                let proj = capa.map.proj();
+                //let proj = capa.map.proj();
 
                 let svg = d3.select("svg#vis-capa");
 
@@ -96,10 +138,12 @@ const capa = {
                     .data(feats)
                     .join("circle")
                     .classed('vis-cities', true)
+                    .classed('no-geom', d => d.no_geom)
                     .attr("fill", d => capa.map.scales.colors(d.properties.categoria))
+                    //.attr("data-coords", d => d.geometry ? proj(d.geometry.coordinates) : 'na')
                     //.attr("stroke", 'dodgerblue')
-                    .attr("cx", d => d.geometry ? proj(d.geometry.coordinates)[0] : 0)
-                    .attr("cy", d => d.geometry ? proj(d.geometry.coordinates)[1] : 0)
+                    .attr("cx", d => d.x0)
+                    .attr("cy", d => d.y0)
                     .attr("r", capa.vis.params.radius)
                 ;
 
@@ -118,6 +162,67 @@ const capa = {
 
             }
             
+        },
+
+        force :  {
+
+            simulation : null,
+
+            config : {
+
+                strength : 0.04,
+
+                charge : () => -Math.pow(capa.vis.params.radius, 2) * capa.map.force.config.strength
+
+            },
+
+            init : function() {
+
+                const charge = capa.map.force.config.charge();
+                const strength = capa.map.force.config.strength;
+                const data = capa.map.data.mun;
+                const feats = data.features;
+                const proj = capa.map.proj();
+
+                capa.map.force.simulation = d3.forceSimulation()
+                    .velocityDecay(0.2)
+                    .force(
+                        'x', 
+                        d3.forceX().strength(strength).x(
+                            d => d.geometry ? proj(d.geometry.coordinates)[0] : 0
+                        )
+                    )
+                    .force(
+                        'y', 
+                        d3.forceY().strength(strength).y(
+                            d => d.geometry ? proj(d.geometry.coordinates)[1] : 0
+                        )
+                    )
+                    //.force('charge', d3.forceManyBody().strength(charge))
+                    .force('collision', d3.forceCollide().strength(strength).radius(capa.vis.params.radius))
+                    .alphaMin(0.25)
+                    .on('tick', capa.map.force.tick_update);
+
+                    // quando faz o dataset data_complete, poderia usar um d.tipo_highlight = other/highlight, e aí usar um dash...rect[d.tipo_highlight].height
+
+                capa.map.force.simulation.stop();
+                capa.map.force.simulation.nodes(feats);
+
+            },
+
+            tick_update : () => {
+                d3.selectAll('circle.vis-cities')
+                  .attr('cx', d => d.x)
+                  .attr('cy', d => d.y)
+            },
+
+            fire : () => {
+
+                const sim = capa.map.force.simulation;
+                sim.alpha(1).restart();
+
+            }
+
         }
 
     },
@@ -361,21 +466,6 @@ const capa = {
 
         },
 
-        orders_muns : function() {
-
-            const feats = capa.map.data.mun.features;
-
-            feats.sort( (a, b) => a.properties.categoria - b.properties.categoria )
-
-            capa.map.data.mun = {
-
-                type: "FeatureCollection",
-                features : feats
-
-            }
-
-        },
-
         dims : {
 
             height : null,
@@ -593,15 +683,17 @@ const capa = {
 
             // after data is loaded
 
-
-            capa.utils.orders_muns();
             capa.utils.dims.get();
             capa.map.prov.render();
+            capa.map.mun.prepare_muns();
             capa.map.mun.render();
+            capa.map.force.init();
 
             capa.vis.calc_margin();
             capa.vis.scatterplot.scales.set();
             capa.vis.scatterplot.axis.set();
+
+            
 
         }
 
