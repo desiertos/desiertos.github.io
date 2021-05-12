@@ -650,6 +650,21 @@ g.axis {
 
 circle.vis-cities {
 
-    /*opacity: .75;*/
+    stroke-width: 1px;
+    stroke: black;
 
+}
+
+.story-container .btns-proto {
+    position: absolute;
+    top: var(--header-height);
+    z-index: 10;
+}
+
+.story-container button {
+    width: 10rem;
+    margin-right: 1rem;
+    display: inline;
+    background-color: tomato;
+    border: 1px solid black;
 }

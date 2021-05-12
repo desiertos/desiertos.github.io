@@ -18,7 +18,21 @@ const capa = {
 
         scales : {
 
-            colors : (cat) => Object.values(capa.utils.colors.categories)[+cat-1]
+            colors : (cat) => Object.values(capa.utils.colors.categories)[+cat-1],
+
+            radius : d3.scaleSqrt().range([2, 10]),
+
+            set_radius_domain : () => {
+
+                const data = capa.map.data.mun.features;
+
+                const domain = d3.extent(data, d => +d.properties.poblacion_residente);
+
+                console.log(domain);
+
+                capa.map.scales.radius.domain(domain);
+
+            } 
 
         },
 
@@ -160,6 +174,26 @@ const capa = {
                   .attr("cy", d => d.geometry ? proj(d.geometry.coordinates)[1] : 0)
                 ;
 
+            },
+
+            pop_bubbles : function() {
+
+                const strength = capa.map.force.config.strength;
+
+                d3.selectAll("circle.vis-cities")
+                  .transition()
+                  .duration(1000)
+                  .attr("r", d => capa.map.scales.radius(d.properties.poblacion_residente));
+
+                capa.map.force.simulation.force(
+                    'collision', 
+                    d3.forceCollide().strength(strength*1.5).radius(
+                        d => capa.map.scales.radius(d.properties.poblacion_residente) + 1
+                    )
+                );
+
+                capa.map.force.simulation.alpha(1).restart();
+
             }
             
         },
@@ -199,8 +233,8 @@ const capa = {
                         )
                     )
                     //.force('charge', d3.forceManyBody().strength(charge))
-                    .force('collision', d3.forceCollide().strength(strength).radius(capa.vis.params.radius))
-                    .alphaMin(0.25)
+                    .force('collision', d3.forceCollide().strength(strength*1.5).radius(capa.vis.params.radius))
+                    .alphaMin(0.01)
                     .on('tick', capa.map.force.tick_update);
 
                     // quando faz o dataset data_complete, poderia usar um d.tipo_highlight = other/highlight, e aí usar um dash...rect[d.tipo_highlight].height
@@ -686,6 +720,7 @@ const capa = {
             capa.utils.dims.get();
             capa.map.prov.render();
             capa.map.mun.prepare_muns();
+            capa.map.scales.set_radius_domain();
             capa.map.mun.render();
             capa.map.force.init();
 
@@ -693,7 +728,26 @@ const capa = {
             capa.vis.scatterplot.scales.set();
             capa.vis.scatterplot.axis.set();
 
+            capa.ctrl.monitor_buttons();
+
             
+
+        },
+
+        monitor_buttons : function() {
+
+            console.log('monitoring');
+
+            const btns = document.querySelector(".btns-proto");
+
+            btns.addEventListener('click', function(e) {
+
+                console.log(e.target);
+
+                if (e.target.dataset.btn == 'force') capa.map.force.fire();
+                if (e.target.dataset.btn == 'force-bubble') capa.map.mun.pop_bubbles();
+
+            })
 
         }
 
