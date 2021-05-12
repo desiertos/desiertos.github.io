@@ -16,6 +16,12 @@ const capa = {
     
         },
 
+        scales : {
+
+            colors : (cat) => Object.values(capa.utils.colors.categories)[+cat-1]
+
+        },
+
         proj : () => {
 
             let h = capa.utils.dims.height;
@@ -91,7 +97,7 @@ const capa = {
                     .data(feats)
                     .join("circle")
                     .classed('vis-cities', true)
-                    .attr("fill", d => capa.vis.scales.colors(d.properties.categoria))
+                    .attr("fill", d => capa.map.scales.colors(d.properties.categoria))
                     //.attr("stroke", 'dodgerblue')
                     .attr("cx", d => d.geometry ? proj(d.geometry.coordinates)[0] : 0)
                     .attr("cy", d => d.geometry ? proj(d.geometry.coordinates)[1] : 0)
@@ -129,12 +135,6 @@ const capa = {
             radius: 2,
 
             space_between_dots :  1
-
-        },
-
-        scales : {
-
-            colors : (cat) => Object.values(capa.utils.colors.categories)[+cat-1]
 
         },
 
@@ -193,6 +193,11 @@ const capa = {
 
             }
 
+        },
+
+        scatterplot : {
+
+            
         }
 
     },
