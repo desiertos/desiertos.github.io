@@ -238,6 +238,7 @@ const capa = {
 
                 x : d3.scaleLinear(),
                 y : d3.scaleLinear(),
+                x_log : d3.scaleLog(),
 
                 set : function() {
 
@@ -248,6 +249,7 @@ const capa = {
                     console.log(base_margin);
 
                     capa.vis.scatterplot.scales.x.range([base_margin, w-base_margin]);
+                    capa.vis.scatterplot.scales.x_log.range([base_margin, w-base_margin]);
                     capa.vis.scatterplot.scales.y.range([h-base_margin, base_margin]);
 
                     // domains
@@ -256,6 +258,7 @@ const capa = {
 
                     capa.vis.scatterplot.scales.y.domain(d3.extent(data, d => +d.properties.cantidad_de_medios));
                     capa.vis.scatterplot.scales.x.domain(d3.extent(data, d => +d.properties.poblacion_residente));
+                    capa.vis.scatterplot.scales.x_log.domain(d3.extent(data, d => +d.properties.poblacion_residente));
                     
                 }
 
@@ -272,6 +275,18 @@ const capa = {
                 .duration(1000)
                 .attr('cy', d => y(+d.properties.cantidad_de_medios))
                 .attr('cx', d => x(+d.properties.poblacion_residente));
+
+            },
+
+            change_to_log : function() {
+
+                const x = capa.vis.scatterplot.scales.x_log;
+
+                d3.selectAll('circle.vis-cities')
+                .transition()
+                .duration(1000)
+                .attr('cx', d => x(+d.properties.poblacion_residente));
+
 
             }
 
@@ -393,6 +408,15 @@ const capa = {
             play : function() {
 
                 capa.vis.scatterplot.render();
+
+            }
+        },
+
+        'scatter_log' : {
+
+            play : function() {
+
+                capa.vis.scatterplot.change_to_log();
 
             }
         }
