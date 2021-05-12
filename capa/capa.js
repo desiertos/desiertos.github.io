@@ -2,7 +2,7 @@ const capa = {
 
     map : {
 
-        file : 'provincias_simp.json',
+        file : 'provv.geojson',
 
         render : function() {
 
@@ -24,16 +24,25 @@ const capa = {
             let h = capa.utils.dims.height;
             let w = capa.utils.dims.width;
 
-            // let proj = d3.geoTransverseMercator()
+            let proj = d3.geoTransverseMercator()
+              .center([0, -38.5])
+              .rotate([60, 0])
+              .scale(750)
+              .translate([w / 2, h / 2]);
+
+            //let proj = d3.geoTransverseMercator()
             //   .center([2.5, -38.5])
             //   .rotate([66, 0])
-            //   .scale((h * 56.5) / 33).translate([(w / 2), (h / 2)]);
+            //   .scale(200)
+            //   //.scale((h * 56.5) / 33)
+            //   .translate([(w / 2), (h / 2)]);
 
-            let proj = d3
-              .geoConicEqualArea()
-              .parallels([-56, -21])
-              .rotate([40, 0])
-              .fitSize([h, w], geodata)
+            // let proj = d3
+            //   .geoMercator()
+            //   //.geoConicEqualArea()
+            //   //.parallels([-56, -21])
+            //   .rotate([40, 0])
+            //   .fitSize([h, w], geodata)
 
 
             let svg = d3.select("svg#vis-capa");
@@ -88,8 +97,8 @@ const capa = {
 
                 const svg = document.querySelector("svg#vis-capa");
 
-                capa.dims.width  = svg.getBoundingClientRect().width;
-                capa.dims.height = svg.getBoundingClientRect().height;
+                capa.utils.dims.width  = svg.getBoundingClientRect().width;
+                capa.utils.dims.height = svg.getBoundingClientRect().height;
 
             }
 
@@ -102,13 +111,14 @@ const capa = {
 
         init : function() {
 
-
             capa.utils.read_data();
 
         },
 
         begin : function() {
 
+
+            capa.utils.dims.get();
             capa.map.render();
 
         }
