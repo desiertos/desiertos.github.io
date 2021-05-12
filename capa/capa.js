@@ -132,6 +132,7 @@ const capa = {
         params : {
 
             radius: 2,
+            after_radius : 4,
 
             space_between_dots :  1,
 
@@ -149,7 +150,7 @@ const capa = {
 
             const h = capa.utils.dims.height;
             const w = capa.utils.dims.width;
-            const r = capa.vis.params.radius;
+            const r = capa.vis.params.after_radius;
             const spacing = capa.vis.params.space_between_dots;
             
             const data = capa.map.data.mun.features;
@@ -180,7 +181,7 @@ const capa = {
                // const h = capa.utils.dims.height;
                // const w = capa.utils.dims.width;
 
-                const r = capa.vis.params.radius;
+                const r = capa.vis.params.after_radius;
                 const spacing = capa.vis.params.space_between_dots;
                 
                 // const data = capa.map.data.mun.features;
@@ -225,6 +226,7 @@ const capa = {
                 svg.selectAll('circle.vis-cities')
                 .transition()
                 .duration(1000)
+                .attr('r', capa.vis.params.after_radius)
                 .attr('cx', (d,i) => margin + get_x(i))
                 .attr('cy', (d,i) => margin + get_y(i));
 

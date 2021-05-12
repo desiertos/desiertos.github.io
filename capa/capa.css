@@ -1088,3 +1088,9 @@ g.axis {
     font-family: var(--font-body);
 
 }
+
+circle.vis-cities {
+
+    /*opacity: .75;*/
+
+}
