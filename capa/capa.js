@@ -473,11 +473,117 @@ const capa = {
         
     },
 
+    scroller : {
+
+        steps : {
+
+            list : null,
+
+            get : function() {
+
+                const steps_html = document.querySelector(".story-container").children;
+
+                capa.scroller.steps.list = Array.from(steps_html).map(d => d.dataset.step);
+
+            }
+
+        },
+
+        config : function() {
+
+            enterView({
+
+                selector: '.story-step',
+
+                enter: function(el) {
+
+                    const step = el.dataset.step;
+
+                    console.log("Renderizando step... ", step);
+
+                    capa.scroller.render[step].play();
+
+                },
+
+                exit: function(el) {
+
+                    const step = el.dataset.step;
+
+                    const index_step = capa.scroller.steps.list.indexOf(step);
+
+                    const step_anterior = capa.scroller.steps.list[index_step - 1];
+
+                    capa.scroller.render[step_anterior]();
+
+                    console.log("saiu, ", step_anterior);
+                },
+
+                offset: 0.5, // enter at middle of viewport
+                //once: true, // trigger just once
+            });
+
+        },
+
+        // por em outro lugar?
+
+        render : {
+
+            'abertura' : {
+
+                play : function() {
+
+                    console.log('nada')
+                }
+                
+            },
+
+            'dotplot' : {
+
+                play : function() {
+    
+                    capa.map.prov.fade();
+                    capa.vis.dotplot.render();
+        
+                },
+    
+                reverse : function() {
+    
+                    capa.map.prov.fade();
+                    capa.map.mun.return();
+    
+                }
+            },
+    
+            'scatterplot' : {
+    
+                play : function() {
+    
+                    capa.vis.scatterplot.render();
+    
+                }
+            },
+    
+            'scatter_log' : {
+    
+                play : function() {
+    
+                    capa.vis.scatterplot.change_to_log();
+    
+                }
+            }
+
+        },
+
+    },
+
     ctrl : {
 
         init : function() {
 
             capa.utils.colors.populate();
+
+            // inicializa o scroller
+            capa.scroller.config();
 
             capa.utils.read_data();
 

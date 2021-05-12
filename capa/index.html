@@ -61,61 +61,46 @@
     
             </div>
 
-            <div class="story-step" data-step="pesquisa" id="step-search">
+            <div class="story-step" data-step="dotplot" id="step-search">
 
                 <div class="story-step-inner">
 
                     <h2>
                         <span class="kicker">Vamos a empezar</span>
-                        <span>¿Y tu donde estas?</span>
+                        <span>Não é uma PLANILHA, mas é um dotplot!</span>
                     </h2>
-    
-                    <div class="container-search">
-                        <button type="submit" class="search-button" id="story-search-place">
-                            <img src="./img/search.png">
-                        </button>
-                        <input type="search" id="location-search" name="q" list="locations" aria-label="Search through list of locations in Argentina">
-                        <datalist id="locations"></datalist>
-                    </div>
+
+                    <a href="#location-card" class="button-go-on">Continue</a>
 
                 </div>
-
-                <a href="#" class="go-to-dashboard"><p>explorar los datos directamente</p></a>
     
             </div>
 
-            <div class="story-step" data-step="location-card" id="location-card">
+            <div class="story-step" data-step="scatterplot" id="location-card">
 
                 <div class="story-step-inner">
 
                     <h2>
-                        <span class="kicker js--location-type"></span>
-                        <span class="js--location-name"></span>
+                        <span>Agora um scatterplot</span>
                     </h2>
 
-                    <p class="js--location-category-main" data-category="bosque"></p>
+                    <a href="#scatter_log" class="button-go-on">Continue</a>
 
-                    <p class="js--location-category-description card-text">Estás en un 🌳 bosque. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.</p>
-
-                    <div class="vis-story-container">
-
-                        <svg class="vis-story-stripplot"></svg>
-
-                    </div>
 
                 </div>
 
     
             </div>
 
-            <div class="story-step" data-step="importancia-periodismo">
+            <div class="story-step" id='scatter_log' data-step="scatter_log">
            
-
                 <div class="story-step-inner">
 
-                    <p class="card-text card-only-text">El acceso a un periodismo de calidad es importante para que florezcan la democracia y la vida pública, ya que una prensa independiente garantiza que los ciudadanos estén en mejores condiciones de gobernarse a sí mismos y tomar decisiones.</p>
+                <h2>
+                    <span>Agora um scatterpLOG</span>
+                </h2>
 
-                </div>
+            </div>
 
     
             </div>
