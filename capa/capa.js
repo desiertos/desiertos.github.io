@@ -49,9 +49,10 @@ const capa = {
                 let svg = d3.select("svg#vis-capa");
 
                 svg.append("g")
-                .selectAll("path")
+                .selectAll("path.vis-provinces")
                 .data(feats)
                 .join("path")
+                .classed('vis-provinces', true)
                 .attr("fill", 'white')
                 .attr("stroke", 'khaki')
                 .attr("d", d3.geoPath().projection(proj))
@@ -75,14 +76,15 @@ const capa = {
 
                 //console.log(feats[0], proj(feats[0].geometry.coordinates));
 
-                svg.selectAll("circle")
+                svg.selectAll("circle.vis-cities")
                     .data(feats)
                     .join("circle")
+                    .classed('vis-cities', true)
                     .attr("fill", d => capa.vis.scales.colors(d.properties.categoria))
                     //.attr("stroke", 'dodgerblue')
                     .attr("cx", d => d.geometry ? proj(d.geometry.coordinates)[0] : 0)
                     .attr("cy", d => d.geometry ? proj(d.geometry.coordinates)[1] : 0)
-                    .attr("r", 2)
+                    .attr("r", capa.vis.params.radius)
                 ;
 
             }
@@ -93,11 +95,82 @@ const capa = {
 
     vis : {
 
+        aux_data : {
+
+
+        },
+
+        params : {
+
+            radius: 2,
+
+            space_between_dots :  1
+
+        },
+
         scales : {
 
             colors : (cat) => Object.values(capa.utils.colors.categories)[+cat-1]
 
+        },
+
+        dotplot : {
+
+            render : function() {
+
+                const h = capa.utils.dims.height;
+                const w = capa.utils.dims.width;
+                const r = capa.vis.params.radius;
+                const spacing = capa.vis.params.space_between_dots;
+                
+                const data = capa.map.data.mun.features;
+
+                const nof_dots_side = Math.ceil(Math.sqrt(data.length));
+
+                //console.log(nof_dots_side);
+
+                // each dot occupies : 2r + spacing
+
+                const grid_size = nof_dots_side * (2*r + spacing) - spacing; // minus the last spacing
+
+                // margins
+
+                const lesser_dim = w > h ? w : h;
+
+                const margin = (lesser_dim - grid_size) / 2;
+
+                console.log(grid_size, lesser_dim, margin);
+
+                function get_x(index) {
+
+                    const x_index = index % nof_dots_side;
+
+                    return x_index * (2*r + spacing);
+
+                }
+
+                function get_y(index) {
+
+                    const y_index = Math.floor( index / nof_dots_side);
+
+                    return y_index * (2*r + spacing);
+
+                }
+
+                const svg = d3.select("svg#vis-capa");
+
+                svg.selectAll('circle.vis-cities')
+                .transition()
+                .duration(1000)
+                .attr('cx', (d,i) => margin + get_x(i))
+                .attr('cy', (d,i) => margin + get_y(i));
+
+
+
+            }
+
         }
+
     },
 
     utils : {
@@ -113,6 +186,21 @@ const capa = {
                 capa.ctrl.begin();
 
             });
+
+        },
+
+        orders_muns : function() {
+
+            const feats = capa.map.data.mun.features;
+
+            feats.sort( (a, b) => a.properties.categoria - b.properties.categoria )
+
+            capa.map.data.mun = {
+
+                type: "FeatureCollection",
+                features : feats
+
+            }
 
         },
 
@@ -185,6 +273,7 @@ const capa = {
         begin : function() {
 
 
+            capa.utils.orders_muns();
             capa.utils.dims.get();
             capa.map.render.prov();
             capa.map.render.mun();
