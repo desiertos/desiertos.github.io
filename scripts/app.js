@@ -241,6 +241,7 @@ const app = {
                       'circle-color': ['get', 'color_real'],
                       'circle-opacity': 0.5,
                       'circle-stroke-color' : ['get', 'color_real'],
+                      'circle-stroke-width' : 1,
                       'circle-stroke-opacity' : 1,
                       'circle-radius' : [
                             'let',
@@ -321,14 +322,14 @@ const app = {
 
                 app.map_obj.addLayer({
                     'id': 'provincia',
-                    'type': 'line',
+                    'type': 'fill',
                     'source': 'provincia',
                     'layout': {},
                     'paint': {
-                      'line-width': 0,
-                      'line-color': 'black'
+                      'fill-outline-color': '#AAA',
+                      'fill-color': '#F0E9DF'
                     }
-                }); 
+                }, 'cidade'); 
 
                 app.map_obj.addLayer({
                     'id': 'provincia-border',
@@ -424,8 +425,8 @@ const app = {
                     'type': 'fill',
                     'source': 'mask',
                     'layout': {},
-                    'paint': {'fill-color': 'ghostwhite'},
-                });
+                    'paint': {'fill-color': '#F4F0EC'},
+                }, 'provincia');
 
             }
 
@@ -573,11 +574,12 @@ const app = {
 
             'abertura' : function() {
 
-                app.map_obj.setPaintProperty('cidade', 'fill-pattern', null);
-                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
-                app.map_obj.setPaintProperty('cidade', 'fill-outline-color', 'ghostwhite');
-                app.map_obj.setPaintProperty('cidade', 'fill-opacity', .5);
-                app.map.set_initial_view();
+                //app.map_obj.setPaintProperty('cidade', 'fill-pattern', null);
+                //app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
+                //app.map_obj.setPaintProperty('cidade', 'fill-outline-color', 'ghostwhite');
+                //app.map_obj.setPaintProperty('cidade', 'fill-opacity', .5);
+               // app.map.set_initial_view();
+                app.map.fit_Argentina();
                 app.map.cidade.toggle_highlight_border('');
 
                 //app.interactions.story.toggle_visibility("dashboard_button");

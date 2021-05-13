@@ -3,7 +3,7 @@
 
     --font-title : Newsreader;
     --font-body : Rubik;
-    --background-color: ghostwhite;
+    --background-color: 'white';/*ghostwhite;*/
     --background-transp: rgba(248, 248, 255, .5);
     --background-transp-darker: rgba(248, 248, 255, .25);
 
