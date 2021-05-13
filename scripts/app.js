@@ -36,13 +36,14 @@ const app = {
 
         geojsons : {
 
-            provincia : '../data/maps/arg.json',
-            cidade : '../data/maps/arg_dept.json',
+            provincia : '../data/maps/prov2.json',
+            cidade : '../data/maps/mun2.json',
             mask : '../data/maps/arg_mask.json'
 
         },
 
-        fopea_data : '../data/output.json',
+        //fopea_data : '../data/output.json',
+        place_names : '../data/places.json',
 
         layers : {
 
@@ -72,7 +73,9 @@ const app = {
         provincia : null,
         cidade : null,
         mask : null,
-        fopea_data : null
+        fopea_data : null,
+        max_pob : null,
+        min_pob : null
 
     },
 
@@ -87,7 +90,7 @@ const app = {
                 fetch(app.params.geojsons.cidade, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
-                fetch(app.params.fopea_data, {mode: 'cors'}).then( response => response.json())
+                fetch(app.params.place_names, {mode: 'cors'}).then( response => response.json())
         
             ])
               .then( data => app.ctrl.begin(data))
@@ -231,24 +234,64 @@ const app = {
 
                 app.map_obj.addLayer({
                     'id': 'cidade',
-                    'type': 'fill',
+                    'type': 'circle',
                     'source': 'cidade',
                     'layout': {},
                     'paint': {
-                      'fill-color': 'transparent',
-                      'fill-opacity': 0.5,
-                      'fill-outline-color': 'ghostwhite'
+                      'circle-color': ['get', 'color_real'],
+                      'circle-opacity': 0.5,
+                      'circle-stroke-color' : ['get', 'color_real'],
+                      'circle-stroke-opacity' : 1,
+                      'circle-radius' : [
+                            'let',
+                            'sqrt_pob',
+                            ['sqrt', ['to-number', ['get', 'pob'] ] ],
+
+                            [
+                                'interpolate', ['linear'], ['zoom'],
+
+                                3, [
+                                    'interpolate', ['linear'],
+                                    ['var', 'sqrt_pob'],
+                                    //0, 0,
+                                    Math.sqrt(app.data.min_pob), 2,
+                                    Math.sqrt(app.data.max_pob), 15
+                                ],
+
+                                12, [
+                                    'interpolate', ['linear'],
+                                    ['var', 'sqrt_pob'],
+                                    //0, 0,
+                                    Math.sqrt(app.data.min_pob), 6,
+                                    Math.sqrt(app.data.max_pob), 45
+                                ]
+                                
+                            ]
+                        ]
                     }
                 }, 'road-label'); // puts behind road-label
 
                 app.map_obj.addLayer({
                     'id': 'cidade-border',
-                    'type': 'line',
+                    'type': 'circle',
                     'source': 'cidade',
                     'layout': {},
                     'paint': {
-                      'line-color': 'black',
-                      'line-width': 5
+                      'circle-color': 'black',
+                      'circle-radius' : [
+                        'let',
+                        'sqrt_pob',
+                        ['sqrt', ['to-number', ['get', 'pob'] ] ],
+
+                        [
+                            'interpolate',
+                            ['linear'],
+                            ['var', 'sqrt_pob'],
+                            //0, 0,
+                            Math.sqrt(app.data.min_pob), 2 + 2,
+                            Math.sqrt(app.data.max_pob), 10 + 2
+                        ]
+                    ]
                     },
                     'filter': ['==', 'cidade', '']}); // puts behind road-label
 
@@ -1393,7 +1436,21 @@ const app = {
             app.data.cidade = data[0];
             app.data.mask = data[1];
             app.data.provincia = data[2];
-            app.data.fopea_data = data[3];
+            app.data.fopea_data = {
+                cidade : data[0].features.map(d => d.properties),
+                provincia : data[2].features.map(d => d.properties),
+                lista_locais : data[3]
+            };
+
+            const pobs = data[0].features.map(d => d.properties.pob);
+
+            console.log(pobs);
+
+            app.data.max_pob = Math.max(...pobs);
+            app.data.min_pob = Math.min(...pobs);
+            
+
+
 
             // pre-process cidade data
             app.data.cidade.features.forEach(el => {
@@ -1402,16 +1459,16 @@ const app = {
 
                 const categoria = el.properties.categoria;
 
-                const id = el.properties.gid;
-                const indice = ( (id - 1) % 4 );
+                //const id = el.properties.gid;
+                //const indice = ( (id - 1) % 4 );
 
 
-                const tipo = app.params.patterns.names[indice];
-                const type = types[indice];
-                const color = app.params.colors[type];
+                //const tipo = app.params.patterns.names[indice];
+                //const type = types[indice];
+                //const color = app.params.colors[type];
 
-                el.properties["tipo"] = tipo;
-                el.properties["color"] = color;
+                //el.properties["tipo"] = tipo;
+                //el.properties["color"] = color;
                 el.properties['color_real'] = categoria ?
                   app.params.colors[app.params.categories[+categoria-1]] :
                   'lightgray';
