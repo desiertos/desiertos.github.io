@@ -502,6 +502,13 @@ const app = {
 
         },
 
+        popup: new mapboxgl.Popup(
+            {
+                closeButton: false,
+                loseOnClick: false,
+                anchor: 'bottom-left'
+            }),
+
         fit_Argentina : function() {
 
             app.map_obj.fitBounds([
@@ -589,6 +596,21 @@ const app = {
             app.map.province.toggle_highlight_border_provincia(provincia);
             app.map.localidad.toggle_highlight_border(location);
             app.map.localidad.style_selected_city(location);
+
+            const location_coordinates = app.data.localidad.features
+               .filter(d => d.properties.local == location)
+               [0].geometry.coordinates;
+
+            console.log('Location Info', location_coordinates);
+
+            app.map.popup.setLngLat(location_coordinates).setHTML(location_data.nam).addTo(app.map_obj);
+
+            const popup_tip = document.querySelector('.mapboxgl-popup-tip');
+            popup_tip.style.borderTopColor = location_data.color_real;
+
+            const popup_content = document.querySelector('.mapboxgl-popup-content');
+            popup_content.style.backgroundColor = location_data.color_real;
+
 
         }
 

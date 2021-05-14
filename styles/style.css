@@ -562,6 +562,25 @@ line.vis-story-stripplot-axis {
 
 }
 
+/* Map */
+
+.mapboxgl-popup-content {
+
+    font-family: var(--font-body) !important;
+    padding: 10px 10px !important;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    /* part of the style is inline, so we need to use JS to style it */
+
+}
+
+.mapboxgl-popup-tip {
+
+    border-left: none !important;
+    align-self: flex-start !important;
+
+}
+
 
 @media screen and (max-width: 620px) {
 
