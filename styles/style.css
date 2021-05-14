@@ -259,7 +259,7 @@ a.button-go-on::before {
     position: absolute;
     bottom: 0;
     content: "\003E";
-    color: grey;
+    color: var(--font-color);
     font-size: 3rem;
     transform: rotate(90deg) scaleX(.75);
     font-weight: 300;
