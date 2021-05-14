@@ -509,6 +509,29 @@ const app = {
                 anchor: 'bottom-left'
             }),
 
+        add_popup : function(location) {
+
+            const type = 'localidad';
+
+            const location_data = app.data.fopea_data[type].filter(d => d.local == location)[0];
+
+            const location_coordinates = app.data.localidad.features
+            .filter(d => d.properties.local == location)
+            [0].geometry.coordinates;
+
+            console.log('Location Info', location_coordinates);
+
+            app.map.popup.setLngLat(location_coordinates).setHTML(location_data.nam).addTo(app.map_obj);
+
+            const popup_tip = document.querySelector('.mapboxgl-popup-tip');
+            popup_tip.style.borderTopColor = location_data.color_real;
+
+            const popup_content = document.querySelector('.mapboxgl-popup-content');
+            popup_content.style.backgroundColor = location_data.color_real;
+
+
+        },
+
         fit_Argentina : function() {
 
             app.map_obj.fitBounds([
@@ -597,20 +620,7 @@ const app = {
             app.map.localidad.toggle_highlight_border(location);
             app.map.localidad.style_selected_city(location);
 
-            const location_coordinates = app.data.localidad.features
-               .filter(d => d.properties.local == location)
-               [0].geometry.coordinates;
-
-            console.log('Location Info', location_coordinates);
-
-            app.map.popup.setLngLat(location_coordinates).setHTML(location_data.nam).addTo(app.map_obj);
-
-            const popup_tip = document.querySelector('.mapboxgl-popup-tip');
-            popup_tip.style.borderTopColor = location_data.color_real;
-
-            const popup_content = document.querySelector('.mapboxgl-popup-content');
-            popup_content.style.backgroundColor = location_data.color_real;
-
+            app.map.add_popup(location);
 
         }
 
@@ -735,13 +745,19 @@ const app = {
 
             },
 
-            'real-colors' : function() {
+            'other-categories' : function() {
 
-                app.map.fit_Argentina();
-                app.map.fog_of_war.toggle('provincia', '');
-                app.map.fog_of_war.toggle('localidad', '');
-                app.map.localidad.toggle_highlight_border('');
-                app.map_obj.setPaintProperty('localidad', 'fill-color', ['get', 'color_real']);
+                app.vis.location_card.state.remaining_categories_locations.forEach(location => {
+
+                    app.map.add_popup(location);
+
+                })
+
+                //app.map.fit_Argentina();
+                //app.map.fog_of_war.toggle('provincia', '');
+                //app.map.fog_of_war.toggle('localidad', '');
+                //app.map.localidad.toggle_highlight_border('');
+                //app.map_obj.setPaintProperty('localidad', 'fill-color', ['get', 'color_real']);
 
             },
 
