@@ -156,15 +156,16 @@ h2 {
 
 }
 
-.kicker {
+.story-step .kicker {
 
     display: block;
-    font-size: .8rem;
+    font-size: .6rem;
     text-transform: uppercase;
-    letter-spacing: .8px;
+    letter-spacing: .1em;
     font-family: var(--font-body);
     font-weight: 400;
-    margin-bottom: 1rem;
+    margin-top: 2rem;
+    margin-bottom: .5rem;
     color: var(--font-color);
 
 }
@@ -209,7 +210,6 @@ a.go-to-dashboard {
 
     position: absolute;
     right: 0;
-    font-size: .8rem;
     bottom: 0;
     width: 50vw;
     height: calc(2 * var(--header-height));
@@ -222,7 +222,9 @@ a.go-to-dashboard {
     border-top: 1px solid var(--font-color);
     opacity: 1;
     text-transform: uppercase;
-    background-color: var(--color-semibosque);
+    text-align: center;
+    letter-spacing: .1em;
+    background-color: #EEC471;
 
 }
 
@@ -231,6 +233,7 @@ a.go-to-dashboard p {
     max-width: 36vw;
     width: 36rem;
     margin: 0 auto;
+    font-size: .8rem;
 
 }
 

@@ -46,10 +46,7 @@
 
                 <div class="story-step-inner">
 
-                    <div class="retranca"> 🏜 ⛰ 🌳 🌲 </div>
-
                     <h1>
-                        <span class="kicker">Búsqueda de Datos</span>
                         <span>¿Vives en un desierto o en un bosque?</span>
                     </h1>
 
@@ -57,9 +54,19 @@
                         No estamos hablando de vegetación y clima, sino de acceso a la información. Las regiones donde hay un periodismo profesional activo e independiente son como <span data-category-highlight="bosque"> bosques</span>, donde abunda la vida democrática. Las regiones que no tienen tanta suerte son como  <span data-category-highlight="desierto"> desiertos</span>, donde es mucho más difícil que algo así prospere.
                     </p>
 
-                    <a href="#step-search" class="button-go-on">Continue</a>
+                    <p class="kicker">¿Y tu donde estas?</p>
+
+                    <div class="container-search">
+                        <button type="submit" class="search-button" id="story-search-place">
+                            <img src="./img/search.png">
+                        </button>
+                        <input type="search" id="location-search" name="q" list="locations" aria-label="Search through list of locations in Argentina">
+                        <datalist id="locations"></datalist>
+                    </div>
                 
                 </div>
+
+                <a href="#" class="go-to-dashboard"><p>explorar los datos directamente</p></a>
     
             </div>
 
