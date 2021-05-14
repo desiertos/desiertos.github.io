@@ -192,6 +192,7 @@ const app = {
         generate_random_remaining_locations : function(remaining_categories) {
 
             const data = app.data.fopea_data.localidad;
+            const state = app.vis.location_card.state;
             const output = [];
 
             remaining_categories.forEach(category => {
@@ -201,7 +202,7 @@ const app = {
                 console.log(cat_numeric);
 
                 const available_cities = data
-                  .filter(d => ['San Luis', 'Salta'].includes(d.provincia))
+                  .filter(d => d.provincia == state.user_location_province)
                   .filter(d => d.categoria == cat_numeric)
                   .map(d => d.local);
 
@@ -506,8 +507,7 @@ const app = {
             {
                 closeButton: false,
                 loseOnClick: false,
-                anchor: 'bottom-left',
-                class: 'popup-' + name
+                anchor: 'bottom-left'
             }),
 
         add_popup : function(location, name) {
@@ -520,16 +520,20 @@ const app = {
             .filter(d => d.properties.local == location)
             [0].geometry.coordinates;
 
-            console.log('Location Info', location_coordinates);
+            console.log('Location Data for', name, location_data);
 
             const new_popup = app.map.popup(name);
 
-            new_popup.setLngLat(location_coordinates).setHTML(location_data.nam).addTo(app.map_obj);
+            new_popup
+              .setLngLat(location_coordinates)
+              .setHTML(location_data.nam)
+              .addTo(app.map_obj)
+              .addClassName(name);
 
-            const popup_tip = document.querySelector('.mapboxgl-popup-tip');
+            const popup_tip = document.querySelector('.' + name + ' .mapboxgl-popup-tip');
             popup_tip.style.borderTopColor = location_data.color_real;
 
-            const popup_content = document.querySelector('.mapboxgl-popup-content');
+            const popup_content = document.querySelector('.' + name + ' .mapboxgl-popup-content');
             popup_content.style.backgroundColor = location_data.color_real;
 
 
