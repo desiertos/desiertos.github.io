@@ -275,39 +275,107 @@ const app = {
                 }, 'road-label'); // puts behind road-label
 
                 app.map_obj.addLayer({
-                    'id': 'localidad-border',
+                    'id': 'localidad-highlight',
                     'type': 'circle',
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'circle-color': 'black',
+                      'circle-color': 'transparent',
+                      'circle-stroke-color' : '#999',
+                      'circle-stroke-width' : 1,
                       'circle-radius' : [
-                        'let',
-                        'sqrt_pob',
-                        ['sqrt', ['to-number', ['get', 'pob'] ] ],
+                            'let',
+                            'sqrt_pob',
+                            ['sqrt', ['to-number', ['get', 'pob'] ] ],
 
-                        [
-                            'interpolate',
-                            ['linear'],
-                            ['var', 'sqrt_pob'],
-                            //0, 0,
-                            Math.sqrt(app.data.min_pob), 2 + 2,
-                            Math.sqrt(app.data.max_pob), 10 + 2
+                            [
+                                'interpolate', ['linear'], ['zoom'],
+
+                                3, [
+                                    'interpolate', ['linear'],
+                                    ['var', 'sqrt_pob'],
+                                    //0, 0,
+                                    Math.sqrt(app.data.min_pob), 2 + 4,
+                                    Math.sqrt(app.data.max_pob), 15 + 4
+                                ],
+
+                                12, [
+                                    'interpolate', ['linear'],
+                                    ['var', 'sqrt_pob'],
+                                    //0, 0,
+                                    Math.sqrt(app.data.min_pob), 6 + 4,
+                                    Math.sqrt(app.data.max_pob), 45 + 4
+                                ]
+                                
+                            ]
                         ]
-                    ]
                     },
-                    'filter': ['==', 'localidad', '']}); // puts behind road-label
+                    'filter': ['==', 'localidad', '']
+                }, 'road-label'); // puts behind road-label
 
             },
 
             toggle_highlight_border : function(localidad) {
 
                 app.map_obj.setFilter(
-                    'localidad-border', [
+                    'localidad-highlight', [
                         '==',
-                        ['get', 'nam'],
+                        ['get', 'local'],
                         localidad
                 ]);
+
+            },
+
+            style_selected_city : function(localidad) {
+
+                app.map_obj.setPaintProperty(
+                    
+                    'localidad', 
+                    'circle-opacity',
+                    [
+                        'case',
+                        [
+                            '==',
+                            ['get', 'local'],
+                            localidad
+                        ],
+                        1,
+                        .5
+                    ]
+                )
+
+                app.map_obj.setPaintProperty(
+                    
+                    'localidad', 
+                    'circle-stroke-color',
+                    [
+                        'case',
+                        [
+                            '==',
+                            ['get', 'local'],
+                            localidad
+                        ],
+                        '#212121',
+                        ['get', 'color_real']
+                        
+                    ]
+                )
+
+                app.map_obj.setPaintProperty(
+                    
+                    'localidad', 
+                    'circle-stroke-width',
+                    [
+                        'case',
+                        [
+                            '==',
+                            ['get', 'local'],
+                            localidad
+                        ],
+                        2,
+                        1
+                    ]
+                )
 
             }
 
@@ -339,8 +407,8 @@ const app = {
                     'source': 'provincia',
                     'layout': {},
                     'paint': {
-                      'line-color': 'black',
-                      'line-width': 5
+                      'line-color': '#666',
+                      'line-width': 2
                     },
                     'filter': ['==', 'provincia', '']}); // puts behind road-label
 
@@ -516,9 +584,11 @@ const app = {
                 }
             );
 
-            
+            const provincia = location_data.provincia;
 
-
+            app.map.province.toggle_highlight_border_provincia(provincia);
+            app.map.localidad.toggle_highlight_border(location);
+            app.map.localidad.style_selected_city(location);
 
         }
 
@@ -610,13 +680,13 @@ const app = {
                 const type = app.vis.location_card.state.user_location_type;
                 const location = app.vis.location_card.state.user_location_name
 
-                app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
+                app.map.highlight_feature(type, location, pitch = 0, bearing = 0  );
 
-                app.map_obj.setPaintProperty('localidad', 'circle-opacity', 1);
+                //app.map_obj.setPaintProperty('localidad', 'circle-opacity', 1);
 
-                app.map.localidad.toggle_highlight_border(location);
+                //app.map.localidad.toggle_highlight_border(location);
 
-                app.map.fog_of_war.toggle(type, location);
+                //app.map.fog_of_war.toggle(type, location);
 
             },
 
