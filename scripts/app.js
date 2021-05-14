@@ -526,7 +526,7 @@ const app = {
 
             const new_popup = app.map.popup(name);
 
-            app.map.current_popups.push(new_popup);
+            if (name != 'user-location') app.map.current_popups.push(new_popup);
 
             new_popup
               .setLngLat(location_coordinates)
@@ -582,7 +582,9 @@ const app = {
 
         },
 
-        highlight_feature : function(type, location, pitch = 0, bearing = 0) {
+        highlight_feature : function(type, location, name = 'user-location', pitch = 0, bearing = 0) {
+
+            // this 'name' will be used by the add_popup
 
             console.log(type, location);
 
@@ -637,7 +639,7 @@ const app = {
             app.map.localidad.toggle_highlight_border(location);
             app.map.localidad.style_selected_city(location);
 
-            app.map.add_popup(location, 'user-location');
+            app.map.add_popup(location, name);
 
         }
 
@@ -729,7 +731,7 @@ const app = {
                 const type = app.vis.location_card.state.user_location_type;
                 const location = app.vis.location_card.state.user_location_name
 
-                app.map.highlight_feature(type, location, pitch = 0, bearing = 0  );
+                app.map.highlight_feature(type, location, name = 'user-location', pitch = 0, bearing = 0  );
 
                 //app.map_obj.setPaintProperty('localidad', 'circle-opacity', 1);
 
@@ -780,37 +782,43 @@ const app = {
 
             'remaining-category1' : function() {
 
+                app.map.clear_pop_ups();
+
                 const location = app.vis.location_card.state.remaining_categories_locations[0];
 
-                app.map.highlight_feature('localidad', location);
+                app.map.highlight_feature('localidad', location, name = 'remaining1');
 
-                app.map.fog_of_war.toggle('localidad', location);
+                //app.map.fog_of_war.toggle('localidad', location);
 
-                app.map.localidad.toggle_highlight_border(location);
+                //app.map.localidad.toggle_highlight_border(location);
 
             },
 
             'remaining-category2' : function() {
 
+                app.map.clear_pop_ups();
+
                 const location = app.vis.location_card.state.remaining_categories_locations[1];
 
-                app.map.highlight_feature('localidad', location);
+                app.map.highlight_feature('localidad', location, name = 'remaining2');
 
-                app.map.fog_of_war.toggle('localidad', location);
+                //app.map.fog_of_war.toggle('localidad', location);
 
-                app.map.localidad.toggle_highlight_border(location);
+                //app.map.localidad.toggle_highlight_border(location);
 
             },
 
             'remaining-category3' : function() {
 
+                app.map.clear_pop_ups();
+
                 const location = app.vis.location_card.state.remaining_categories_locations[2];
 
-                app.map.highlight_feature('localidad', location);
+                app.map.highlight_feature('localidad', location, name = 'remaining3');
 
-                app.map.fog_of_war.toggle('localidad', location);
+                //app.map.fog_of_war.toggle('localidad', location);
 
-                app.map.localidad.toggle_highlight_border(location);
+                //app.map.localidad.toggle_highlight_border(location);
 
             },
 
