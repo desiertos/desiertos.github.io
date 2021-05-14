@@ -570,6 +570,7 @@ const app = {
 
             app.map.localidad.toggle_highlight_border('');
             app.map.province.toggle_highlight_border_provincia('');
+            app.map.localidad.style_selected_city('');
             app.map.clear_pop_ups();
             app.map.clear_user_location_popup();
 
@@ -675,6 +676,8 @@ const app = {
                     
                 'localidad', 
                 'circle-opacity',
+                category == 'all' ? 
+                .5 :
                 [
                     'case',
                     [
@@ -685,8 +688,25 @@ const app = {
                     .5,
                     0
                 ]
-            )
+            );
 
+            app.map_obj.setPaintProperty(
+                    
+                'localidad', 
+                'circle-stroke-opacity',
+                category == 'all' ? 
+                1 :
+                [
+                    'case',
+                    [
+                        '==',
+                        ['get', 'categoria'],
+                        category
+                    ],
+                    1,
+                    0
+                ]
+            );
 
         }
 
@@ -874,14 +894,38 @@ const app = {
             'argentina-bosques' : function() {
 
                 app.map.fit_Argentina();
+                app.map.clear_highlights_and_popups();
+                app.map.highlight_category("4");
 
             },
 
+            'argentina-semibosques' : function() {
+
+                //app.map.fit_Argentina();
+                //app.map.clear_highlights_and_popups();
+                app.map.highlight_category("3");
+
+            },   
+            
+            'argentina-semidesiertos' : function() {
+
+                //app.map.fit_Argentina();
+                //app.map.clear_highlights_and_popups();
+                app.map.highlight_category("2");
+
+            }, 
+            
+            'argentina-desiertos' : function() {
+
+                //app.map.fit_Argentina();
+                //app.map.clear_highlights_and_popups();
+                app.map.highlight_category("1");
+
+            },              
+
             'penultimo' : function() {
 
-                app.map.localidad.toggle_highlight_border('');
-                app.map.fog_of_war.toggle('localidad', '');
-                app.map.fit_Argentina();
+                app.map.highlight_category("all");
 
 
             },
