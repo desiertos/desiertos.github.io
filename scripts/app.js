@@ -231,7 +231,12 @@ const app = {
 
     map : {
 
-        current_popups : [],
+        current_popups : {
+            
+            user_location : null, 
+            remaining : [],
+
+        },
 
         localidad : {
 
@@ -531,7 +536,8 @@ const app = {
 
             const new_popup = app.map.popup(name);
 
-            if (name != 'user-location') app.map.current_popups.push(new_popup);
+            if (name != 'user-location') app.map.current_popups.remaining.push(new_popup)
+            else app.map.current_popups.user_location = new_popup;
 
             new_popup
               .setLngLat(location_coordinates)
@@ -550,7 +556,22 @@ const app = {
 
         clear_pop_ups : function() {
 
-            app.map.current_popups.forEach(popup => popup.remove());
+            app.map.current_popups.remaining.forEach(popup => popup.remove());
+
+        },
+
+        clear_user_location_popup : function() {
+
+            app.map.current_popups.user_location.remove();
+
+        },
+
+        clear_highlights_and_popups : function() {
+
+            app.map.localidad.toggle_highlight_border('');
+            app.map.province.toggle_highlight_border_provincia('');
+            app.map.clear_pop_ups();
+            app.map.clear_user_location_popup();
 
         },
 
@@ -646,6 +667,27 @@ const app = {
 
             app.map.add_popup(location, name);
 
+        },
+
+        highlight_category : function(category) {
+
+            app.map_obj.setPaintProperty(
+                    
+                'localidad', 
+                'circle-opacity',
+                [
+                    'case',
+                    [
+                        '==',
+                        ['get', 'categoria'],
+                        category
+                    ],
+                    .5,
+                    0
+                ]
+            )
+
+
         }
 
     },
@@ -719,17 +761,17 @@ const app = {
 
             },
 
-            'pesquisa' : function() {
+            // 'pesquisa' : function() {
 
-                console.log('Pesquisando...');
+            //     console.log('Pesquisando...');
 
-                app.map.set_initial_view();
-                app.map.fog_of_war.toggle('provincia', '');
-                app.map.fog_of_war.toggle('localidad', '');
-                app.map_obj.setPaintProperty('localidad', 'fill-color', ['get', 'color']);
-                app.map.localidad.toggle_highlight_border('');
+            //     app.map.set_initial_view();
+            //     app.map.fog_of_war.toggle('provincia', '');
+            //     app.map.fog_of_war.toggle('localidad', '');
+            //     app.map_obj.setPaintProperty('localidad', 'fill-color', ['get', 'color']);
+            //     app.map.localidad.toggle_highlight_border('');
                 
-            },
+            // },
 
             'location-card' : function() {
 
@@ -746,28 +788,28 @@ const app = {
 
             },
 
-            'story-no-map-interactions' : function() {},
+            // 'story-no-map-interactions' : function() {},
 
-            'segundo' : function() {
+            // 'segundo' : function() {
 
-                app.map.fit_Argentina();
+            //     app.map.fit_Argentina();
 
-                app.map_obj.setPaintProperty('localidad', 'fill-pattern', ['get', 'tipo']);
-                app.map_obj.setPaintProperty('localidad', 'fill-opacity', 1);
-                app.map.fog_of_war.toggle('provincia', '');
-                app.map.fog_of_war.toggle('localidad', '');
+            //     app.map_obj.setPaintProperty('localidad', 'fill-pattern', ['get', 'tipo']);
+            //     app.map_obj.setPaintProperty('localidad', 'fill-opacity', 1);
+            //     app.map.fog_of_war.toggle('provincia', '');
+            //     app.map.fog_of_war.toggle('localidad', '');
 
-            },
+            // },
 
-            'importancia-periodismo' : function() {
+            // 'importancia-periodismo' : function() {
 
-                // app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
+            //     // app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
 
-                // app.map.localidad.toggle_highlight_border(location);
+            //     // app.map.localidad.toggle_highlight_border(location);
 
-                // app.map.fog_of_war.toggle(type, location);
+            //     // app.map.fog_of_war.toggle(type, location);
 
-            },
+            // },
 
             'other-categories' : function() {
 
@@ -829,9 +871,7 @@ const app = {
 
             },
 
-            'blabla' : function() {
-
-                app.map.localidad.toggle_highlight_border('');
+            'argentina-bosques' : function() {
 
                 app.map.fit_Argentina();
 
