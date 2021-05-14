@@ -226,6 +226,8 @@ const app = {
 
     map : {
 
+        current_popups : [],
+
         localidad : {
 
             initialize : function() {
@@ -524,6 +526,8 @@ const app = {
 
             const new_popup = app.map.popup(name);
 
+            app.map.current_popups.push(new_popup);
+
             new_popup
               .setLngLat(location_coordinates)
               .setHTML(location_data.nam)
@@ -536,6 +540,12 @@ const app = {
             const popup_content = document.querySelector('.' + name + ' .mapboxgl-popup-content');
             popup_content.style.backgroundColor = location_data.color_real;
 
+
+        },
+
+        clear_pop_ups : function() {
+
+            app.map.current_popups.forEach(popup => popup.remove());
 
         },
 
