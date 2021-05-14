@@ -155,6 +155,8 @@ const app = {
 
         get_category_from_data : function(local, data) {
 
+            console.log(local, data);
+
             let location_category;
 
             if (local.tipo == 'provincia') {
@@ -511,7 +513,12 @@ const app = {
                     padding: {top: 30, bottom: 30, left: 30, right: 30},
                     pitch: pitch,
                     bearing: bearing
-                });
+                }
+            );
+
+            
+
+
 
         }
 
@@ -605,7 +612,7 @@ const app = {
 
                 app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
 
-                app.map_obj.setPaintProperty('localidad', 'fill-color', ['get', 'color_real']);
+                app.map_obj.setPaintProperty('localidad', 'circle-opacity', 1);
 
                 app.map.localidad.toggle_highlight_border(location);
 
@@ -835,12 +842,12 @@ const app = {
 
                     // with the fields updated, resize svg
 
-                    app.vis.stripplot.dimensions.set_size();
-                    app.vis.stripplot.scales.range.set();
-                    app.vis.stripplot.scales.set(local.tipo);
-                    app.vis.stripplot.components.labels.render(local.tipo);
-                    app.vis.stripplot.components.lines.render(local.tipo);
-                    app.vis.stripplot.components.marks.render(local.tipo);
+                    //app.vis.stripplot.dimensions.set_size();
+                    //app.vis.stripplot.scales.range.set();
+                    //app.vis.stripplot.scales.set(local.tipo);
+                    //app.vis.stripplot.components.labels.render(local.tipo);
+                    //app.vis.stripplot.components.lines.render(local.tipo);
+                    //app.vis.stripplot.components.marks.render(local.tipo);
 
                     //updates maps
 
