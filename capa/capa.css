@@ -662,9 +662,12 @@ circle.vis-cities {
 }
 
 .story-container button {
-    width: 10rem;
+    width: 5rem;
+    padding: .5em 1em;
     margin-right: 1rem;
     display: inline;
-    background-color: tomato;
-    border: 1px solid black;
+    background-color: black;
+    border: 1px solid yellow;
+    color: yellow;
+    border-radius: 5px;
 }

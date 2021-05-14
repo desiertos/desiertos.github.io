@@ -367,7 +367,8 @@ const capa = {
                 .duration(1000)
                 .attr('r', capa.vis.params.after_radius)
                 .attr('cx', (d,i) => margin + get_x(i))
-                .attr('cy', (d,i) => margin + get_y(i));
+                .attr('cy', (d,i) => margin + get_y(i))
+                .style('stroke', 'none');
 
 
 
