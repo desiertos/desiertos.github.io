@@ -323,7 +323,7 @@ input#location-search {
     margin: 0 auto;
     /*margin-top: 50vh;
     transform: translateY(-50%);*/
-    background-color: var(--background-transp); 
+    background-color: var(--background-color);/*var(--background-transp); */
 
 
 }
@@ -614,7 +614,7 @@ line.vis-story-stripplot-axis {
 
         max-width: 90vw;
         padding: 10px;
-        background-color: var(--background-color);
+        background-color: ghostwhite;/*var(--background-color);*/
         border-radius: 10px;
     }
 
