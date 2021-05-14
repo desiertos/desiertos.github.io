@@ -556,13 +556,23 @@ const app = {
 
         clear_pop_ups : function() {
 
-            app.map.current_popups.remaining.forEach(popup => popup.remove());
+            if (app.map.current_popups.remaining.length > 0) {
+                
+                app.map.current_popups.remaining.forEach(popup => popup.remove());
+                app.map.current_popups.remaining = [];
+
+            }
 
         },
 
         clear_user_location_popup : function() {
 
-            app.map.current_popups.user_location.remove();
+            if (app.map.current_popups.user_location) {
+                
+                app.map.current_popups.user_location.remove();
+                app.map.current_popups.user_location = null;
+
+            }
 
         },
 
@@ -774,8 +784,9 @@ const app = {
                 //app.map_obj.setPaintProperty('localidad', 'fill-outline-color', 'ghostwhite');
                 //app.map_obj.setPaintProperty('localidad', 'fill-opacity', .5);
                // app.map.set_initial_view();
-                app.map.fit_Argentina();
-                app.map.localidad.toggle_highlight_border('');
+               app.map.clear_highlights_and_popups();
+               app.map.fit_Argentina();
+               app.map.localidad.toggle_highlight_border('');
 
                 //app.interactions.story.toggle_visibility("dashboard_button");
 
@@ -884,6 +895,14 @@ const app = {
                 const location = app.vis.location_card.state.remaining_categories_locations[2];
 
                 app.map.highlight_feature('localidad', location.local, name = 'remaining3');
+
+                if (!app.map.current_popups.user_location) {
+
+                    // this is the case when the user is returning in the story
+
+                    app.map.add_popup(app.vis.location_card.state.user_location_name, name = 'user-location');
+
+                }
 
                 //app.map.fog_of_war.toggle('localidad', location);
 
