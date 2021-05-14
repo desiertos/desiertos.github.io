@@ -1017,8 +1017,8 @@ const app = {
 
             refs : {
 
-                name : '.js--location-name',
-                type : '.js--location-type',
+                //name : '.js--location-name',
+                //type : '.js--location-type',
                 category_description : '.js--location-category-description',
                 remaining_category1 : '.js--remaining-category1',
                 remaining_category2 : '.js--remaining-category2',
@@ -1099,15 +1099,15 @@ const app = {
 
                 // name
 
-                populate_field('name', state.user_location_name);
+                //populate_field('name', state.user_location_name);
 
                 // type
 
-                populate_field('type', state.user_location_type);
+                //populate_field('type', state.user_location_type);
 
                 // main category field
 
-                populate_field('main_category', user_category, dataset = 'category');
+                //populate_field('main_category', user_category, dataset = 'category');
 
                 // description field
 
