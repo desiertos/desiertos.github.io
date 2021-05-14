@@ -502,14 +502,15 @@ const app = {
 
         },
 
-        popup: new mapboxgl.Popup(
+        popup: (name) => new mapboxgl.Popup(
             {
                 closeButton: false,
                 loseOnClick: false,
-                anchor: 'bottom-left'
+                anchor: 'bottom-left',
+                class: 'popup-' + name
             }),
 
-        add_popup : function(location) {
+        add_popup : function(location, name) {
 
             const type = 'localidad';
 
@@ -521,7 +522,9 @@ const app = {
 
             console.log('Location Info', location_coordinates);
 
-            app.map.popup.setLngLat(location_coordinates).setHTML(location_data.nam).addTo(app.map_obj);
+            const new_popup = app.map.popup(name);
+
+            new_popup.setLngLat(location_coordinates).setHTML(location_data.nam).addTo(app.map_obj);
 
             const popup_tip = document.querySelector('.mapboxgl-popup-tip');
             popup_tip.style.borderTopColor = location_data.color_real;
@@ -620,7 +623,7 @@ const app = {
             app.map.localidad.toggle_highlight_border(location);
             app.map.localidad.style_selected_city(location);
 
-            app.map.add_popup(location);
+            app.map.add_popup(location, 'user-location');
 
         }
 
@@ -747,9 +750,9 @@ const app = {
 
             'other-categories' : function() {
 
-                app.vis.location_card.state.remaining_categories_locations.forEach(location => {
+                app.vis.location_card.state.remaining_categories_locations.forEach((location, i) => {
 
-                    app.map.add_popup(location);
+                    app.map.add_popup(location, 'remaining-' + i);
 
                 })
 
