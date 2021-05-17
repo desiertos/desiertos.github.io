@@ -400,7 +400,7 @@ const capa = {
 
                     const data = capa.map.data.mun.features;
 
-                    capa.vis.scatterplot.scales.y.domain(d3.extent(data, d => +d.properties.cantidad_de_medios));
+                    capa.vis.scatterplot.scales.y.domain(d3.extent(data, d => +d.properties.cant_medios));
                     capa.vis.scatterplot.scales.x.domain(d3.extent(data, d => +d.properties.pob));
                     capa.vis.scatterplot.scales.x_log.domain(d3.extent(data, d => +d.properties.pob));
                     
@@ -459,7 +459,7 @@ const capa = {
                 d3.selectAll('circle.vis-cities')
                 .transition()
                 .duration(1000)
-                .attr('cy', d => y(+d.properties.cantidad_de_medios))
+                .attr('cy', d => y(+d.properties.cant_medios))
                 .attr('cx', d => x(+d.properties.pob));
 
                 capa.vis.scatterplot.axis.render();
