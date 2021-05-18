@@ -481,6 +481,34 @@ const capa = {
             }
 
             
+        },
+
+        bar_chart : {
+
+            scales : {
+
+                x : d3.scaleLinear(),
+                y : d3.scaleBand(),
+                w : d3.scaleLinear(),
+
+                set : function() {
+
+
+
+                }
+
+            },
+
+            set_positions : {
+
+            },
+
+
+
+
+
+
+
         }
 
     },
