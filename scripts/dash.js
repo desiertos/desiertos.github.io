@@ -1605,6 +1605,24 @@ const dash = {
 
                     });
 
+                    if (type == 'pais') {
+
+                        document.querySelector('[data-breadcrumbs-type="provincia"]').classList.add('not-displayed');
+                        document.querySelector('[data-breadcrumbs-type="localidad"]').classList.add('not-displayed');
+
+                    } else if (type == 'provincia') {
+
+                        document.querySelector('[data-breadcrumbs-type="provincia"]').classList.remove('not-displayed');
+                        document.querySelector('[data-breadcrumbs-type="localidad"]').classList.add('not-displayed');
+
+                    } else {
+
+                        document.querySelector('[data-breadcrumbs-type="provincia"]').classList.remove('not-displayed');
+                        document.querySelector('[data-breadcrumbs-type="localidad"]').classList.remove('not-displayed');
+
+
+                    }
+
                 },
 
                 monitor_click : function() {

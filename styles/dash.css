@@ -716,6 +716,12 @@ p[data-text_field='medio_prototipico'] {
 
 }
 
+.dashboard--breadcrumbs li.not-displayed {
+
+    display: none;
+
+}
+
 
 
 /* fim argentina card */
