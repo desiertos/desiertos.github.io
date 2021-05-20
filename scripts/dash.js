@@ -1182,7 +1182,7 @@ const dash = {
 
                 data = {
 
-                    'pob' : '44,94 milliones',
+                    'pob' : 44.94e6,
                     'cant_medios' : '1.000',
                     'cant_periodistas' : '100.000'
 
@@ -1192,13 +1192,16 @@ const dash = {
 
                 dash.vis.stripplot.hide_svg(true);
 
+                //turns off borders
                 dash.map.localidad.toggle_borders('off');
+                dash.map.province.toggle_highlight_border_provincia('');
+                dash.map.fit_Argentina();
 
             } else {
 
                 data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
 
-                dash.vis.location_card.info_table.styles_country_view(false);
+                dash.vis.location_card.info_table.styles_country_view(local.tipo == 'provincia'); // if provincia, styles like country
 
                 dash.vis.stripplot.hide_svg(false);
 
@@ -1248,34 +1251,42 @@ const dash = {
 
             // with the fields updated, resize svg
 
-            dash.vis.stripplot.dimensions.set_size();
-            dash.vis.stripplot.scales.range.set();
-            dash.vis.stripplot.scales.set(local.tipo);
 
-            // render
+            // vis only for localidad now
 
-            if (new_view) {
+            if (local.tipo == 'localidad') {
 
-                dash.vis.stripplot.components.labels.render(local.tipo);
-                dash.vis.stripplot.components.lines.render(local.tipo);
-                dash.vis.stripplot.components.marks.render[local.tipo]();
-                dash.vis.stripplot.components.label_selected.render(local.tipo);
-                dash.vis.stripplot.components.min_max_labels.render(local.tipo);
-                dash.vis.stripplot.components.separation_lines.render(local.tipo);
+                dash.vis.stripplot.dimensions.set_size();
+                dash.vis.stripplot.scales.range.set();
+                dash.vis.stripplot.scales.set(local.tipo);
+    
+                // render
+    
+                if (new_view) {
+    
+                    dash.vis.stripplot.components.labels.render(local.tipo);
+                    dash.vis.stripplot.components.lines.render(local.tipo);
+                    dash.vis.stripplot.components.marks.render[local.tipo]();
+                    dash.vis.stripplot.components.label_selected.render(local.tipo);
+                    dash.vis.stripplot.components.min_max_labels.render(local.tipo);
+                    dash.vis.stripplot.components.separation_lines.render(local.tipo);
+    
+                } else {
+    
+                    dash.vis.stripplot.components.marks.render_lite[local.tipo]();
+                    dash.vis.stripplot.components.label_selected.render(local.tipo);
+    
+                }
 
-            } else {
+                // listeners
 
-                dash.vis.stripplot.components.marks.render_lite[local.tipo]();
-                dash.vis.stripplot.components.label_selected.render(local.tipo);
+                dash.vis.stripplot.interactions.hover_on_strip.monitor();
+                dash.vis.stripplot.interactions.click_on_strip.monitor();
+
 
             }
 
 
-
-            // listeners
-
-            dash.vis.stripplot.interactions.hover_on_strip.monitor();
-            dash.vis.stripplot.interactions.click_on_strip.monitor();
 
             //updates maps
 
@@ -1323,6 +1334,8 @@ const dash = {
 
                 set : function(local, data) {
 
+                    console.log(data);
+
                     const state = dash.vis.location_card.state;
 
                     state.user_location = local.text;
@@ -1353,6 +1366,10 @@ const dash = {
                 pais : {
 
                     name : () => 'Argentina',
+
+                    category : () => '',
+
+                    category_description : () => '',
 
                     medio_prototipico : () => '<strong>UN GRAN DESIERTO</strong>. En Argentina, un país de dimensiones continentales, el acceso a información de calidad se limita a unas pocas regiones. Existe un periodismo relativamente vigoroso en las zonas más pobladas y desarrolladas de la nación, como alrededor de la Capital Federal y en regiones urbanas como Córdoba y Rosario. Sin embargo, no se puede decir lo mismo de las inmensas áreas alejadas de estos centros. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pretium felis sit amet lorem mollis semper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, urna eget fringilla ultrices, lorem tortor euismod erat.'
 
@@ -1499,13 +1516,19 @@ const dash = {
 
                         console.log('clicou no breadcrumb', type);
 
-                        if (type == 'pais') { 
+                        // if (type == 'pais') { 
 
-                            dash.vis.location_card.breadcrumbs.update(type);
-                            //montar um local pais
-                            dash.map.fit_Argentina();
+                        //     dash.vis.location_card.breadcrumbs.update(type);
+                        //     //montar um local pais
+                        //     const local = {
 
-                        } else if (type == 'provincia' & dash.vis.location_card.state.user_location_type == 'localidad') {
+
+                        //     }
+                        //     dash.map.fit_Argentina();
+
+                        // } else 
+                        
+                        if (type == 'provincia' & dash.vis.location_card.state.user_location_type == 'localidad') {
 
                             const current_provincia = dash.vis.location_card.state.user_location_province;
 
@@ -2713,7 +2736,7 @@ const dash = {
             hide_svg: function(option) {
 
 
-                dash.vis.stripplot.sels.d3.svg.classed( 'not-displayed', option );
+                dash.vis.stripplot.sels.d3.container.classed( 'not-displayed', option );
 
             }
 

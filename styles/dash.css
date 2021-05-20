@@ -705,7 +705,8 @@ p[data-text_field='medio_prototipico'] {
 
 .argentina .dashboard-basic-info-table-group [data-infotable_field] {
 
-    font-size: 2.5rem;
+    font-size: 2rem;
+    font-weight: 500;
 
 }
 
