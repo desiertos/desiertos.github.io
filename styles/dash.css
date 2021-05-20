@@ -709,6 +709,12 @@ p[data-text_field='medio_prototipico'] {
 
 }
 
+.not-displayed {
+
+    display: none;
+
+}
+
 
 
 /* fim argentina card */

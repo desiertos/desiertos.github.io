@@ -1179,11 +1179,15 @@ const dash = {
 
                 dash.vis.location_card.info_table.styles_country_view(true);
 
+                dash.vis.stripplot.toggle_svg(true);
+
             } else {
 
                 data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
 
                 dash.vis.location_card.info_table.styles_country_view(false);
+
+                dash.vis.stripplot.toggle_svg(false);
 
             }
 
@@ -1297,7 +1301,7 @@ const dash = {
 
                 user_location : null,
                 user_location_name : null,
-                user_location_type : null,
+                user_location_type : 'pais',
                 user_location_category : null,
                 user_location_province : null,
                 remaining_categories : null,
@@ -1335,7 +1339,9 @@ const dash = {
 
                 pais : {
 
-                    name : () => 'Argentina'
+                    name : () => 'Argentina',
+
+                    medio_prototipico : () => '<strong>UN GRAN DESIERTO</strong>. En Argentina, un país de dimensiones continentales, el acceso a información de calidad se limita a unas pocas regiones. Existe un periodismo relativamente vigoroso en las zonas más pobladas y desarrolladas de la nación, como alrededor de la Capital Federal y en regiones urbanas como Córdoba y Rosario. Sin embargo, no se puede decir lo mismo de las inmensas áreas alejadas de estos centros. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pretium felis sit amet lorem mollis semper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, urna eget fringilla ultrices, lorem tortor euismod erat.'
 
                 },
 
@@ -2689,6 +2695,13 @@ const dash = {
                     }                     
 
                 }
+            },
+
+            toggle_svg: function(option) {
+
+
+                dash.vis.stripplot.sels.d3.svg.classed( 'not-displayed', option );
+
             }
 
 
