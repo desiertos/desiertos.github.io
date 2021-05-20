@@ -273,7 +273,7 @@ const dash = {
                 dash.map_obj.addSource('localidad', {
                     type: 'geojson',
                     'data' : dash.data.localidad,
-                    'promoteId' : 'index'
+                    'promoteId' : 'local'
                 });
 
                 dash.map_obj.addLayer({
@@ -282,7 +282,27 @@ const dash = {
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'fill-color': ['get', 'color_real'],
+                      'fill-color': ['get', 'color_real']
+                    }
+                }); 
+
+                dash.map_obj.addLayer({
+                    'id': 'localidad-border-hover',
+                    'type': 'line',
+                    'source': 'localidad',
+                    'layout': {},
+                    'paint': {
+                      'line-color': '#666',
+                      'line-width': [
+                        'case',
+                        [
+                            'boolean', 
+                            ['feature-state', 'hover'], 
+                            false
+                        ],
+                        2,
+                        0
+                    ]
                     }
                 }); 
 
@@ -327,16 +347,16 @@ const dash = {
 
                 dash.map_obj.setPaintProperty(
                     'localidad-border', 
-                    'line-width', 
-                    [
-                        'case', [
-                            'boolean', 
-                            ['feature-state', 'hover'], 
-                            false
-                        ], 
-                        option == 'on' ? 2 : 0,
-                        option == 'on' ? 1 : 0
-                    ]
+                    'line-width', option == 'on' ? 1 : 0
+                    // [
+                    //     'case', [
+                    //         'boolean', 
+                    //         ['feature-state', 'hover'], 
+                    //         false
+                    //     ], 
+                    //     option == 'on' ? 2 : 0,
+                    //     option == 'on' ? 1 : 0
+                    // ]
                 );
 
             },
@@ -347,88 +367,110 @@ const dash = {
                         loseOnClick: false
                     }),
 
-            monitor_hover_event : function() {
+            hoveredStateId : null,
 
-                let hoveredStateId = null;
+            mouse_enter_handler : function (e) {
+                // Change the cursor style as a UI indicator.
+                dash.map_obj.getCanvas().style.cursor = 'pointer';
 
-                dash.map_obj.on('mouseenter', 'localidad', function (e) {
-                    // Change the cursor style as a UI indicator.
-                    dash.map_obj.getCanvas().style.cursor = 'pointer';
+                console.log(e);
+                 
+                let coordinates = [
+                    e.features[0].properties.xc,
+                    e.features[0].properties.yc
+                ]; //e.features[0].geometry.coordinates.slice();
 
-                    console.log(e);
-                     
-                    let coordinates = e.features[0].geometry.coordinates.slice();
-                    let name = e.features[0].properties.local;
-                     
-                    // Ensure that if the map is zoomed out such that multiple
-                    // copies of the feature are visible, the popup appears
-                    // over the copy being pointed to.
-                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                    }
-                     
-                    // Populate the popup and set its coordinates
-                    // based on the feature found.
-                    dash.map.localidad.popup.setLngLat(coordinates).setHTML(name).addTo(dash.map_obj);
+                let name = e.features[0].properties.nam;
 
-                    ////////////
-                    // highlight polygon
+                console.log('mouse enter fired ', coordinates, name);
+                 
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
 
-                    if (hoveredStateId) {
-                        dash.map_obj.setFeatureState(
-                            { 
-                                source: 'localidad',
-                                id: hoveredStateId
-                            },
+                // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                // coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                // }
+                 
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                //dash.map.localidad.popup.setLngLat(coordinates).setHTML(name).addTo(dash.map_obj);
 
-                            { hover : false }
-                        )
+                ////////////
+                // highlight polygon
 
-                        //console.log(' Quando eu venho aqui? ')
-                    }
-
-                    hoveredStateId = e.features[0].properties.link;
+                if (dash.map.localidad.hoveredStateId !== null) {
 
                     dash.map_obj.setFeatureState(
                         { 
                             source: 'localidad',
-                            id: hoveredStateId
+                            id: dash.map.localidad.hoveredStateId
                         },
 
-                        { hover : true }
+                        { hover : false }
                     )
-                });
-                     
-                dash.map_obj.on('mouseleave', 'localidad', function () {
 
-                    dash.map_obj.getCanvas().style.cursor = '';
-                    dash.map.localidad.popup.remove();
 
-                    // return circle to normal sizing and color
-                    if (hoveredStateId) {
-                        dash.map_obj.setFeatureState(
-                            { source: 'localidad', id: hoveredStateId },
-                            { hover: false }
-                        );
-                    }
-                
-                    hoveredStateId = null;
+                }
 
-                });
+                dash.map.localidad.hoveredStateId = e.features[0].properties.local;
+
+                dash.map_obj.setFeatureState(
+                    { 
+                        source: 'localidad',
+                        id: dash.map.localidad.hoveredStateId
+                    },
+
+                    { hover : true }
+                )
+            },
+
+            mouse_leave_handler : function () {
+
+                dash.map_obj.getCanvas().style.cursor = '';
+                //dash.map.localidad.popup.remove();
+
+                console.log('fired mouse leave!!!!!!!', dash.map.localidad.hoveredStateId);
+
+                // return circle to normal sizing and color
+                if (dash.map.localidad.hoveredStateId !== null) {
+                    dash.map_obj.setFeatureState(
+                        { source: 'localidad', id: dash.map.localidad.hoveredStateId },
+                        { hover: false }
+                    );
+                }
+            
+                dash.map.localidad.hoveredStateId = null;
 
             },
 
-            monitor_click_event : function(option) {
+            monitor_events : function(option) {
     
                 if (option == 'on') {
+
+                    console.log('MONITORING LOCALIDAD EVENTS');
+
+                    dash.map.localidad.hoveredStateId = null;
+
+                    dash.map_obj.on('mousemove', 'localidad', dash.map.localidad.mouse_enter_handler);
+                         
+                    dash.map_obj.on('mouseleave', 'localidad', dash.map.localidad.mouse_leave_handler);
     
                     dash.map_obj.on('click', 'localidad', dash.map.localidad.click_event_handler);
 
                     // como tem o layer aqui, dá para no handler pegar o e.features!
     
                 } else {
+
+                    console.log('turning off localidad event monitor');
+
+                    dash.map_obj.off('mousemove', 'localidad', dash.map.localidad.mouse_enter_handler);
+                         
+                    dash.map_obj.off('mouseleave', 'localidad', dash.map.localidad.mouse_leave_handler);
     
                     dash.map_obj.off('click', 'localidad', dash.map.localidad.click_event_handler);
+
+                    dash.map.localidad.hoveredStateId = null;
                     
                 }
     
@@ -532,62 +574,50 @@ const dash = {
 
             },
 
-            monitor_hover_event : function() {
+            mouse_enter_handler : function (e) {
 
-                let hoveredStateId = null;
+                // precisa desse if aqui para fazer tirar o estado de hover da provincia anterior quando passa para outra provincia
 
-                function highlight_on_hover(e) {
-
-                    // precisa desse if aqui para fazer tirar o estado de hover da provincia anterior quando passa para outra provincia
-
-                    if (hoveredStateId) {
-                        dash.map_obj.setFeatureState(
-                            { 
-                                source: 'provincia',
-                                id: hoveredStateId
-                            },
-
-                            { hover : false }
-                        )
-
-                        //console.log(' Quando eu venho aqui? ')
-                    }
-
-                    hoveredStateId = e.features[0].properties.nam;
-
+                if (dash.map.province.hoveredStateId) {
                     dash.map_obj.setFeatureState(
                         { 
                             source: 'provincia',
-                            id: hoveredStateId
+                            id: dash.map.province.hoveredStateId
                         },
 
-                        { hover : true }
+                        { hover : false }
                     )
 
-                    //console.log('Hover no ', hoveredStateId)
+                    //console.log(' Quando eu venho aqui? ')
+                }
 
-                    // algo mais a fazer aqui
+                dash.map.province.hoveredStateId = e.features[0].properties.nam;
 
-                };
+                dash.map_obj.setFeatureState(
+                    { 
+                        source: 'provincia',
+                        id: dash.map.province.hoveredStateId
+                    },
 
-                // function debounced(e) {
-                //     dash.utils.debounce(highlight_on_hover(e), wait = 10000);
-                // }
+                    { hover : true }
+                )
 
-                dash.map_obj.on('mousemove', 'provincia', highlight_on_hover);
+                //console.log('Hover no ', hoveredStateId)
 
-                dash.map_obj.on('mouseleave', 'provincia', function () {
+                // algo mais a fazer aqui
+
+            },
+
+            mouse_leave_handler : function () {
     
-                    if (hoveredStateId) {
-                        dash.map_obj.setFeatureState(
-                            { source: 'provincia', id: hoveredStateId },
-                            { hover: false }
-                        );
-                    }
-                
-                    hoveredStateId = null;
-                });
-
+                if (dash.map.province.hoveredStateId) {
+                    dash.map_obj.setFeatureState(
+                        { source: 'provincia', id: dash.map.province.hoveredStateId },
+                        { hover: false }
+                    );
+                }
+            
+                dash.map.province.hoveredStateId = null;
             },
 
             click_event_handler : function(e) {
@@ -635,18 +665,32 @@ const dash = {
             //     }
     
             // },
+
+            hoveredStateId : null,
     
-            monitor_click_event : function(option) {
+            monitor_events : function(option) {
     
                 if (option == 'on') {
+
+                    dash.map_obj.on('mousemove', 'provincia', dash.map.province.mouse_enter_handler);
     
+                    dash.map_obj.on('mouseleave', 'provincia', dash.map.province.mouse_leave_handler);
+
                     dash.map_obj.on('click', 'provincia', dash.map.province.click_event_handler);
 
                     // como tem o layer aqui, dá para no handler pegar o e.features!
     
                 } else {
+
+                    console.log('turning off province event monitor');
+
+                    dash.map_obj.off('mousemove', 'provincia', dash.map.province.mouse_enter_handler);
+    
+                    dash.map_obj.off('mouseleave', 'provincia', dash.map.province.mouse_leave_handler);
     
                     dash.map_obj.off('click', 'provincia', dash.map.province.click_event_handler);
+
+                    dash.map.province.hoveredStateId = null;
                     
                 }
     
@@ -1229,8 +1273,8 @@ const dash = {
                 dash.map.province.toggle_highlight_border_provincia('');
                 dash.map.fit_Argentina();
 
-                dash.map.localidad.monitor_click_event('off');
-                dash.map.province.monitor_click_event('on');
+                dash.map.localidad.monitor_events('off');
+                dash.map.province.monitor_events('on');
 
             } else {
 
@@ -1240,15 +1284,8 @@ const dash = {
 
                 dash.vis.stripplot.hide_svg(false);
 
-                dash.map.localidad.monitor_click_event('off');
-                dash.map.province.monitor_click_event('on');
-
-                if (local.tipo == 'provincia') {
-
-                    dash.map.localidad.monitor_click_event('on');
-                    dash.map.province.monitor_click_event('off');
-
-                }
+                dash.map.localidad.monitor_events('on');
+                dash.map.province.monitor_events('off');
 
             }
 
@@ -2858,8 +2895,7 @@ const dash = {
 
                 // monitor hover and click events on provinces
 
-                dash.map.province.monitor_hover_event();
-                dash.map.province.monitor_click_event('on');
+                dash.map.province.monitor_events('on');
 
                 // monitor hover and click events on localidads
 
