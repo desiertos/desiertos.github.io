@@ -1281,6 +1281,7 @@ const dash = {
 
                 //turns off borders
                 dash.map.localidad.toggle_borders('off');
+                dash.map.localidad.toggle_highlight('');
                 dash.map.province.toggle_highlight_border_provincia('');
                 dash.map.fit_Argentina();
 
@@ -1297,6 +1298,8 @@ const dash = {
 
                 if (local.tipo == 'provincia') {
 
+                    dash.vis.stripplot.hide_svg(true);
+
                     //vai ligar quando chegar na província, e depois só desliga quando voltar para o país
 
                     dash.map.localidad.monitor_events('on');
@@ -1311,8 +1314,11 @@ const dash = {
             // if province, highlight on map
 
             if (local.tipo == 'provincia') {
+
                 dash.map.highlight_feature(local.local, type = 'provincia');
                 dash.map.province.toggle_highlight_border_provincia(local.local);
+                dash.map.localidad.toggle_highlight('');
+
             } else if (local.tipo == 'localidad') {
                 dash.map.localidad.toggle_highlight(local.local);
             }
