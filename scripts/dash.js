@@ -1302,6 +1302,7 @@ const dash = {
 
                     //vai ligar quando chegar na província, e depois só desliga quando voltar para o país
 
+                    dash.map.localidad.monitor_events('off');
                     dash.map.localidad.monitor_events('on');
                     dash.map.province.monitor_events('off');
 
