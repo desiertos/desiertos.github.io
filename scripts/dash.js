@@ -273,7 +273,7 @@ const dash = {
                 dash.map_obj.addSource('localidad', {
                     type: 'geojson',
                     'data' : dash.data.localidad,
-                    'promoteId' : 'local'
+                    'promoteId' : 'randId'
                 });
 
                 dash.map_obj.addLayer({
@@ -282,7 +282,18 @@ const dash = {
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'fill-color': ['get', 'color_real']
+                      'fill-color': ['get', 'color_real'],
+                      'fill-outline-color' : 'transparent',
+                      'fill-opacity': [
+                        'case',
+                        [
+                            'boolean', 
+                            ['feature-state', 'hover'], 
+                            false
+                        ],
+                        1,
+                        .8
+                      ]
                     }
                 }); 
 
@@ -373,7 +384,7 @@ const dash = {
                 // Change the cursor style as a UI indicator.
                 dash.map_obj.getCanvas().style.cursor = 'pointer';
 
-                console.log(e);
+                //console.log(e);
                  
                 let coordinates = [
                     e.features[0].properties.xc,
@@ -382,7 +393,7 @@ const dash = {
 
                 let name = e.features[0].properties.nam;
 
-                console.log('mouse enter fired ', coordinates, name);
+                //console.log('mouse enter fired ', coordinates, name);
                  
                 // Ensure that if the map is zoomed out such that multiple
                 // copies of the feature are visible, the popup appears
@@ -394,7 +405,7 @@ const dash = {
                  
                 // Populate the popup and set its coordinates
                 // based on the feature found.
-                //dash.map.localidad.popup.setLngLat(coordinates).setHTML(name).addTo(dash.map_obj);
+                dash.map.localidad.popup.setLngLat(coordinates).setHTML(name).addTo(dash.map_obj);
 
                 ////////////
                 // highlight polygon
@@ -413,7 +424,7 @@ const dash = {
 
                 }
 
-                dash.map.localidad.hoveredStateId = e.features[0].properties.local;
+                dash.map.localidad.hoveredStateId = e.features[0].properties.randId;
 
                 dash.map_obj.setFeatureState(
                     { 
@@ -428,9 +439,9 @@ const dash = {
             mouse_leave_handler : function () {
 
                 dash.map_obj.getCanvas().style.cursor = '';
-                //dash.map.localidad.popup.remove();
+                dash.map.localidad.popup.remove();
 
-                console.log('fired mouse leave!!!!!!!', dash.map.localidad.hoveredStateId);
+                //console.log('fired mouse leave!!!!!!!', dash.map.localidad.hoveredStateId);
 
                 // return circle to normal sizing and color
                 if (dash.map.localidad.hoveredStateId !== null) {
@@ -479,7 +490,7 @@ const dash = {
             click_event_handler : function(e) {
 
 
-                const localidad = e.features[0].properties.localidad; //feature.properties.local;
+                const localidad = e.features[0].properties.local; //feature.properties.local;
                 const localidad_name = e.features[0].properties.nam;
                 const provincia = e.features[0].properties.provincia; //feature.properties.provincia;
 
@@ -1284,8 +1295,14 @@ const dash = {
 
                 dash.vis.stripplot.hide_svg(false);
 
-                dash.map.localidad.monitor_events('on');
-                dash.map.province.monitor_events('off');
+                if (local.tipo == 'provincia') {
+
+                    //vai ligar quando chegar na província, e depois só desliga quando voltar para o país
+
+                    dash.map.localidad.monitor_events('on');
+                    dash.map.province.monitor_events('off');
+
+                }
 
             }
 
@@ -2043,7 +2060,7 @@ const dash = {
 
                         let domain = d3.extent(
                             data, 
-                            d => d[variable]
+                            d => +d[variable]
                         )
 
                         // if (variable == 'cat_media') {
@@ -2114,7 +2131,9 @@ const dash = {
                           .classed("vis-dash-stripplot-labels-variables", true)
                           .style("left", 0)
                           .style("top", (d,i) => dash.vis.stripplot.dimensions.strip_height*i + "px")
-                          .text((d,i) => dash.vis.stripplot.variables[type][i]);
+                          .text((d,i) => dash.vis.stripplot.variables.names[
+                            dash.vis.stripplot.variables[type][i]
+                          ]);
 
                     }
 
@@ -2358,23 +2377,23 @@ const dash = {
                                     
                                 })
                                 .attr('cy', d => 
-                                dash.vis.stripplot.scales.y[d.variable])
+                                dash.vis.stripplot.scales.y[+d.variable])
                                 .attr('cx', d => {
                                     //console.log(d.variable);
 
                                     const variable = d.variable;
 
-                                    if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+                                    if (dash.vis.stripplot.scales.x[variable](+d[variable])) {
 
-                                        console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+                                        console.log(dash.vis.stripplot.scales.x[variable](+d[variable]));
 
-                                        return dash.vis.stripplot.scales.x[variable](d[variable])
+                                        return dash.vis.stripplot.scales.x[variable](+d[variable])
                                         //-
                                         //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
                                 
                                     } else {
 
-                                        console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+                                        console.log(dash.vis.stripplot.scales.x[variable](+d[variable]));
 
                                         return 0
 
@@ -2453,11 +2472,11 @@ const dash = {
 
                                     const variable = d.variable;
         
-                                    if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+                                    if (dash.vis.stripplot.scales.x[variable](+d[variable])) {
         
                                        // console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
         
-                                        return dash.vis.stripplot.scales.x[variable](d[variable])
+                                        return dash.vis.stripplot.scales.x[variable](+d[variable])
                                         //-
                                         //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
                                 
