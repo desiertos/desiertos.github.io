@@ -2964,9 +2964,19 @@ const dash = {
 
                 // monitor hover and click events on provinces
 
-                dash.map.province.monitor_events('on');
+                //dash.map.province.monitor_events('on');
 
                 // monitor hover and click events on localidads
+
+                const local = {
+
+                    local: 'Argentina',
+                    tipo : 'pais',
+                    text : 'Argentina'
+
+                }
+
+                dash.vis.render_selected_place(local);
 
                 // commenting for now
                 // dash.map.localidad.monitor_hover_event();
@@ -2976,7 +2986,7 @@ const dash = {
                 //dash.map.monitor_click_event('on');
 
                 //fit map to continental Argentina
-                dash.map.fit_Argentina();
+                //dash.map.fit_Argentina();
 
                 // inicializa o scroller
                 //dash.scroller.config();
