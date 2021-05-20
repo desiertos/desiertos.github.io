@@ -36,8 +36,8 @@ const dash = {
 
         geojsons : {
 
-            provincia : '../data/maps/arg_prov.json',
-            localidad : '../data/maps/arg_localidads.geojson',
+            provincia : '../data/maps/prov2.json',
+            localidad : '../data/maps/dep.json',
             mask : '../data/maps/arg_mask.json'
 
         },
@@ -273,64 +273,40 @@ const dash = {
                 dash.map_obj.addSource('localidad', {
                     type: 'geojson',
                     'data' : dash.data.localidad,
-                    'promoteId' : 'link'
+                    'promoteId' : 'index'
                 });
 
                 dash.map_obj.addLayer({
                     'id': 'localidad',
-                    'type': 'circle',
+                    'type': 'fill',
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'circle-color': ['get', 'color_real'],
-                      'circle-radius' : [
-                          'case', [
-                              'boolean', 
-                              ['feature-state', 'hover'], 
-                              false
-                            ], 10,
-                            2,
-                        ],
-                      'circle-stroke-width': [
-                        'case', [
-                            'boolean', 
-                            ['feature-state', 'hover'], 
-                            false
-                          ], 2,
-                          0,
-                        ],
-                      'circle-stroke-color': [
-                        'case', [
-                            'boolean', 
-                            ['feature-state', 'hover'], 
-                            false
-                          ], '#ffffff',
-                          'transparent',
-                        ] 
+                      'fill-color': ['get', 'color_real'],
                     }
                 }); 
 
                 dash.map_obj.addLayer({
                     'id': 'localidad-highlight',
-                    'type': 'circle',
+                    'type': 'line',
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'circle-color': 'transparent',
-                      'circle-radius': 15,
+                      'line-color': 'black',
+                      'line-width': 2,
                       'circle-stroke-width': 2,
                       'circle-stroke-color': 'black'
-                    }, 'filter': ['==', 'localidad', '']
+                    }, 'filter': ['==', 'local', '']
                 }); 
 
             },
 
-            toggle_highlight_circle : function(localidad) {
+            toggle_highlight : function(localidad) {
 
                 dash.map_obj.setFilter(
                     'localidad-highlight', [
                         '==',
-                        ['get', 'localidad'],
+                        ['get', 'local'],
                         localidad
                 ]);
 
@@ -353,7 +329,7 @@ const dash = {
                     console.log(e);
                      
                     let coordinates = e.features[0].geometry.coordinates.slice();
-                    let name = e.features[0].properties.localidad;
+                    let name = e.features[0].properties.local;
                      
                     // Ensure that if the map is zoomed out such that multiple
                     // copies of the feature are visible, the popup appears
@@ -367,7 +343,7 @@ const dash = {
                     dash.map.localidad.popup.setLngLat(coordinates).setHTML(name).addTo(dash.map_obj);
 
                     ////////////
-                    // highlight circle
+                    // highlight polygon
 
                     if (hoveredStateId) {
                         dash.map_obj.setFeatureState(
@@ -416,14 +392,15 @@ const dash = {
             click_event_handler : function(feature) {
 
 
-                const localidad = feature.properties.localidad; //e.features[0].properties.localidad;
+                const localidad = feature.properties.local; //e.features[0].properties.localidad;
+                const localidad_name = feature.properties.nam;
                 const provincia = feature.properties.provincia // e.features[0].properties.provincia;
 
                 const local = {
 
                     local : localidad,
                     tipo  : "localidad",
-                    text  : localidad + '(' + provincia + ')',
+                    text  : localidad_name + '(' + provincia + ')',
                     provincia : provincia
 
                 };
@@ -452,7 +429,7 @@ const dash = {
                     'source': 'provincia',
                     'layout': {},
                     'paint': {
-                      'fill-color': 'hotpink',
+                      'fill-color': 'transparent',
                       'fill-opacity': [
                         'case',
                         [
@@ -472,16 +449,16 @@ const dash = {
                     'source': 'provincia',
                     'layout': {},
                     'paint': {
-                      'line-width': 4,
-                      'line-color': [
+                      'line-color': '#666',
+                      'line-width': [
                         'case',
                         [
                             'boolean', 
                             ['feature-state', 'hover'], 
                             false
                         ],
-                        "hotpink",
-                        "transparent"
+                        4,
+                        1
                     ]
                     }
                 }); 
@@ -660,7 +637,7 @@ const dash = {
                     'type': 'fill',
                     'source': 'mask',
                     'layout': {},
-                    'paint': {'fill-color': 'ghostwhite'},
+                    'paint': {'fill-color': '#F4F0EC'},
                 });
 
             }
@@ -1199,7 +1176,7 @@ const dash = {
                 dash.map.highlight_feature(local.local, type = 'provincia');
                 dash.map.province.toggle_highlight_border_provincia(local.local);
             } else if (local.tipo == 'localidad') {
-                dash.map.localidad.toggle_highlight_circle(local.local);
+                dash.map.localidad.toggle_highlight(local.local);
             }
 
             //// seria o caso de levar isso para o render step do scroller?
