@@ -294,8 +294,6 @@ const dash = {
                     'paint': {
                       'line-color': 'black',
                       'line-width': 2,
-                      'circle-stroke-width': 2,
-                      'circle-stroke-color': 'black'
                     }, 'filter': ['==', 'local', '']
                 }); 
 
@@ -2759,7 +2757,8 @@ const dash = {
 
                 // monitor hover and click events on localidads
 
-                dash.map.localidad.monitor_hover_event();
+                // commenting for now
+                // dash.map.localidad.monitor_hover_event();
                   //dash.map.localidad.monitor_click_event();
 
                 // monitor click events on localidad or provincia
