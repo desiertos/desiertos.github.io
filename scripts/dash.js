@@ -287,13 +287,24 @@ const dash = {
                 }); 
 
                 dash.map_obj.addLayer({
+                    'id': 'localidad-border',
+                    'type': 'line',
+                    'source': 'localidad',
+                    'layout': {},
+                    'paint': {
+                      'line-color': '#666',
+                      'line-width': 0,
+                    }
+                }); 
+
+                dash.map_obj.addLayer({
                     'id': 'localidad-highlight',
                     'type': 'line',
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
                       'line-color': 'black',
-                      'line-width': 2,
+                      'line-width': 3,
                     }, 'filter': ['==', 'local', '']
                 }); 
 
@@ -307,6 +318,26 @@ const dash = {
                         ['get', 'local'],
                         localidad
                 ]);
+
+            },
+
+            toggle_borders : function(option) {
+
+                // option: on/off
+
+                dash.map_obj.setPaintProperty(
+                    'localidad-border', 
+                    'line-width', 
+                    [
+                        'case', [
+                            'boolean', 
+                            ['feature-state', 'hover'], 
+                            false
+                        ], 
+                        option == 'on' ? 2 : 0,
+                        option == 'on' ? 1 : 0
+                    ]
+                );
 
             },
                 
@@ -726,20 +757,22 @@ const dash = {
                 }
             );
 
-            // increases circle radius when zooming
+            // shows dept borders when zooming
 
-            dash.map_obj.setPaintProperty(
-                'localidad', 
-                'circle-radius', 
-                [
-                    'case', [
-                        'boolean', 
-                        ['feature-state', 'hover'], 
-                        false
-                    ], 10,
-                    5,
-                ]
-            );
+            dash.map.localidad.toggle_borders('on');
+
+            // dash.map_obj.setPaintProperty(
+            //     'localidad', 
+            //     'line-color', 
+            //     [
+            //         'case', [
+            //             'boolean', 
+            //             ['feature-state', 'hover'], 
+            //             false
+            //         ], 10,
+            //         5,
+            //     ]
+            // );
 
         },
 
@@ -1157,7 +1190,9 @@ const dash = {
 
                 dash.vis.location_card.info_table.styles_country_view(true);
 
-                dash.vis.stripplot.toggle_svg(true);
+                dash.vis.stripplot.hide_svg(true);
+
+                dash.map.localidad.toggle_borders('off');
 
             } else {
 
@@ -1165,7 +1200,7 @@ const dash = {
 
                 dash.vis.location_card.info_table.styles_country_view(false);
 
-                dash.vis.stripplot.toggle_svg(false);
+                dash.vis.stripplot.hide_svg(false);
 
             }
 
@@ -2675,7 +2710,7 @@ const dash = {
                 }
             },
 
-            toggle_svg: function(option) {
+            hide_svg: function(option) {
 
 
                 dash.vis.stripplot.sels.d3.svg.classed( 'not-displayed', option );
