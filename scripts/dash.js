@@ -498,7 +498,7 @@ const dash = {
 
                     local : localidad,
                     tipo  : "localidad",
-                    text  : localidad_name + '(' + provincia + ')',
+                    text  : localidad_name,
                     provincia : provincia
 
                 };
@@ -1488,7 +1488,7 @@ const dash = {
 
                 localidad : {
 
-                    name : () => dash.vis.location_card.state.user_location_name,
+                    name : () => dash.vis.location_card.state.user_location,
 
                     category : () => dash.vis.location_card.state.user_location_category,
 
@@ -2520,7 +2520,7 @@ const dash = {
 
                             })
                             .style('left', 0)
-                            .text(datum.local);
+                            .text(datum.nam);
 
                             label
                               .style('left', function(variable) {
@@ -2688,7 +2688,7 @@ const dash = {
                             let tt = dash.vis.stripplot.sels.d3.container.select('p.dash-stripplot-tooltip');
 
                             tt
-                              .text(local_hovered)
+                              .text(datum.nam)
                               .style('top', (dash.vis.stripplot.scales.y[variable] - dash.vis.stripplot.dimensions.rect.other.height) + 'px');
 
                             tt
@@ -2821,7 +2821,7 @@ const dash = {
 
                             local : datum.local,
                             tipo : type,
-                            text : datum.local,
+                            text : datum.nam,
                             provincia : datum.provincia
 
                         }
