@@ -746,7 +746,10 @@ const dash = {
         monitor_click_event : function() {
 
             dash.map_obj.on('click', function(e) {
-                let features = dash.map_obj.queryRenderedFeatures(e.point, { layers: ['localidad', 'provincia'] });
+                let features = dash.map_obj.queryRenderedFeatures(
+                    e.point, 
+                    { layers: ['provincia'] });
+                    //{ layers: ['localidad', 'provincia'] });
 
                 if (features.length) {
 
@@ -998,7 +1001,7 @@ const dash = {
     
                     const parent = document.querySelector(ref);
     
-                    const data = dash.data.fopea_data.lista_locais.filter(d => d.tipo == "cidade");
+                    const data = dash.data.fopea_data.lista_locais.filter(d => d.tipo == "localidad");
     
                     data.forEach(row => {
     
