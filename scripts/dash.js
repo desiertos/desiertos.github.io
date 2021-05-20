@@ -418,12 +418,28 @@ const dash = {
 
             },
 
-            click_event_handler : function(feature) {
+            monitor_click_event : function(option) {
+    
+                if (option == 'on') {
+    
+                    dash.map_obj.on('click', 'localidad', dash.map.localidad.click_event_handler);
+
+                    // como tem o layer aqui, dá para no handler pegar o e.features!
+    
+                } else {
+    
+                    dash.map_obj.off('click', 'localidad', dash.map.localidad.click_event_handler);
+                    
+                }
+    
+            },
+
+            click_event_handler : function(e) {
 
 
-                const localidad = feature.properties.local; //e.features[0].properties.localidad;
-                const localidad_name = feature.properties.nam;
-                const provincia = feature.properties.provincia // e.features[0].properties.provincia;
+                const localidad = e.features[0].properties.localidad; //feature.properties.local;
+                const localidad_name = e.features[0].properties.nam;
+                const provincia = e.features[0].properties.provincia; //feature.properties.provincia;
 
                 const local = {
 
@@ -574,9 +590,12 @@ const dash = {
 
             },
 
-            click_event_handler : function(feature) {
+            click_event_handler : function(e) {
 
-                const province_name = feature.properties.nam; //e.features[0].properties.nam;
+                console.log(e);
+
+                //const province_name = feature.properties.nam; 
+                const province_name = e.features[0].properties.nam;
 
                 if (province_name != dash.vis.location_card.state.user_location_name) {
 
@@ -594,6 +613,43 @@ const dash = {
 
                 } else console.log('Clicou na mesma provincia, nao precisa renderizar.')
 
+            },
+
+            // handler_click_event : function(e) {
+
+            //     let features = dash.map_obj.queryRenderedFeatures(
+            //         e.point, 
+            //         //{ layers: ['provincia'] });
+            //         { layers: ['provincia'] });
+    
+            //     if (features.length) {
+    
+            //         let type = features[0].layer.id;
+    
+            //         if (type == 'provincia') type = 'province';
+    
+            //         console.log("Clicked on a", type, ". Detalhes: ", features, e);
+    
+            //         dash.map[type].click_event_handler(features[0]);
+    
+            //     }
+    
+            // },
+    
+            monitor_click_event : function(option) {
+    
+                if (option == 'on') {
+    
+                    dash.map_obj.on('click', 'provincia', dash.map.province.click_event_handler);
+
+                    // como tem o layer aqui, dá para no handler pegar o e.features!
+    
+                } else {
+    
+                    dash.map_obj.off('click', 'provincia', dash.map.province.click_event_handler);
+                    
+                }
+    
             }
 
         },
@@ -773,30 +829,6 @@ const dash = {
             //         5,
             //     ]
             // );
-
-        },
-
-        monitor_click_event : function() {
-
-            dash.map_obj.on('click', function(e) {
-                let features = dash.map_obj.queryRenderedFeatures(
-                    e.point, 
-                    { layers: ['provincia'] });
-                    //{ layers: ['localidad', 'provincia'] });
-
-                if (features.length) {
-
-                    let type = features[0].layer.id;
-
-                    if (type == 'provincia') type = 'province';
-
-                    console.log("Clicked on a", type, ". Detalhes: ", features, e);
-
-                    dash.map[type].click_event_handler(features[0]);
-
-                }
-
-            });
 
         }
 
@@ -1197,6 +1229,9 @@ const dash = {
                 dash.map.province.toggle_highlight_border_provincia('');
                 dash.map.fit_Argentina();
 
+                dash.map.localidad.monitor_click_event('off');
+                dash.map.province.monitor_click_event('on');
+
             } else {
 
                 data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
@@ -1204,6 +1239,16 @@ const dash = {
                 dash.vis.location_card.info_table.styles_country_view(local.tipo == 'provincia'); // if provincia, styles like country
 
                 dash.vis.stripplot.hide_svg(false);
+
+                dash.map.localidad.monitor_click_event('off');
+                dash.map.province.monitor_click_event('on');
+
+                if (local.tipo == 'provincia') {
+
+                    dash.map.localidad.monitor_click_event('on');
+                    dash.map.province.monitor_click_event('off');
+
+                }
 
             }
 
@@ -2814,7 +2859,7 @@ const dash = {
                 // monitor hover and click events on provinces
 
                 dash.map.province.monitor_hover_event();
-                  //dash.map.province.monitor_click_event();
+                dash.map.province.monitor_click_event('on');
 
                 // monitor hover and click events on localidads
 
@@ -2823,7 +2868,7 @@ const dash = {
                   //dash.map.localidad.monitor_click_event();
 
                 // monitor click events on localidad or provincia
-                dash.map.monitor_click_event();
+                //dash.map.monitor_click_event('on');
 
                 //fit map to continental Argentina
                 dash.map.fit_Argentina();
