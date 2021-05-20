@@ -1,0 +1,673 @@
+:root {
+
+
+    --font-title : Newsreader;
+    --font-body : Rubik;
+    --background-color: ghostwhite;
+    --background-transp: rgba(248, 248, 255, .5);
+    --background-transp-darker: rgba(248, 248, 255, .25);
+
+    --title-color : #3a3a3a;
+    --font-color : #212121; /*#4f4f4f;*/
+    --font-color20 : #21212120;
+
+    --color-desierto: #E37E71;
+    --color-semidesierto: #F4B180;
+    --color-semibosque: #EFCA47;
+    --color-bosque: #92B879;
+
+    --header-border-color: lightgrey;
+    --header-height: 2.5rem;
+
+    --emoji-bosque: '🌳 ';
+    --emoji-semibosque: '🌲 ';
+    --emoji-desierto: '🏜 ';
+    --emoji-semidesierto: '⛰ ';
+
+    --color-vis-variable-label : #636363;
+    --color-vis-axis : #E5E5E5;
+
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    z-index: 1;
+    background-color: white;
+    border-bottom: 2px solid var(--header-border-color);
+    display: flex;
+    align-items: center;
+}
+
+.brands-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: var(--header-height);
+}
+
+.brands,
+.brands a
+ {
+  display: flex;
+  align-items: center;
+}
+
+.brands a {
+  border: none;
+}
+
+.pipe {
+  content: '';
+  /*display: flex;*/
+  height: 1.2rem;
+  min-width: .05rem;
+  margin: 0 1rem;
+  background: var(--header-border-color);
+  /*align-self: center;*/
+}
+
+.brands a:first-child img {
+  width: 3rem;
+  /*align-self: center;*/
+  margin-left: 1rem;
+}
+
+.brands a:last-child img {
+  height: .9rem;
+    /*align-self: center;*/
+}
+
+nav {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+}
+
+.menu-toggle {
+    color: var(--header-border-color);
+    align-self: center;
+    background-color: transparent;
+    border: none;
+    font-size: 2rem;
+}
+
+.title {
+
+    text-transform: uppercase;
+    font-size : 1rem;
+    font-family: var(--font-body);
+    margin: 0;
+
+}
+
+
+
+
+
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    background-color: var(--background-color);
+    color: var(--font-color);
+}
+
+h1 {
+
+    margin: 0;
+    margin-bottom: 1rem;
+    font-family: var(--font-title);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--title-color);
+
+}
+
+h2 {
+
+    margin: 0;
+    margin-bottom: 1.4rem;
+    font-family: var(--font-title);
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 1.15;
+    color: var(--title-color);
+
+}
+
+.kicker {
+
+    display: block;
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    margin-bottom: 1rem;
+    color: var(--font-color);
+
+}
+
+.outer-container {
+
+    margin-top: var(--header-height);
+    scroll-behavior: smooth;
+
+}
+
+.map-container {
+
+    position: fixed;
+    width: calc(100% - 50vw);
+    height: 100vh;  
+    z-index: 1;
+
+}
+
+#map {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+}
+
+.story-container {
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50vw;
+    background-color: transparent;
+
+}
+
+a.go-to-dashboard {
+
+    position: absolute;
+    right: 0;
+    font-size: .8rem;
+    bottom: 0;
+    width: 50vw;
+    height: calc(2 * var(--header-height));
+    text-decoration: none;
+    background-color: #efefef;
+    color: var(--font-color);
+    display: flex;
+    align-items: center;
+    padding-left: calc(25vw - 18rem);
+    border-top: 1px solid var(--font-color);
+    opacity: 1;
+    text-transform: uppercase;
+    background-color: var(--color-semibosque);
+
+}
+
+a.go-to-dashboard p {
+
+    max-width: 36vw;
+    width: 36rem;
+    margin: 0 auto;
+
+}
+
+    /*transition: opacity .4s linear;
+
+}
+
+a.go-to-dashboard.hidden {
+
+    opacity : 0;
+
+} */
+
+a.button-go-on {
+
+    color: transparent;
+    text-decoration: none;
+
+}
+
+a.button-go-on::before {
+
+    position: absolute;
+    bottom: 0;
+    content: "\003E";
+    color: grey;
+    font-size: 3rem;
+    transform: rotate(90deg) scaleX(.75);
+    font-weight: 300;
+
+}
+
+/* search */
+
+.container-search {
+
+    border-top: 1px solid var(--font-color);
+    border-bottom: 1px solid var(--font-color);
+    padding: .8rem 0;
+    display: flex;
+
+}
+
+input#location-search {
+
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background: transparent;
+    font-family: var(--font-body);
+
+}
+
+.search-button {
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  .search-button img {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+  }
+
+/* Story */
+
+.story-step {
+
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    scroll-snap-align: start;
+
+
+}
+
+.story-step-inner {
+
+    max-width: 36vw;
+    width: 36rem;
+    margin: 0 auto;
+    /*margin-top: 50vh;
+    transform: translateY(-50%);*/
+    background-color: var(--background-transp); 
+
+
+}
+
+.retranca {
+
+    font-size: 2rem;
+    margin-bottom: 1rem;
+
+}
+
+[data-category-highlight] {
+
+    text-transform: uppercase;
+
+}
+
+.story-step:last-child {
+
+    margin-bottom: 100vh;
+
+}
+
+.story-step p {
+
+    font-weight: 400;
+    font-size: 0.9rem;
+    line-height: 1.3;
+
+}
+
+/* Story - location card*/
+
+#location-card [data-content]::before {
+
+    content: attr(data-content);
+
+}
+
+#location-card .kicker {
+
+    margin-bottom: .2rem;
+    font-size: .7rem;
+
+}
+
+#location-card h2 {
+
+    margin-bottom: .4rem;
+
+}
+
+.story-step p[data-category] {
+
+    text-transform: uppercase;
+    font-size: .8rem;
+    padding: .5rem 1rem;
+    border-top: 1px solid var(--font-color);
+    border-bottom: 1px solid var(--font-color);
+    line-height: normal;
+    margin-top: .4rem;
+
+
+}
+
+.story-step .card-text {
+
+    font-family: var(--font-title);
+    font-size: 1rem;
+
+}
+
+.story-step p.card-only-text {
+
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-top: 1px solid var(--font-color20);
+    border-bottom: 1px solid var(--font-color20);
+    line-height: 1.5;
+}
+
+[data-category]::before {
+
+    padding-right: 1rem;
+
+}
+
+/* bosque */
+
+[data-category='bosque'] {
+
+    background-color: var(--color-bosque);
+
+}
+
+[data-category='bosque']::before, [data-category-highlight='bosque']::before {
+
+    content: var(--emoji-bosque);
+
+}
+
+[data-category-highlight='bosque'] {
+
+    color : var(--color-bosque)
+
+}
+
+/* semibosque */
+
+[data-category='semibosque'] {
+
+    background-color: var(--color-semibosque);
+
+}
+
+[data-category='semibosque']::before, [data-category-highlight='semibosque']::before {
+
+    content: var(--emoji-semibosque);
+
+}
+
+[data-category-highlight='semibosque'] {
+
+    color : var(--color-semibosque)
+
+}
+
+/* semidesierto */
+
+[data-category='semidesierto'] {
+
+    background-color: var(--color-semidesierto);
+
+}
+
+[data-category='semidesierto']::before, [data-category-highlight='semidesierto']::before {
+
+    content: var(--emoji-semidesierto);
+
+}
+
+[data-category-highlight='semidesierto'] {
+
+    color : var(--color-semidesierto)
+
+}
+
+/* desierto */
+
+[data-category='desierto'] {
+
+    background-color: var(--color-desierto);
+
+}
+
+[data-category='desierto']::before, [data-category-highlight='desierto']::before {
+
+    content: var(--emoji-desierto);
+
+}
+
+[data-category-highlight='desierto'] {
+
+    color : var(--color-desierto)
+
+}
+
+/*
+
+
+
+[data-place-type='provincia'] {
+
+    content: 'Provincia';
+
+}
+
+[data-place-type='cidade'] {
+
+    content: 'Departamiento / Municipio';
+
+}
+
+*/
+
+/* vis */
+
+.vis-story-container {
+
+    width: 100%;
+    position: relative;
+
+}
+
+.vis-story-stripplot {
+
+    width: 100%;
+
+}
+
+.vis-story-container .vis-story-stripplot-labels-variables {
+
+    position: absolute;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    line-height: 15px;
+    color : var(--color-vis-variable-label);
+
+}
+
+line.vis-story-stripplot-axis {
+
+    stroke: var(--color-vis-axis);
+    stroke-width: 1;
+
+}
+
+.vis-story-stripplot-marks {
+
+    opacity : .5;
+
+}
+
+.marks-na {
+
+    opacity : 0;
+
+}
+
+.marks-location-highlighted {
+
+    opacity : 1;
+    stroke : black;
+
+}
+
+
+@media screen and (max-width: 620px) {
+
+    /* talvez usar uma variável para esse tamanho... e só mudar o tamanho da variável no media query 
+    --var-width-sections: 50vw;
+    e aí dentro do media mudaria para 100vw
+    */
+
+    .map-container {
+
+        width: 100vw;
+        z-index: 0;
+    
+    }
+
+    .story-container {
+
+        width: 100vw;
+    
+    }
+
+    .story-step {
+
+        max-width: 100vw;
+        padding: 1rem 0;
+        
+
+    }
+
+    .story-step-inner {
+
+        max-width: 90vw;
+        padding: 10px;
+        background-color: var(--background-color);
+        border-radius: 10px;
+    }
+
+    a.go-to-dashboard {
+
+        width: 100vw;
+
+    }
+
+
+
+}
+
+/* nova capa */
+
+.vis-capa-container {
+
+    position: fixed;
+    width: calc(100% - 50vw);
+    top: calc(var(--header-height) * 1 );
+    height: calc(100vh - var(--header-height));  
+    z-index: 1;
+
+}
+
+#vis-capa {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background-color: ghostwhite;
+
+}
+
+g.container-provinces {
+
+    transition: opacity 1s;
+
+}
+
+g.container-provinces.fade {
+
+    opacity: 0;
+
+}
+
+g.axis {
+
+    font-family: var(--font-body);
+
+}
+
+circle.vis-cities {
+
+    stroke-width: 1px;
+    stroke: black;
+
+}
+
+.story-container .btns-proto {
+    position: absolute;
+    top: var(--header-height);
+    z-index: 10;
+}
+
+.story-container button {
+    width: 5rem;
+    padding: .5em 1em;
+    margin-right: 1rem;
+    display: inline;
+    background-color: black;
+    border: 1px solid yellow;
+    color: yellow;
+    border-radius: 5px;
+}

@@ -46,10 +46,7 @@
 
                 <div class="story-step-inner">
 
-                    <div class="retranca"> 🏜 ⛰ 🌳 🌲 </div>
-
                     <h1>
-                        <span class="kicker">Búsqueda de Datos</span>
                         <span>¿Vives en un desierto o en un bosque?</span>
                     </h1>
 
@@ -57,21 +54,8 @@
                         No estamos hablando de vegetación y clima, sino de acceso a la información. Las regiones donde hay un periodismo profesional activo e independiente son como <span data-category-highlight="bosque"> bosques</span>, donde abunda la vida democrática. Las regiones que no tienen tanta suerte son como  <span data-category-highlight="desierto"> desiertos</span>, donde es mucho más difícil que algo así prospere.
                     </p>
 
-                    <a href="#step-search" class="button-go-on">Continue</a>
-                
-                </div>
-    
-            </div>
+                    <p class="kicker">¿Y tu donde estas?</p>
 
-            <div class="story-step" data-step="pesquisa" id="step-search">
-
-                <div class="story-step-inner">
-
-                    <h2>
-                        <span class="kicker">Vamos a empezar</span>
-                        <span>¿Y tu donde estas?</span>
-                    </h2>
-    
                     <div class="container-search">
                         <button type="submit" class="search-button" id="story-search-place">
                             <img src="./img/search.png">
@@ -79,10 +63,10 @@
                         <input type="search" id="location-search" name="q" list="locations" aria-label="Search through list of locations in Argentina">
                         <datalist id="locations"></datalist>
                     </div>
-
+                
                 </div>
 
-                <a href="#" class="go-to-dashboard"><p>explorar los datos directamente</p></a>
+                <a href="/dashboard" target="_blank" class="go-to-dashboard"><p>explorar los datos directamente</p></a>
     
             </div>
 
@@ -90,99 +74,153 @@
 
                 <div class="story-step-inner">
 
-                    <h2>
-                        <span class="kicker js--location-type"></span>
-                        <span class="js--location-name"></span>
-                    </h2>
+                    <p class="js--location-category-description card-text card-only-text">Estás en un 🌳 bosque. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.</p>
 
-                    <p class="js--location-category-main" data-category="bosque"></p>
-
-                    <p class="js--location-category-description card-text">Estás en un 🌳 bosque. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.</p>
-
-                    <div class="vis-story-container">
-
-                        <svg class="vis-story-stripplot"></svg>
-
-                    </div>
+                    <a href="#other-categories" class="button-go-on">Continue</a>
 
                 </div>
 
-    
+                
+
             </div>
 
-            <div class="story-step" data-step="importancia-periodismo">
-           
-
-                <div class="story-step-inner">
-
-                    <p class="card-text card-only-text">El acceso a un periodismo de calidad es importante para que florezcan la democracia y la vida pública, ya que una prensa independiente garantiza que los ciudadanos estén en mejores condiciones de gobernarse a sí mismos y tomar decisiones.</p>
-
-                </div>
-
-    
-            </div>
-
-            <div class="story-step" data-step="real-colors">
+            <div class="story-step" data-step="other-categories" id="other-categories">
            
                 <div class="story-step-inner">
 
                     <p class="card-text card-only-text">Además de regiones como la tuya, que es un <span class="js--location-category" data-category-highlight="bosque">bosque</span>, también hay ciudades que se clasifican como <span class="js--remaining-category1" data-category-highlight="semibosque"></span>, <span class="js--remaining-category2" data-category-highlight="semidesierto"></span> y <span class="js--remaining-category3" data-category-highlight="desierto"></span>.'</p>
 
+                    <a href="#rem1" class="button-go-on">Continue</a>
+
                 </div>
 
             </div>
 
-            <div class="story-step" data-step="remaining-category1">
+            <div class="story-step" data-step="remaining-category1" id="rem1">
            
                 <div class="story-step-inner">
 
                     <p class="js--location-remaining-category1-text card-text card-only-text"></p>
 
+                    <a href="#rem2" class="button-go-on">Continue</a>
+
                 </div>
 
             </div>
 
-            <div class="story-step" data-step="remaining-category2">
+            <div class="story-step" data-step="remaining-category2" id="rem2">
            
                 <div class="story-step-inner">
 
                     <p class="js--location-remaining-category2-text card-text card-only-text"></p>
 
+                    <a href="#rem3" class="button-go-on">Continue</a>
+
                 </div>
 
             </div>
 
-            <div class="story-step" data-step="remaining-category3">
+            <div class="story-step" data-step="remaining-category3" id="rem3">
            
                 <div class="story-step-inner">
 
                     <p class="js--location-remaining-category3-text card-text card-only-text"></p>
 
+                    <a href="#arg-bosques" class="button-go-on">Continue</a>
+
                 </div>
 
             </div>
 
-            <div class="story-step" data-step="penultimo">
+            <div class="story-step" data-step="argentina-bosques" id="arg-bosques">
            
 
                 <div class="story-step-inner">
 
-                    <p class="card-text card-only-text">En el mapa elaborado por <strong>FOPEA</strong>, la vegetación argentina ha sido reemplazada por estos bosques y desiertos para que puedas ver qué regiones del país sufren más la ausencia de un periodismo de calidad.</p>
+                    <p class="card-text card-only-text">Los <span data-category-highlight="bosque"> bosques</span> son las loacalidades más raras de Argentina y se quedán concentradas en regiones centrales, desarolladas y con mayor población.</p>
+
+                    <a href="#arg-semibosques" class="button-go-on">Continue</a>
 
                 </div>
+
+
     
             </div>
 
-            <div class="story-step" data-step="fecho">
+            <div class="story-step" data-step="argentina-semibosques" id="arg-semibosques">
            
 
                 <div class="story-step-inner">
 
-                    <p class="card-text card-only-text">Puede explorar los datos a nivel de provincia o acercar y conocer más sobre el ecosistema de información de ciudades de todo el país y barrios de la ciudad de Buenos Aires.</p>
+                    <p class="card-text card-only-text">Los <span data-category-highlight="semibosque"> semibosques</span> se veen majoritariamente en los alrededores de regiones pobladas, desarrolladas y centrales.
+                    </p>
+
+                    <a href="#arg-semidesiertos" class="button-go-on">Continue</a>
 
                 </div>
 
-                <a href="#" class="go-to-dashboard"><p>explorar los datos directamente</p></a>
+
+    
+            </div>
+
+            <div class="story-step" data-step="argentina-semidesiertos" id="arg-semidesiertos">
+           
+
+                <div class="story-step-inner">
+
+                    <p class="card-text card-only-text">Los <span data-category-highlight="semidesierto"> semidesiertos</span> quedan-se en regiones más rurales y distantes, muchas veces con menores índices de desarrollo..
+                    </p>
+
+                    <a href="#arg-desiertos" class="button-go-on">Continue</a>
+
+                </div>
+
+
+    
+            </div>
+
+            <div class="story-step" data-step="argentina-desiertos" id="arg-desiertos">
+           
+
+                <div class="story-step-inner">
+
+                    <p class="card-text card-only-text">Los <span data-category-highlight="desierto"> desiertos</span> desiertos són los ecosistemas informativos más comunes en Argentina y aparecen frecuentemente en áreas aisladas.
+                    </p>
+
+                    <a href="#penultimo" class="button-go-on">Continue</a>
+
+                </div>
+
+
+    
+            </div>
+
+            <div class="story-step" data-step="penultimo" id="penultimo">
+           
+
+                <div class="story-step-inner">
+
+                    <p class="card-text card-only-text">En el mapa elaborado por <strong>FOPEA</strong>, la vegetación argentina ha sido reemplazada por estos <span data-category-highlight="bosque"> bosques</span> y <span data-category-highlight="desierto"> desiertos</span> para que puedas ver qué regiones del país sufren más la ausencia de un periodismo de calidad.</p>
+
+                    <a href="#fecho" class="button-go-on">Continue</a>
+
+                </div>
+
+
+    
+            </div>
+
+
+            <div class="story-step" data-step="fecho" id="fecho">
+           
+
+                <div class="story-step-inner">
+
+                    <p class="card-text card-only-text"> <strong style="text-transform: uppercase">Puede explorar los datos </strong> a nivel de provincia o acercar y conocer más sobre el ecosistema de información de ciudades de todo el país y barrios de la ciudad de Buenos Aires.</p>
+
+                </div>
+
+                <a href="/dashboard" class="go-to-dashboard"><p>explorar los datos directamente</p></a>
     
             </div>
 

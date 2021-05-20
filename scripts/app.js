@@ -36,13 +36,14 @@ const app = {
 
         geojsons : {
 
-            provincia : '../data/maps/arg.json',
-            cidade : '../data/maps/arg_dept.json',
+            provincia : '../data/maps/prov2.json',
+            localidad : '../data/maps/mun2.json',
             mask : '../data/maps/arg_mask.json'
 
         },
 
-        fopea_data : '../data/output.json',
+        //fopea_data : '../data/output.json',
+        place_names : '../data/places.json',
 
         layers : {
 
@@ -70,9 +71,11 @@ const app = {
     data : {
 
         provincia : null,
-        cidade : null,
+        localidad : null,
         mask : null,
-        fopea_data : null
+        fopea_data : null,
+        max_pob : null,
+        min_pob : null
 
     },
 
@@ -84,10 +87,10 @@ const app = {
 
             Promise.all([
 
-                fetch(app.params.geojsons.cidade, {mode: 'cors'}).then( response => response.json()),
+                fetch(app.params.geojsons.localidad, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
-                fetch(app.params.fopea_data, {mode: 'cors'}).then( response => response.json())
+                fetch(app.params.place_names, {mode: 'cors'}).then( response => response.json())
         
             ])
               .then( data => app.ctrl.begin(data))
@@ -152,6 +155,8 @@ const app = {
 
         get_category_from_data : function(local, data) {
 
+            console.log(local, data);
+
             let location_category;
 
             if (local.tipo == 'provincia') {
@@ -186,7 +191,8 @@ const app = {
 
         generate_random_remaining_locations : function(remaining_categories) {
 
-            const data = app.data.fopea_data.cidade;
+            const data = app.data.fopea_data.localidad;
+            const state = app.vis.location_card.state;
             const output = [];
 
             remaining_categories.forEach(category => {
@@ -196,9 +202,14 @@ const app = {
                 console.log(cat_numeric);
 
                 const available_cities = data
-                  .filter(d => ['San Luis', 'Salta'].includes(d.provincia))
+                  .filter(d => d.provincia == state.user_location_province)
                   .filter(d => d.categoria == cat_numeric)
-                  .map(d => d.local);
+                  .map(d => (
+                      {
+                          local : d.local,
+                          text  : d.nam
+                      })
+                    );
 
                 const amount_available_cities = available_cities.length;
 
@@ -220,48 +231,164 @@ const app = {
 
     map : {
 
-        cidade : {
+        current_popups : {
+            
+            user_location : null, 
+            remaining : [],
+
+        },
+
+        localidad : {
 
             initialize : function() {
 
-                app.map_obj.addSource('cidade', {
+                app.map_obj.addSource('localidad', {
                     type: 'geojson',
-                    'data' : app.data.cidade
+                    'data' : app.data.localidad
                 });
 
                 app.map_obj.addLayer({
-                    'id': 'cidade',
-                    'type': 'fill',
-                    'source': 'cidade',
+                    'id': 'localidad',
+                    'type': 'circle',
+                    'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'fill-color': 'transparent',
-                      'fill-opacity': 0.5,
-                      'fill-outline-color': 'ghostwhite'
+                      'circle-color': ['get', 'color_real'],
+                      'circle-opacity': 0.5,
+                      'circle-stroke-color' : ['get', 'color_real'],
+                      'circle-stroke-width' : 1,
+                      'circle-stroke-opacity' : 1,
+                      'circle-radius' : [
+                            'let',
+                            'sqrt_pob',
+                            ['sqrt', ['to-number', ['get', 'pob'] ] ],
+
+                            [
+                                'interpolate', ['linear'], ['zoom'],
+
+                                3, [
+                                    'interpolate', ['linear'],
+                                    ['var', 'sqrt_pob'],
+                                    //0, 0,
+                                    Math.sqrt(app.data.min_pob), 2,
+                                    Math.sqrt(app.data.max_pob), 15
+                                ],
+
+                                12, [
+                                    'interpolate', ['linear'],
+                                    ['var', 'sqrt_pob'],
+                                    //0, 0,
+                                    Math.sqrt(app.data.min_pob), 6,
+                                    Math.sqrt(app.data.max_pob), 45
+                                ]
+                                
+                            ]
+                        ]
                     }
                 }, 'road-label'); // puts behind road-label
 
                 app.map_obj.addLayer({
-                    'id': 'cidade-border',
-                    'type': 'line',
-                    'source': 'cidade',
+                    'id': 'localidad-highlight',
+                    'type': 'circle',
+                    'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'line-color': 'black',
-                      'line-width': 5
+                      'circle-color': 'transparent',
+                      'circle-stroke-color' : '#999',
+                      'circle-stroke-width' : 1,
+                      'circle-radius' : [
+                            'let',
+                            'sqrt_pob',
+                            ['sqrt', ['to-number', ['get', 'pob'] ] ],
+
+                            [
+                                'interpolate', ['linear'], ['zoom'],
+
+                                3, [
+                                    'interpolate', ['linear'],
+                                    ['var', 'sqrt_pob'],
+                                    //0, 0,
+                                    Math.sqrt(app.data.min_pob), 2 + 4,
+                                    Math.sqrt(app.data.max_pob), 15 + 4
+                                ],
+
+                                12, [
+                                    'interpolate', ['linear'],
+                                    ['var', 'sqrt_pob'],
+                                    //0, 0,
+                                    Math.sqrt(app.data.min_pob), 6 + 4,
+                                    Math.sqrt(app.data.max_pob), 45 + 4
+                                ]
+                                
+                            ]
+                        ]
                     },
-                    'filter': ['==', 'cidade', '']}); // puts behind road-label
+                    'filter': ['==', 'localidad', '']
+                }, 'road-label'); // puts behind road-label
 
             },
 
-            toggle_highlight_border : function(cidade) {
+            toggle_highlight_border : function(localidad) {
 
                 app.map_obj.setFilter(
-                    'cidade-border', [
+                    'localidad-highlight', [
                         '==',
-                        ['get', 'nam'],
-                        cidade
+                        ['get', 'local'],
+                        localidad
                 ]);
+
+            },
+
+            style_selected_city : function(localidad) {
+
+                app.map_obj.setPaintProperty(
+                    
+                    'localidad', 
+                    'circle-opacity',
+                    [
+                        'case',
+                        [
+                            '==',
+                            ['get', 'local'],
+                            localidad
+                        ],
+                        1,
+                        .5
+                    ]
+                )
+
+                app.map_obj.setPaintProperty(
+                    
+                    'localidad', 
+                    'circle-stroke-color',
+                    [
+                        'case',
+                        [
+                            '==',
+                            ['get', 'local'],
+                            localidad
+                        ],
+                        '#212121',
+                        ['get', 'color_real']
+                        
+                    ]
+                )
+
+                app.map_obj.setPaintProperty(
+                    
+                    'localidad', 
+                    'circle-stroke-width',
+                    [
+                        'case',
+                        [
+                            '==',
+                            ['get', 'local'],
+                            localidad
+                        ],
+                        2,
+                        1
+                    ]
+                )
 
             }
 
@@ -278,14 +405,14 @@ const app = {
 
                 app.map_obj.addLayer({
                     'id': 'provincia',
-                    'type': 'line',
+                    'type': 'fill',
                     'source': 'provincia',
                     'layout': {},
                     'paint': {
-                      'line-width': 0,
-                      'line-color': 'black'
+                      'fill-outline-color': '#AAA',
+                      'fill-color': '#F0E9DF'
                     }
-                }); 
+                }, 'localidad'); 
 
                 app.map_obj.addLayer({
                     'id': 'provincia-border',
@@ -293,8 +420,8 @@ const app = {
                     'source': 'provincia',
                     'layout': {},
                     'paint': {
-                      'line-color': 'black',
-                      'line-width': 5
+                      'line-color': '#666',
+                      'line-width': 2
                     },
                     'filter': ['==', 'provincia', '']}); // puts behind road-label
 
@@ -330,15 +457,15 @@ const app = {
                 }); // puts behind road-label
 
                 app.map_obj.addLayer({
-                    'id': 'fog_of_war_cidade',
+                    'id': 'fog_of_war_localidad',
                     'type': 'fill',
-                    'source': 'cidade',
+                    'source': 'localidad',
                     'paint': {
                       'fill-color': 'ghostwhite',
                       'fill-opacity': 0,
                       'fill-outline-color': '#555'
                     },
-                    'filter': ['!=', 'cidade', '']
+                    'filter': ['!=', 'localidad', '']
                 }); // puts behind road-label
 
             },
@@ -381,10 +508,81 @@ const app = {
                     'type': 'fill',
                     'source': 'mask',
                     'layout': {},
-                    'paint': {'fill-color': 'ghostwhite'},
-                });
+                    'paint': {'fill-color': '#F4F0EC'},
+                }, 'provincia');
 
             }
+
+        },
+
+        popup: (name) => new mapboxgl.Popup(
+            {
+                closeButton: false,
+                loseOnClick: false,
+                anchor: 'bottom-left'
+            }),
+
+        add_popup : function(location, name) {
+
+            const type = 'localidad';
+
+            const location_data = app.data.fopea_data[type].filter(d => d.local == location)[0];
+
+            const location_coordinates = app.data.localidad.features
+            .filter(d => d.properties.local == location)
+            [0].geometry.coordinates;
+
+            console.log('Location Data for', name, location_data);
+
+            const new_popup = app.map.popup(name);
+
+            if (name != 'user-location') app.map.current_popups.remaining.push(new_popup)
+            else app.map.current_popups.user_location = new_popup;
+
+            new_popup
+              .setLngLat(location_coordinates)
+              .setHTML(location_data.nam)
+              .addTo(app.map_obj)
+              .addClassName(name);
+
+            const popup_tip = document.querySelector('.' + name + ' .mapboxgl-popup-tip');
+            popup_tip.style.borderTopColor = location_data.color_real;
+
+            const popup_content = document.querySelector('.' + name + ' .mapboxgl-popup-content');
+            popup_content.style.backgroundColor = location_data.color_real;
+
+
+        },
+
+        clear_pop_ups : function() {
+
+            if (app.map.current_popups.remaining.length > 0) {
+                
+                app.map.current_popups.remaining.forEach(popup => popup.remove());
+                app.map.current_popups.remaining = [];
+
+            }
+
+        },
+
+        clear_user_location_popup : function() {
+
+            if (app.map.current_popups.user_location) {
+                
+                app.map.current_popups.user_location.remove();
+                app.map.current_popups.user_location = null;
+
+            }
+
+        },
+
+        clear_highlights_and_popups : function() {
+
+            app.map.localidad.toggle_highlight_border('');
+            app.map.province.toggle_highlight_border_provincia('');
+            app.map.localidad.style_selected_city('');
+            app.map.clear_pop_ups();
+            app.map.clear_user_location_popup();
 
         },
 
@@ -421,11 +619,13 @@ const app = {
 
         },
 
-        highlight_feature : function(type, location, pitch = 0, bearing = 0) {
+        highlight_feature : function(type, location, name = 'user-location', pitch = 0, bearing = 0) {
+
+            // this 'name' will be used by the add_popup
 
             console.log(type, location);
 
-            // type provincia, cidade
+            // type provincia, localidad
 
             //let locations = app.map_obj.querySourceFeatures(type, {
             //    sourceLayer: type});
@@ -467,7 +667,56 @@ const app = {
                     padding: {top: 30, bottom: 30, left: 30, right: 30},
                     pitch: pitch,
                     bearing: bearing
-                });
+                }
+            );
+
+            const provincia = location_data.provincia;
+
+            app.map.province.toggle_highlight_border_provincia(provincia);
+            app.map.localidad.toggle_highlight_border(location);
+            app.map.localidad.style_selected_city(location);
+
+            app.map.add_popup(location, name);
+
+        },
+
+        highlight_category : function(category) {
+
+            app.map_obj.setPaintProperty(
+                    
+                'localidad', 
+                'circle-opacity',
+                category == 'all' ? 
+                .5 :
+                [
+                    'case',
+                    [
+                        '==',
+                        ['get', 'categoria'],
+                        category
+                    ],
+                    .5,
+                    0
+                ]
+            );
+
+            app.map_obj.setPaintProperty(
+                    
+                'localidad', 
+                'circle-stroke-opacity',
+                category == 'all' ? 
+                1 :
+                [
+                    'case',
+                    [
+                        '==',
+                        ['get', 'categoria'],
+                        category
+                    ],
+                    1,
+                    0
+                ]
+            );
 
         }
 
@@ -530,126 +779,172 @@ const app = {
 
             'abertura' : function() {
 
-                app.map_obj.setPaintProperty('cidade', 'fill-pattern', null);
-                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
-                app.map_obj.setPaintProperty('cidade', 'fill-outline-color', 'ghostwhite');
-                app.map_obj.setPaintProperty('cidade', 'fill-opacity', .5);
-                app.map.set_initial_view();
-                app.map.cidade.toggle_highlight_border('');
+                //app.map_obj.setPaintProperty('localidad', 'fill-pattern', null);
+                //app.map_obj.setPaintProperty('localidad', 'fill-color', ['get', 'color']);
+                //app.map_obj.setPaintProperty('localidad', 'fill-outline-color', 'ghostwhite');
+                //app.map_obj.setPaintProperty('localidad', 'fill-opacity', .5);
+               // app.map.set_initial_view();
+               app.map.clear_highlights_and_popups();
+               app.map.fit_Argentina();
+               app.map.localidad.toggle_highlight_border('');
 
                 //app.interactions.story.toggle_visibility("dashboard_button");
 
             },
 
-            'pesquisa' : function() {
+            // 'pesquisa' : function() {
 
-                console.log('Pesquisando...');
+            //     console.log('Pesquisando...');
 
-                app.map.set_initial_view();
-                app.map.fog_of_war.toggle('provincia', '');
-                app.map.fog_of_war.toggle('cidade', '');
-                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
-                app.map.cidade.toggle_highlight_border('');
+            //     app.map.set_initial_view();
+            //     app.map.fog_of_war.toggle('provincia', '');
+            //     app.map.fog_of_war.toggle('localidad', '');
+            //     app.map_obj.setPaintProperty('localidad', 'fill-color', ['get', 'color']);
+            //     app.map.localidad.toggle_highlight_border('');
                 
-            },
+            // },
 
             'location-card' : function() {
 
                 const type = app.vis.location_card.state.user_location_type;
                 const location = app.vis.location_card.state.user_location_name
 
-                app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
+                app.map.highlight_feature(type, location, name = 'user-location', pitch = 0, bearing = 0  );
 
-                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color_real']);
+                //app.map_obj.setPaintProperty('localidad', 'circle-opacity', 1);
 
-                app.map.cidade.toggle_highlight_border(location);
+                //app.map.localidad.toggle_highlight_border(location);
 
-                app.map.fog_of_war.toggle(type, location);
-
-            },
-
-            'story-no-map-interactions' : function() {},
-
-            'segundo' : function() {
-
-                app.map.fit_Argentina();
-
-                app.map_obj.setPaintProperty('cidade', 'fill-pattern', ['get', 'tipo']);
-                app.map_obj.setPaintProperty('cidade', 'fill-opacity', 1);
-                app.map.fog_of_war.toggle('provincia', '');
-                app.map.fog_of_war.toggle('cidade', '');
+                //app.map.fog_of_war.toggle(type, location);
 
             },
 
-            'importancia-periodismo' : function() {
+            // 'story-no-map-interactions' : function() {},
 
-                // app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
+            // 'segundo' : function() {
 
-                // app.map.cidade.toggle_highlight_border(location);
+            //     app.map.fit_Argentina();
 
-                // app.map.fog_of_war.toggle(type, location);
+            //     app.map_obj.setPaintProperty('localidad', 'fill-pattern', ['get', 'tipo']);
+            //     app.map_obj.setPaintProperty('localidad', 'fill-opacity', 1);
+            //     app.map.fog_of_war.toggle('provincia', '');
+            //     app.map.fog_of_war.toggle('localidad', '');
 
-            },
+            // },
 
-            'real-colors' : function() {
+            // 'importancia-periodismo' : function() {
 
-                app.map.fit_Argentina();
-                app.map.fog_of_war.toggle('provincia', '');
-                app.map.fog_of_war.toggle('cidade', '');
-                app.map.cidade.toggle_highlight_border('');
-                app.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color_real']);
+            //     // app.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
+
+            //     // app.map.localidad.toggle_highlight_border(location);
+
+            //     // app.map.fog_of_war.toggle(type, location);
+
+            // },
+
+            'other-categories' : function() {
+
+                app.vis.location_card.state.remaining_categories_locations.forEach((location, i) => {
+
+                    app.map.add_popup(location.local, 'remaining-' + i);
+
+                })
+
+                //app.map.fit_Argentina();
+                //app.map.fog_of_war.toggle('provincia', '');
+                //app.map.fog_of_war.toggle('localidad', '');
+                //app.map.localidad.toggle_highlight_border('');
+                //app.map_obj.setPaintProperty('localidad', 'fill-color', ['get', 'color_real']);
 
             },
 
             'remaining-category1' : function() {
 
+                app.map.clear_pop_ups();
+
                 const location = app.vis.location_card.state.remaining_categories_locations[0];
 
-                app.map.highlight_feature('cidade', location);
+                //console.log('Remaining 1', location.local)
 
-                app.map.fog_of_war.toggle('cidade', location);
+                app.map.highlight_feature('localidad', location.local, name = 'remaining1');
 
-                app.map.cidade.toggle_highlight_border(location);
+                //app.map.fog_of_war.toggle('localidad', location);
+
+                //app.map.localidad.toggle_highlight_border(location);
 
             },
 
             'remaining-category2' : function() {
 
+                app.map.clear_pop_ups();
+
                 const location = app.vis.location_card.state.remaining_categories_locations[1];
 
-                app.map.highlight_feature('cidade', location);
+                app.map.highlight_feature('localidad', location.local, name = 'remaining2');
 
-                app.map.fog_of_war.toggle('cidade', location);
+                //app.map.fog_of_war.toggle('localidad', location);
 
-                app.map.cidade.toggle_highlight_border(location);
+                //app.map.localidad.toggle_highlight_border(location);
 
             },
 
             'remaining-category3' : function() {
 
+                app.map.clear_pop_ups();
+
                 const location = app.vis.location_card.state.remaining_categories_locations[2];
 
-                app.map.highlight_feature('cidade', location);
+                app.map.highlight_feature('localidad', location.local, name = 'remaining3');
 
-                app.map.fog_of_war.toggle('cidade', location);
+                if (!app.map.current_popups.user_location) {
 
-                app.map.cidade.toggle_highlight_border(location);
+                    // this is the case when the user is returning in the story
+
+                    app.map.add_popup(app.vis.location_card.state.user_location_name, name = 'user-location');
+
+                }
+
+                //app.map.fog_of_war.toggle('localidad', location);
+
+                //app.map.localidad.toggle_highlight_border(location);
 
             },
 
-            'blabla' : function() {
-
-                app.map.cidade.toggle_highlight_border('');
+            'argentina-bosques' : function() {
 
                 app.map.fit_Argentina();
+                app.map.clear_highlights_and_popups();
+                app.map.highlight_category("4");
 
             },
+
+            'argentina-semibosques' : function() {
+
+                //app.map.fit_Argentina();
+                //app.map.clear_highlights_and_popups();
+                app.map.highlight_category("3");
+
+            },   
+            
+            'argentina-semidesiertos' : function() {
+
+                //app.map.fit_Argentina();
+                //app.map.clear_highlights_and_popups();
+                app.map.highlight_category("2");
+
+            }, 
+            
+            'argentina-desiertos' : function() {
+
+                //app.map.fit_Argentina();
+                //app.map.clear_highlights_and_popups();
+                app.map.highlight_category("1");
+
+            },              
 
             'penultimo' : function() {
 
-                app.map.cidade.toggle_highlight_border('');
-                app.map.fog_of_war.toggle('cidade', '');
-                app.map.fit_Argentina();
+                app.map.highlight_category("all");
 
 
             },
@@ -705,13 +1000,16 @@ const app = {
     
                     const parent = document.querySelector(ref);
     
-                    const data = app.data.fopea_data.lista_locais.filter(d => d.tipo == "cidade");
+                    const data = app.data.fopea_data.lista_locais
+                      .filter(d => d.tipo == "localidad")
+                      .sort((a,b) => a.local - b.local);
+
+                    console.log(data);
     
                     data.forEach(row => {
     
                         const new_option = document.createElement("option");
                         
-    
                         new_option.value = row.text;
                         new_option.dataset.name = row.localidade;
                         new_option.dataset.tipoLocalidade = row.tipo;
@@ -787,20 +1085,20 @@ const app = {
 
                     // with the fields updated, resize svg
 
-                    app.vis.stripplot.dimensions.set_size();
-                    app.vis.stripplot.scales.range.set();
-                    app.vis.stripplot.scales.set(local.tipo);
-                    app.vis.stripplot.components.labels.render(local.tipo);
-                    app.vis.stripplot.components.lines.render(local.tipo);
-                    app.vis.stripplot.components.marks.render(local.tipo);
+                    //app.vis.stripplot.dimensions.set_size();
+                    //app.vis.stripplot.scales.range.set();
+                    //app.vis.stripplot.scales.set(local.tipo);
+                    //app.vis.stripplot.components.labels.render(local.tipo);
+                    //app.vis.stripplot.components.lines.render(local.tipo);
+                    //app.vis.stripplot.components.marks.render(local.tipo);
 
                     //updates maps
 
                     // let type; 
                     
-                    // if (local.type == "cidade") {
+                    // if (local.type == "localidad") {
 
-                    //     type = 'cidade';
+                    //     type = 'localidad';
 
                     // } else {
 
@@ -870,8 +1168,8 @@ const app = {
 
             refs : {
 
-                name : '.js--location-name',
-                type : '.js--location-type',
+                //name : '.js--location-name',
+                //type : '.js--location-type',
                 category_description : '.js--location-category-description',
                 remaining_category1 : '.js--remaining-category1',
                 remaining_category2 : '.js--remaining-category2',
@@ -895,32 +1193,32 @@ const app = {
 
                 bosque : {
                     
-                    first : 'Estás en un <span data-category-highlight="bosque">bosque</span>. Esto significa que su ciudad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.',
+                    first : 'Estás en un <span data-category-highlight="bosque">bosque</span>. Esto significa que su localidad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.',
 
-                    second: 'Un <span data-category-highlight="bosque">bosque</span> es una región bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales. La ciudad de <span class="js--random-location-bosque"></span> es un ejemplo de este tipo de región.'
+                    second: 'Un <span data-category-highlight="bosque">bosque</span> es una región bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales. La localidad de <span class="js--random-location-bosque"></span> es un ejemplo de este tipo de región.'
 
                 },
 
                 semibosque : {
                     
-                    first : 'Estás en un <span data-category-highlight="semibosque">semibosque</span>. Esto significa que su ciudad tiene un buen acceso al periodismo profesional, pero con algunos problemas graves. Si bien es posible obtener información a través de los periódicos locales, existen fallas en la cobertura que pueden dañar la calidad de la vida pública.',
+                    first : 'Estás en un <span data-category-highlight="semibosque">semibosque</span>. Esto significa que su localidad tiene un buen acceso al periodismo profesional, pero con algunos problemas graves. Si bien es posible obtener información a través de los periódicos locales, existen fallas en la cobertura que pueden dañar la calidad de la vida pública.',
 
-                    second : 'Un <span data-category-highlight="semibosque">semibosque</span> es una región que tiene acceso al periodismo profesional, pero con algunos problemas serios. Si bien es posible obtener información a través de los periódicos locales, existen fallas en la cobertura. La ciudad de <span class="js--random-location-semibosque"></span> es un ejemplo de este tipo de región.'
+                    second : 'Un <span data-category-highlight="semibosque">semibosque</span> es una región que tiene acceso al periodismo profesional, pero con algunos problemas serios. Si bien es posible obtener información a través de los periódicos locales, existen fallas en la cobertura. La localidad de <span class="js--random-location-semibosque"></span> es un ejemplo de este tipo de región.'
 
                 },
 
  
                 semidesierto : {
                     
-                    first : 'Estás en un <span data-category-highlight="semidesierto">semidesierto</span>. Esto significa que su ciudad tiene serios problemas para acceder a un periodismo de calidad, aunque la prensa profesional esté presente. Esto causa problemas considerables en la calidad de la vida pública.',
+                    first : 'Estás en un <span data-category-highlight="semidesierto">semidesierto</span>. Esto significa que su localidad tiene serios problemas para acceder a un periodismo de calidad, aunque la prensa profesional esté presente. Esto causa problemas considerables en la calidad de la vida pública.',
 
-                    second : 'Un <span data-category-highlight="semidesierto">semidesierto</span> es una región que tiene serios problemas para acceder a un periodismo de calidad, a pesar de que la prensa profesional está presente, como en la ciudad de <span class="js--random-location-semidesierto"></span>.'
+                    second : 'Un <span data-category-highlight="semidesierto">semidesierto</span> es una región que tiene serios problemas para acceder a un periodismo de calidad, a pesar de que la prensa profesional está presente, como en la localidad de <span class="js--random-location-semidesierto"></span>.'
 
                 },
 
                 desierto : {
                     
-                    first : 'Estás en un <span data-category-highlight="desierto">desierto</span>. Esto significa que, en la práctica, casi no hay periodismo profesional de calidad en tu ciudad. Esto afecta gravemente a la calidad de la vida pública.',
+                    first : 'Estás en un <span data-category-highlight="desierto">desierto</span>. Esto significa que, en la práctica, casi no hay periodismo profesional de calidad en tu localidad. Esto afecta gravemente a la calidad de la vida pública.',
 
                     second : 'En un <span data-category-highlight="desierto">desierto</span>, en la práctica, casi no hay periodismo profesional de calidad. Este es el caso de <span class="js--random-location-desierto"></span>.'
 
@@ -942,7 +1240,7 @@ const app = {
 
                     console.log(ref, field, refs[ref], origin_of_information);
 
-                    field.innerHTML = (ref == 'type' & origin_of_information == 'cidade') ?
+                    field.innerHTML = (ref == 'type' & origin_of_information == 'localidad') ?
                     ('departamento de ' + state.user_location_province) :
                     origin_of_information;
 
@@ -952,15 +1250,15 @@ const app = {
 
                 // name
 
-                populate_field('name', state.user_location_name);
+                //populate_field('name', state.user_location_name);
 
                 // type
 
-                populate_field('type', state.user_location_type);
+                //populate_field('type', state.user_location_type);
 
                 // main category field
 
-                populate_field('main_category', user_category, dataset = 'category');
+                //populate_field('main_category', user_category, dataset = 'category');
 
                 // description field
 
@@ -987,7 +1285,7 @@ const app = {
 
                 populate_field(
                     'random_location_' + remain_cat1, 
-                    state.remaining_categories_locations[0]
+                    state.remaining_categories_locations[0].text
                     );
 
 
@@ -1002,7 +1300,7 @@ const app = {
 
                 populate_field(
                     'random_location_' + remain_cat2, 
-                    state.remaining_categories_locations[1]
+                    state.remaining_categories_locations[1].text
                     );
 
 
@@ -1017,7 +1315,7 @@ const app = {
 
                 populate_field(
                     'random_location_' + remain_cat3, 
-                    state.remaining_categories_locations[2]
+                    state.remaining_categories_locations[2].text
                     );
 
             }
@@ -1147,7 +1445,7 @@ const app = {
 
             variables : {
 
-                cidade : [ 'pobXmedios', 'pobXperiodistas' ],
+                localidad : [ 'pobXmedios', 'pobXperiodistas' ],
 
                 provincia : [ 'pobXmedios', 'pobXperiodistas', 'cat_media', 'Impacto de la publicidad oficial'],
 
@@ -1216,7 +1514,7 @@ const app = {
 
                             let key, location_stats;
 
-                            if (type == 'cidade') {
+                            if (type == 'localidad') {
 
                                 key = 'provincias';
 
@@ -1306,13 +1604,13 @@ const app = {
 
                         let data;
 
-                        if (type == 'cidade') {
+                        if (type == 'localidad') {
 
                             const provincia = app.vis.location_card.state.user_location_province;
 
                             // gets departments that belong to the current province
 
-                            data = app.data.fopea_data.cidade.filter(d => d.provincia == provincia);
+                            data = app.data.fopea_data.localidad.filter(d => d.provincia == provincia);
 
                         } else data = app.data.fopea_data.provincia;
 
@@ -1390,28 +1688,42 @@ const app = {
 
             console.log(data);
 
-            app.data.cidade = data[0];
+            app.data.localidad = data[0];
             app.data.mask = data[1];
             app.data.provincia = data[2];
-            app.data.fopea_data = data[3];
+            app.data.fopea_data = {
+                localidad : data[0].features.map(d => d.properties),
+                provincia : data[2].features.map(d => d.properties),
+                lista_locais : data[3]
+            };
 
-            // pre-process cidade data
-            app.data.cidade.features.forEach(el => {
+            const pobs = data[0].features.map(d => d.properties.pob);
+
+            console.log(pobs);
+
+            app.data.max_pob = Math.max(...pobs);
+            app.data.min_pob = Math.min(...pobs);
+            
+
+
+
+            // pre-process localidad data
+            app.data.localidad.features.forEach(el => {
 
                 const types = Object.keys(app.params.colors);
 
                 const categoria = el.properties.categoria;
 
-                const id = el.properties.gid;
-                const indice = ( (id - 1) % 4 );
+                //const id = el.properties.gid;
+                //const indice = ( (id - 1) % 4 );
 
 
-                const tipo = app.params.patterns.names[indice];
-                const type = types[indice];
-                const color = app.params.colors[type];
+                //const tipo = app.params.patterns.names[indice];
+                //const type = types[indice];
+                //const color = app.params.colors[type];
 
-                el.properties["tipo"] = tipo;
-                el.properties["color"] = color;
+                //el.properties["tipo"] = tipo;
+                //el.properties["color"] = color;
                 el.properties['color_real'] = categoria ?
                   app.params.colors[app.params.categories[+categoria-1]] :
                   'lightgray';
@@ -1432,7 +1744,7 @@ const app = {
 
             app.map_obj.on('load', function() {
 
-                app.map.cidade.initialize();
+                app.map.localidad.initialize();
                 app.map.province.initialize();
                 app.map.world_mask.initialize();
                 app.map.fog_of_war.initialize(); 

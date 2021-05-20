@@ -1046,3 +1046,25 @@ p.dash-stripplot-tooltip-visible {
 
 }
 
+
+/* nova capa */
+
+.vis-capa-container {
+
+    position: fixed;
+    width: 50vw;
+    top: calc(var(--header-height) * 2 );
+    height: calc(100vh - var(--header-height) - var(--header-height));  
+    z-index: 1;
+
+}
+
+#vis-capa {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+}
