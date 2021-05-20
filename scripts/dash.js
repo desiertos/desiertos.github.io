@@ -2746,8 +2746,8 @@ const dash = {
                 // initialize map
 
                 dash.map.world_mask.initialize();
-                dash.map.province.initialize();
                 dash.map.localidad.initialize();
+                dash.map.province.initialize();
                 dash.map.fog_of_war.initialize(); 
 
                 // monitor hover and click events on provinces
