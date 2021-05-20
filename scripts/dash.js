@@ -1615,10 +1615,15 @@ const dash = {
                         document.querySelector('[data-breadcrumbs-type="provincia"]').classList.remove('not-displayed');
                         document.querySelector('[data-breadcrumbs-type="localidad"]').classList.add('not-displayed');
 
+                        document.querySelector('[data-breadcrumbs-type="provincia"]').innerHTML = dash.vis.location_card.state.user_location;
+
                     } else {
 
                         document.querySelector('[data-breadcrumbs-type="provincia"]').classList.remove('not-displayed');
                         document.querySelector('[data-breadcrumbs-type="localidad"]').classList.remove('not-displayed');
+
+                        document.querySelector('[data-breadcrumbs-type="provincia"]').innerHTML = dash.vis.location_card.state.user_location_province;
+                        document.querySelector('[data-breadcrumbs-type="localidad"]').innerHTML = dash.vis.location_card.state.user_location;
 
 
                     }
@@ -2299,7 +2304,7 @@ const dash = {
                                 .duration(500)
                                 .attr('x', d => {
 
-                                    console.log(d.variable);
+                                    //console.log(d.variable);
 
                                     if (dash.vis.stripplot.scales.x[variable](d[variable])) {
 
@@ -2409,7 +2414,7 @@ const dash = {
 
                                     if (dash.vis.stripplot.scales.x[variable](+d[variable])) {
 
-                                        console.log(dash.vis.stripplot.scales.x[variable](+d[variable]));
+                                        //console.log(dash.vis.stripplot.scales.x[variable](+d[variable]));
 
                                         return dash.vis.stripplot.scales.x[variable](+d[variable])
                                         //-
@@ -2417,7 +2422,7 @@ const dash = {
                                 
                                     } else {
 
-                                        console.log(dash.vis.stripplot.scales.x[variable](+d[variable]));
+                                        //console.log(dash.vis.stripplot.scales.x[variable](+d[variable]));
 
                                         return 0
 
@@ -2441,7 +2446,7 @@ const dash = {
                             const force = dash.vis.stripplot.force;
                             const sim = force.simulation;
 
-                            console.log(data_complete);
+                            //console.log(data_complete);
 
                             sim.nodes(data_complete);
 
@@ -2489,7 +2494,7 @@ const dash = {
 
                             dash.vis.stripplot.force.simulation.force('collision', d3.forceCollide().radius(function(d) {
                             
-                                if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+                                //if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
     
                                 return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}))
                                 .force('x', d3.forceX().strength(strength).x(function(d) {
@@ -2649,7 +2654,7 @@ const dash = {
                         //.force('charge', d3.forceManyBody().strength(charge))
                         .force('collision', d3.forceCollide().radius(function(d) {
                             
-                            if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+                            //if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
 
                             return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}))
                         .alphaMin(0.25)
@@ -2690,7 +2695,7 @@ const dash = {
 
                         const type =  dash.vis.location_card.state.user_location_type;
 
-                        console.log(datum);
+                        //console.log(datum);
 
                         const local_hovered = datum.local;
 
@@ -2735,7 +2740,7 @@ const dash = {
 
                         if (type == 'localidad') {
 
-                            console.log('eh localidad, eh o ', local_hovered);
+                            //console.log('eh localidad, eh o ', local_hovered);
                             
                             dash.vis.stripplot.interactions.hover_on_strip.highlight_localidad_on_hover(local_hovered);
                             //dash.vis.stripplot.components.marks.render_lite.localidad(local_hovered);
@@ -2763,7 +2768,7 @@ const dash = {
                         dash.vis.stripplot.force.simulation
                         .force('collision', d3.forceCollide().radius(function(d) {
                             
-                            if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+                            //if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
 
                             return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}));
 
@@ -2791,7 +2796,7 @@ const dash = {
 
                         dash.vis.stripplot.force.simulation.force('collision', d3.forceCollide().radius(function(d) {
                         
-                            if (d.hovered) { console.log("esse é o hovered. ", d.local, )}
+                            //if (d.hovered) { console.log("esse é o hovered. ", d.local, )}
 
                             return d.hovered ? dash.vis.stripplot.dimensions.rect.highlight.height/4 : dash.vis.stripplot.dimensions.rect.other.height/4}))
                             .force('x', d3.forceX().strength(strength).x(function(d) {
@@ -2895,7 +2900,7 @@ const dash = {
 
         begin : function(data) {
 
-            console.log(data);
+            //console.log(data);
 
             dash.data.localidad = data[0];
             dash.data.mask = data[1];
