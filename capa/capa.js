@@ -5,7 +5,7 @@ const capa = {
         files : [
             
             'provv.geojson',
-            'mun_.geojson'
+            'mun2.json'
 
         ],
 
@@ -26,7 +26,7 @@ const capa = {
 
                 const data = capa.map.data.mun.features;
 
-                const domain = d3.extent(data, d => +d.properties.poblacion_residente);
+                const domain = d3.extent(data, d => +d.properties.pob);
 
                 console.log(domain);
 
@@ -183,12 +183,12 @@ const capa = {
                 d3.selectAll("circle.vis-cities")
                   .transition()
                   .duration(1000)
-                  .attr("r", d => capa.map.scales.radius(d.properties.poblacion_residente));
+                  .attr("r", d => capa.map.scales.radius(+d.properties.pob));
 
                 capa.map.force.simulation.force(
                     'collision', 
                     d3.forceCollide().strength(strength*1.5).radius(
-                        d => capa.map.scales.radius(d.properties.poblacion_residente) + 1
+                        d => capa.map.scales.radius(+d.properties.pob) + 1
                     )
                 );
 
@@ -367,7 +367,8 @@ const capa = {
                 .duration(1000)
                 .attr('r', capa.vis.params.after_radius)
                 .attr('cx', (d,i) => margin + get_x(i))
-                .attr('cy', (d,i) => margin + get_y(i));
+                .attr('cy', (d,i) => margin + get_y(i))
+                .style('stroke', 'none');
 
 
 
@@ -399,9 +400,9 @@ const capa = {
 
                     const data = capa.map.data.mun.features;
 
-                    capa.vis.scatterplot.scales.y.domain(d3.extent(data, d => +d.properties.cantidad_de_medios));
-                    capa.vis.scatterplot.scales.x.domain(d3.extent(data, d => +d.properties.poblacion_residente));
-                    capa.vis.scatterplot.scales.x_log.domain(d3.extent(data, d => +d.properties.poblacion_residente));
+                    capa.vis.scatterplot.scales.y.domain(d3.extent(data, d => +d.properties.cant_medios));
+                    capa.vis.scatterplot.scales.x.domain(d3.extent(data, d => +d.properties.pob));
+                    capa.vis.scatterplot.scales.x_log.domain(d3.extent(data, d => +d.properties.pob));
                     
                 }
 
@@ -458,8 +459,8 @@ const capa = {
                 d3.selectAll('circle.vis-cities')
                 .transition()
                 .duration(1000)
-                .attr('cy', d => y(+d.properties.cantidad_de_medios))
-                .attr('cx', d => x(+d.properties.poblacion_residente));
+                .attr('cy', d => y(+d.properties.cant_medios))
+                .attr('cx', d => x(+d.properties.pob));
 
                 capa.vis.scatterplot.axis.render();
 
@@ -472,7 +473,7 @@ const capa = {
                 d3.selectAll('circle.vis-cities')
                 .transition()
                 .duration(1000)
-                .attr('cx', d => x(+d.properties.poblacion_residente));
+                .attr('cx', d => x(+d.properties.pob));
 
                 capa.vis.scatterplot.axis.change_to_log();
 
@@ -480,6 +481,34 @@ const capa = {
             }
 
             
+        },
+
+        bar_chart : {
+
+            scales : {
+
+                x : d3.scaleLinear(),
+                y : d3.scaleBand(),
+                w : d3.scaleLinear(),
+
+                set : function() {
+
+
+
+                }
+
+            },
+
+            set_positions : {
+
+            },
+
+
+
+
+
+
+
         }
 
     },
@@ -633,11 +662,15 @@ const capa = {
 
                     const step = el.dataset.step;
 
+                    console.log('voltando, ', step, capa.scroller.steps.list);
+
                     const index_step = capa.scroller.steps.list.indexOf(step);
 
                     const step_anterior = capa.scroller.steps.list[index_step - 1];
 
-                    capa.scroller.render[step_anterior]();
+                    capa.scroller.render[step].reverse();
+
+                    //capa.scroller.render[step_anterior]();
 
                     console.log("saiu, ", step_anterior);
                 },
@@ -657,6 +690,11 @@ const capa = {
                 play : function() {
 
                     console.log('nada')
+                },
+
+                reverse : function() {
+
+
                 }
                 
             },
@@ -707,6 +745,7 @@ const capa = {
             capa.utils.colors.populate();
 
             // inicializa o scroller
+            capa.scroller.steps.get();
             capa.scroller.config();
 
             capa.utils.read_data();
