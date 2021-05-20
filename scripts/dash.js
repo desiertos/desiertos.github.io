@@ -72,7 +72,8 @@ const dash = {
         provincia : null,
         localidad : null,
         mask : null,
-        fopea_data : null
+        fopea_data : null,
+        argentina : null
 
     },
 
@@ -260,7 +261,21 @@ const dash = {
             
             return d3.formatDefaultLocale(locale).format(",.0f")(x)
 
-        }
+        },
+
+        evaluate_national_data : function() {
+
+            const data = dash.data.fopea_data.provincia;
+
+            dash.data.argentina = {
+
+                pob : d3.sum(data, d => +d.pob),
+                cant_medios : d3.sum(data, d => d.cant_medios),
+                cant_periodistas : d3.sum(data, d => d.cant_periodistas)
+
+            }
+
+        },
 
     },
 
@@ -1267,13 +1282,15 @@ const dash = {
 
             if (local.tipo == 'pais') {
 
-                data = {
+                // data = {
 
-                    'pob' : 44.94e6,
-                    'cant_medios' : '1.000',
-                    'cant_periodistas' : '100.000'
+                //     'pob' : 44.94e6,
+                //     'cant_medios' : '1.000',
+                //     'cant_periodistas' : '100.000'
 
-                }
+                // }
+
+                data = dash.data.argentina;
 
                 dash.vis.location_card.info_table.styles_country_view(true);
 
@@ -2907,6 +2924,9 @@ const dash = {
             dash.data.mask = data[1];
             dash.data.provincia = data[2];
             dash.data.fopea_data = data[3];
+
+            //get national data
+            dash.utils.evaluate_national_data();
 
             // pre-process localidad data
             dash.data.localidad.features.forEach(el => {
