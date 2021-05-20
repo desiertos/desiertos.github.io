@@ -705,7 +705,20 @@ p[data-text_field='medio_prototipico'] {
 
 .argentina .dashboard-basic-info-table-group [data-infotable_field] {
 
-    font-size: 2.5rem;
+    font-size: 2rem;
+    font-weight: 500;
+
+}
+
+.not-displayed {
+
+    display: none;
+
+}
+
+.dashboard--breadcrumbs li.not-displayed {
+
+    display: none;
 
 }
 
@@ -883,14 +896,15 @@ line.vis-dash-stripplot-separation {
     /*opacity : .5;*/
     stroke-width: 0;
     /*transform : translate(-50%, -50%);*/
-    transition: opacity .5s, fill .5s;
+    transition: opacity .5s, stroke .5s;
 
 }
 
 .vis-dash-stripplot-marks-hovered {
 
     opacity : 1;
-    fill : gold;
+    stroke : black;
+    stroke-width : 1px;
     transition: all .25s;
 }
 
@@ -949,7 +963,7 @@ p.dash-stripplot-tooltip {
     transform: translateY(-100%);
     font-family: var(--font-body);
     font-size: 10px;
-    color: gold;
+    color: black;
     transition: opacity .5s;
     pointer-events: none;
 

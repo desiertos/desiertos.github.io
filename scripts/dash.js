@@ -36,8 +36,8 @@ const dash = {
 
         geojsons : {
 
-            provincia : '../data/maps/arg_prov.json',
-            localidad : '../data/maps/arg_localidads.geojson',
+            provincia : '../data/maps/prov2.json',
+            localidad : '../data/maps/dep.json',
             mask : '../data/maps/arg_mask.json'
 
         },
@@ -72,7 +72,8 @@ const dash = {
         provincia : null,
         localidad : null,
         mask : null,
-        fopea_data : null
+        fopea_data : null,
+        argentina : null
 
     },
 
@@ -260,7 +261,21 @@ const dash = {
             
             return d3.formatDefaultLocale(locale).format(",.0f")(x)
 
-        }
+        },
+
+        evaluate_national_data : function() {
+
+            const data = dash.data.fopea_data.provincia;
+
+            dash.data.argentina = {
+
+                pob : d3.sum(data, d => +d.pob),
+                cant_medios : d3.sum(data, d => d.cant_medios),
+                cant_periodistas : d3.sum(data, d => d.cant_periodistas)
+
+            }
+
+        },
 
     },
 
@@ -273,66 +288,102 @@ const dash = {
                 dash.map_obj.addSource('localidad', {
                     type: 'geojson',
                     'data' : dash.data.localidad,
-                    'promoteId' : 'link'
+                    'promoteId' : 'randId'
                 });
 
                 dash.map_obj.addLayer({
                     'id': 'localidad',
-                    'type': 'circle',
+                    'type': 'fill',
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'circle-color': ['get', 'color_real'],
-                      'circle-radius' : [
-                          'case', [
-                              'boolean', 
-                              ['feature-state', 'hover'], 
-                              false
-                            ], 10,
-                            2,
-                        ],
-                      'circle-stroke-width': [
-                        'case', [
+                      'fill-color': ['get', 'color_real'],
+                      'fill-outline-color' : 'transparent',
+                      'fill-opacity': [
+                        'case',
+                        [
                             'boolean', 
                             ['feature-state', 'hover'], 
                             false
-                          ], 2,
-                          0,
                         ],
-                      'circle-stroke-color': [
-                        'case', [
+                        1,
+                        .8
+                      ]
+                    }
+                }); 
+
+                dash.map_obj.addLayer({
+                    'id': 'localidad-border-hover',
+                    'type': 'line',
+                    'source': 'localidad',
+                    'layout': {},
+                    'paint': {
+                      'line-color': '#666',
+                      'line-width': [
+                        'case',
+                        [
                             'boolean', 
                             ['feature-state', 'hover'], 
                             false
-                          ], '#ffffff',
-                          'transparent',
-                        ] 
+                        ],
+                        2,
+                        0
+                    ]
+                    }
+                }); 
+
+                dash.map_obj.addLayer({
+                    'id': 'localidad-border',
+                    'type': 'line',
+                    'source': 'localidad',
+                    'layout': {},
+                    'paint': {
+                      'line-color': '#666',
+                      'line-width': 0,
                     }
                 }); 
 
                 dash.map_obj.addLayer({
                     'id': 'localidad-highlight',
-                    'type': 'circle',
+                    'type': 'line',
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'circle-color': 'transparent',
-                      'circle-radius': 15,
-                      'circle-stroke-width': 2,
-                      'circle-stroke-color': 'black'
-                    }, 'filter': ['==', 'localidad', '']
+                      'line-color': 'black',
+                      'line-width': 3,
+                    }, 'filter': ['==', 'local', '']
                 }); 
 
             },
 
-            toggle_highlight_circle : function(localidad) {
+            toggle_highlight : function(localidad) {
 
                 dash.map_obj.setFilter(
                     'localidad-highlight', [
                         '==',
-                        ['get', 'localidad'],
+                        ['get', 'local'],
                         localidad
                 ]);
+
+            },
+
+            toggle_borders : function(option) {
+
+                // option: on/off
+
+                dash.map_obj.setPaintProperty(
+                    'localidad-border', 
+                    'line-width', option == 'on' ? 1 : 0
+                    // [
+                    //     'case', [
+                    //         'boolean', 
+                    //         ['feature-state', 'hover'], 
+                    //         false
+                    //     ], 
+                    //     option == 'on' ? 2 : 0,
+                    //     option == 'on' ? 1 : 0
+                    // ]
+                );
 
             },
                 
@@ -342,88 +393,127 @@ const dash = {
                         loseOnClick: false
                     }),
 
-            monitor_hover_event : function() {
+            hoveredStateId : null,
 
-                let hoveredStateId = null;
+            mouse_enter_handler : function (e) {
+                // Change the cursor style as a UI indicator.
+                dash.map_obj.getCanvas().style.cursor = 'pointer';
 
-                dash.map_obj.on('mouseenter', 'localidad', function (e) {
-                    // Change the cursor style as a UI indicator.
-                    dash.map_obj.getCanvas().style.cursor = 'pointer';
+                //console.log(e);
+                 
+                let coordinates = [
+                    e.features[0].properties.xc,
+                    e.features[0].properties.yc
+                ]; //e.features[0].geometry.coordinates.slice();
 
-                    console.log(e);
-                     
-                    let coordinates = e.features[0].geometry.coordinates.slice();
-                    let name = e.features[0].properties.localidad;
-                     
-                    // Ensure that if the map is zoomed out such that multiple
-                    // copies of the feature are visible, the popup appears
-                    // over the copy being pointed to.
-                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                    }
-                     
-                    // Populate the popup and set its coordinates
-                    // based on the feature found.
-                    dash.map.localidad.popup.setLngLat(coordinates).setHTML(name).addTo(dash.map_obj);
+                let name = e.features[0].properties.nam;
 
-                    ////////////
-                    // highlight circle
+                //console.log('mouse enter fired ', coordinates, name);
+                 
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
 
-                    if (hoveredStateId) {
-                        dash.map_obj.setFeatureState(
-                            { 
-                                source: 'localidad',
-                                id: hoveredStateId
-                            },
+                // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                // coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                // }
+                 
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                dash.map.localidad.popup.setLngLat(coordinates).setHTML(name).addTo(dash.map_obj);
 
-                            { hover : false }
-                        )
+                ////////////
+                // highlight polygon
 
-                        //console.log(' Quando eu venho aqui? ')
-                    }
-
-                    hoveredStateId = e.features[0].properties.link;
+                if (dash.map.localidad.hoveredStateId !== null) {
 
                     dash.map_obj.setFeatureState(
                         { 
                             source: 'localidad',
-                            id: hoveredStateId
+                            id: dash.map.localidad.hoveredStateId
                         },
 
-                        { hover : true }
+                        { hover : false }
                     )
-                });
-                     
-                dash.map_obj.on('mouseleave', 'localidad', function () {
 
-                    dash.map_obj.getCanvas().style.cursor = '';
-                    dash.map.localidad.popup.remove();
 
-                    // return circle to normal sizing and color
-                    if (hoveredStateId) {
-                        dash.map_obj.setFeatureState(
-                            { source: 'localidad', id: hoveredStateId },
-                            { hover: false }
-                        );
-                    }
-                
-                    hoveredStateId = null;
+                }
 
-                });
+                dash.map.localidad.hoveredStateId = e.features[0].properties.randId;
+
+                dash.map_obj.setFeatureState(
+                    { 
+                        source: 'localidad',
+                        id: dash.map.localidad.hoveredStateId
+                    },
+
+                    { hover : true }
+                )
+            },
+
+            mouse_leave_handler : function () {
+
+                dash.map_obj.getCanvas().style.cursor = '';
+                dash.map.localidad.popup.remove();
+
+                //console.log('fired mouse leave!!!!!!!', dash.map.localidad.hoveredStateId);
+
+                // return circle to normal sizing and color
+                if (dash.map.localidad.hoveredStateId !== null) {
+                    dash.map_obj.setFeatureState(
+                        { source: 'localidad', id: dash.map.localidad.hoveredStateId },
+                        { hover: false }
+                    );
+                }
+            
+                dash.map.localidad.hoveredStateId = null;
 
             },
 
-            click_event_handler : function(feature) {
+            monitor_events : function(option) {
+    
+                if (option == 'on') {
+
+                    console.log('MONITORING LOCALIDAD EVENTS');
+
+                    dash.map.localidad.hoveredStateId = null;
+
+                    dash.map_obj.on('mousemove', 'localidad', dash.map.localidad.mouse_enter_handler);
+                         
+                    dash.map_obj.on('mouseleave', 'localidad', dash.map.localidad.mouse_leave_handler);
+    
+                    dash.map_obj.on('click', 'localidad', dash.map.localidad.click_event_handler);
+
+                    // como tem o layer aqui, dá para no handler pegar o e.features!
+    
+                } else {
+
+                    console.log('turning off localidad event monitor');
+
+                    dash.map_obj.off('mousemove', 'localidad', dash.map.localidad.mouse_enter_handler);
+                         
+                    dash.map_obj.off('mouseleave', 'localidad', dash.map.localidad.mouse_leave_handler);
+    
+                    dash.map_obj.off('click', 'localidad', dash.map.localidad.click_event_handler);
+
+                    dash.map.localidad.hoveredStateId = null;
+                    
+                }
+    
+            },
+
+            click_event_handler : function(e) {
 
 
-                const localidad = feature.properties.localidad; //e.features[0].properties.localidad;
-                const provincia = feature.properties.provincia // e.features[0].properties.provincia;
+                const localidad = e.features[0].properties.local; //feature.properties.local;
+                const localidad_name = e.features[0].properties.nam;
+                const provincia = e.features[0].properties.provincia; //feature.properties.provincia;
 
                 const local = {
 
                     local : localidad,
                     tipo  : "localidad",
-                    text  : localidad + '(' + provincia + ')',
+                    text  : localidad_name,
                     provincia : provincia
 
                 };
@@ -452,7 +542,7 @@ const dash = {
                     'source': 'provincia',
                     'layout': {},
                     'paint': {
-                      'fill-color': 'hotpink',
+                      'fill-color': 'transparent',
                       'fill-opacity': [
                         'case',
                         [
@@ -472,16 +562,16 @@ const dash = {
                     'source': 'provincia',
                     'layout': {},
                     'paint': {
-                      'line-width': 4,
-                      'line-color': [
+                      'line-color': '#666',
+                      'line-width': [
                         'case',
                         [
                             'boolean', 
                             ['feature-state', 'hover'], 
                             false
                         ],
-                        "hotpink",
-                        "transparent"
+                        4,
+                        1
                     ]
                     }
                 }); 
@@ -510,67 +600,58 @@ const dash = {
 
             },
 
-            monitor_hover_event : function() {
+            mouse_enter_handler : function (e) {
 
-                let hoveredStateId = null;
+                // precisa desse if aqui para fazer tirar o estado de hover da provincia anterior quando passa para outra provincia
 
-                function highlight_on_hover(e) {
-
-                    // precisa desse if aqui para fazer tirar o estado de hover da provincia anterior quando passa para outra provincia
-
-                    if (hoveredStateId) {
-                        dash.map_obj.setFeatureState(
-                            { 
-                                source: 'provincia',
-                                id: hoveredStateId
-                            },
-
-                            { hover : false }
-                        )
-
-                        //console.log(' Quando eu venho aqui? ')
-                    }
-
-                    hoveredStateId = e.features[0].properties.nam;
-
+                if (dash.map.province.hoveredStateId) {
                     dash.map_obj.setFeatureState(
                         { 
                             source: 'provincia',
-                            id: hoveredStateId
+                            id: dash.map.province.hoveredStateId
                         },
 
-                        { hover : true }
+                        { hover : false }
                     )
 
-                    //console.log('Hover no ', hoveredStateId)
+                    //console.log(' Quando eu venho aqui? ')
+                }
 
-                    // algo mais a fazer aqui
+                dash.map.province.hoveredStateId = e.features[0].properties.nam;
 
-                };
+                dash.map_obj.setFeatureState(
+                    { 
+                        source: 'provincia',
+                        id: dash.map.province.hoveredStateId
+                    },
 
-                // function debounced(e) {
-                //     dash.utils.debounce(highlight_on_hover(e), wait = 10000);
-                // }
+                    { hover : true }
+                )
 
-                dash.map_obj.on('mousemove', 'provincia', highlight_on_hover);
+                //console.log('Hover no ', hoveredStateId)
 
-                dash.map_obj.on('mouseleave', 'provincia', function () {
-    
-                    if (hoveredStateId) {
-                        dash.map_obj.setFeatureState(
-                            { source: 'provincia', id: hoveredStateId },
-                            { hover: false }
-                        );
-                    }
-                
-                    hoveredStateId = null;
-                });
+                // algo mais a fazer aqui
 
             },
 
-            click_event_handler : function(feature) {
+            mouse_leave_handler : function () {
+    
+                if (dash.map.province.hoveredStateId) {
+                    dash.map_obj.setFeatureState(
+                        { source: 'provincia', id: dash.map.province.hoveredStateId },
+                        { hover: false }
+                    );
+                }
+            
+                dash.map.province.hoveredStateId = null;
+            },
 
-                const province_name = feature.properties.nam; //e.features[0].properties.nam;
+            click_event_handler : function(e) {
+
+                console.log(e);
+
+                //const province_name = feature.properties.nam; 
+                const province_name = e.features[0].properties.nam;
 
                 if (province_name != dash.vis.location_card.state.user_location_name) {
 
@@ -588,6 +669,57 @@ const dash = {
 
                 } else console.log('Clicou na mesma provincia, nao precisa renderizar.')
 
+            },
+
+            // handler_click_event : function(e) {
+
+            //     let features = dash.map_obj.queryRenderedFeatures(
+            //         e.point, 
+            //         //{ layers: ['provincia'] });
+            //         { layers: ['provincia'] });
+    
+            //     if (features.length) {
+    
+            //         let type = features[0].layer.id;
+    
+            //         if (type == 'provincia') type = 'province';
+    
+            //         console.log("Clicked on a", type, ". Detalhes: ", features, e);
+    
+            //         dash.map[type].click_event_handler(features[0]);
+    
+            //     }
+    
+            // },
+
+            hoveredStateId : null,
+    
+            monitor_events : function(option) {
+    
+                if (option == 'on') {
+
+                    dash.map_obj.on('mousemove', 'provincia', dash.map.province.mouse_enter_handler);
+    
+                    dash.map_obj.on('mouseleave', 'provincia', dash.map.province.mouse_leave_handler);
+
+                    dash.map_obj.on('click', 'provincia', dash.map.province.click_event_handler);
+
+                    // como tem o layer aqui, dá para no handler pegar o e.features!
+    
+                } else {
+
+                    console.log('turning off province event monitor');
+
+                    dash.map_obj.off('mousemove', 'provincia', dash.map.province.mouse_enter_handler);
+    
+                    dash.map_obj.off('mouseleave', 'provincia', dash.map.province.mouse_leave_handler);
+    
+                    dash.map_obj.off('click', 'provincia', dash.map.province.click_event_handler);
+
+                    dash.map.province.hoveredStateId = null;
+                    
+                }
+    
             }
 
         },
@@ -660,7 +792,7 @@ const dash = {
                     'type': 'fill',
                     'source': 'mask',
                     'layout': {},
-                    'paint': {'fill-color': 'ghostwhite'},
+                    'paint': {'fill-color': '#F4F0EC'},
                 });
 
             }
@@ -751,41 +883,22 @@ const dash = {
                 }
             );
 
-            // increases circle radius when zooming
+            // shows dept borders when zooming
 
-            dash.map_obj.setPaintProperty(
-                'localidad', 
-                'circle-radius', 
-                [
-                    'case', [
-                        'boolean', 
-                        ['feature-state', 'hover'], 
-                        false
-                    ], 10,
-                    5,
-                ]
-            );
+            dash.map.localidad.toggle_borders('on');
 
-        },
-
-        monitor_click_event : function() {
-
-            dash.map_obj.on('click', function(e) {
-                let features = dash.map_obj.queryRenderedFeatures(e.point, { layers: ['localidad', 'provincia'] });
-
-                if (features.length) {
-
-                    let type = features[0].layer.id;
-
-                    if (type == 'provincia') type = 'province';
-
-                    console.log("Clicked on a", type, ". Detalhes: ", features, e);
-
-                    dash.map[type].click_event_handler(features[0]);
-
-                }
-
-            });
+            // dash.map_obj.setPaintProperty(
+            //     'localidad', 
+            //     'line-color', 
+            //     [
+            //         'case', [
+            //             'boolean', 
+            //             ['feature-state', 'hover'], 
+            //             false
+            //         ], 10,
+            //         5,
+            //     ]
+            // );
 
         }
 
@@ -1023,7 +1136,7 @@ const dash = {
     
                     const parent = document.querySelector(ref);
     
-                    const data = dash.data.fopea_data.lista_locais.filter(d => d.tipo == "cidade");
+                    const data = dash.data.fopea_data.lista_locais.filter(d => d.tipo == "localidad");
     
                     data.forEach(row => {
     
@@ -1169,21 +1282,48 @@ const dash = {
 
             if (local.tipo == 'pais') {
 
-                data = {
+                // data = {
 
-                    'pob' : '44,94 milliones',
-                    'cant_medios' : '1.000',
-                    'cant_periodistas' : '100.000'
+                //     'pob' : 44.94e6,
+                //     'cant_medios' : '1.000',
+                //     'cant_periodistas' : '100.000'
 
-                }
+                // }
+
+                data = dash.data.argentina;
 
                 dash.vis.location_card.info_table.styles_country_view(true);
+
+                dash.vis.stripplot.hide_svg(true);
+
+                //turns off borders
+                dash.map.localidad.toggle_borders('off');
+                dash.map.localidad.toggle_highlight('');
+                dash.map.province.toggle_highlight_border_provincia('');
+                dash.map.fit_Argentina();
+
+                dash.map.localidad.monitor_events('off');
+                dash.map.province.monitor_events('on');
 
             } else {
 
                 data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
 
-                dash.vis.location_card.info_table.styles_country_view(false);
+                dash.vis.location_card.info_table.styles_country_view(local.tipo == 'provincia'); // if provincia, styles like country
+
+                dash.vis.stripplot.hide_svg(false);
+
+                if (local.tipo == 'provincia') {
+
+                    dash.vis.stripplot.hide_svg(true);
+
+                    //vai ligar quando chegar na província, e depois só desliga quando voltar para o país
+
+                    dash.map.localidad.monitor_events('off');
+                    dash.map.localidad.monitor_events('on');
+                    dash.map.province.monitor_events('off');
+
+                }
 
             }
 
@@ -1192,10 +1332,13 @@ const dash = {
             // if province, highlight on map
 
             if (local.tipo == 'provincia') {
+
                 dash.map.highlight_feature(local.local, type = 'provincia');
                 dash.map.province.toggle_highlight_border_provincia(local.local);
+                dash.map.localidad.toggle_highlight('');
+
             } else if (local.tipo == 'localidad') {
-                dash.map.localidad.toggle_highlight_circle(local.local);
+                dash.map.localidad.toggle_highlight(local.local);
             }
 
             //// seria o caso de levar isso para o render step do scroller?
@@ -1231,34 +1374,42 @@ const dash = {
 
             // with the fields updated, resize svg
 
-            dash.vis.stripplot.dimensions.set_size();
-            dash.vis.stripplot.scales.range.set();
-            dash.vis.stripplot.scales.set(local.tipo);
 
-            // render
+            // vis only for localidad now
 
-            if (new_view) {
+            if (local.tipo == 'localidad') {
 
-                dash.vis.stripplot.components.labels.render(local.tipo);
-                dash.vis.stripplot.components.lines.render(local.tipo);
-                dash.vis.stripplot.components.marks.render[local.tipo]();
-                dash.vis.stripplot.components.label_selected.render(local.tipo);
-                dash.vis.stripplot.components.min_max_labels.render(local.tipo);
-                dash.vis.stripplot.components.separation_lines.render(local.tipo);
+                dash.vis.stripplot.dimensions.set_size();
+                dash.vis.stripplot.scales.range.set();
+                dash.vis.stripplot.scales.set(local.tipo);
+    
+                // render
+    
+                if (new_view) {
+    
+                    dash.vis.stripplot.components.labels.render(local.tipo);
+                    dash.vis.stripplot.components.lines.render(local.tipo);
+                    dash.vis.stripplot.components.marks.render[local.tipo]();
+                    dash.vis.stripplot.components.label_selected.render(local.tipo);
+                    dash.vis.stripplot.components.min_max_labels.render(local.tipo);
+                    dash.vis.stripplot.components.separation_lines.render(local.tipo);
+    
+                } else {
+    
+                    dash.vis.stripplot.components.marks.render_lite[local.tipo]();
+                    dash.vis.stripplot.components.label_selected.render(local.tipo);
+    
+                }
 
-            } else {
+                // listeners
 
-                dash.vis.stripplot.components.marks.render_lite[local.tipo]();
-                dash.vis.stripplot.components.label_selected.render(local.tipo);
+                dash.vis.stripplot.interactions.hover_on_strip.monitor();
+                dash.vis.stripplot.interactions.click_on_strip.monitor();
+
 
             }
 
 
-
-            // listeners
-
-            dash.vis.stripplot.interactions.hover_on_strip.monitor();
-            dash.vis.stripplot.interactions.click_on_strip.monitor();
 
             //updates maps
 
@@ -1297,7 +1448,7 @@ const dash = {
 
                 user_location : null,
                 user_location_name : null,
-                user_location_type : null,
+                user_location_type : 'pais',
                 user_location_category : null,
                 user_location_province : null,
                 remaining_categories : null,
@@ -1305,6 +1456,8 @@ const dash = {
                 location_data : null,
 
                 set : function(local, data) {
+
+                    console.log(data);
 
                     const state = dash.vis.location_card.state;
 
@@ -1335,7 +1488,13 @@ const dash = {
 
                 pais : {
 
-                    name : () => 'Argentina'
+                    name : () => 'Argentina',
+
+                    category : () => '',
+
+                    category_description : () => '',
+
+                    medio_prototipico : () => '<strong>UN GRAN DESIERTO</strong>. En Argentina, un país de dimensiones continentales, el acceso a información de calidad se limita a unas pocas regiones. Existe un periodismo relativamente vigoroso en las zonas más pobladas y desarrolladas de la nación, como alrededor de la Capital Federal y en regiones urbanas como Córdoba y Rosario. Sin embargo, no se puede decir lo mismo de las inmensas áreas alejadas de estos centros. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pretium felis sit amet lorem mollis semper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, urna eget fringilla ultrices, lorem tortor euismod erat.'
 
                 },
 
@@ -1353,7 +1512,7 @@ const dash = {
 
                 localidad : {
 
-                    name : () => dash.vis.location_card.state.user_location_name,
+                    name : () => dash.vis.location_card.state.user_location,
 
                     category : () => dash.vis.location_card.state.user_location_category,
 
@@ -1464,6 +1623,29 @@ const dash = {
 
                     });
 
+                    if (type == 'pais') {
+
+                        document.querySelector('[data-breadcrumbs-type="provincia"]').classList.add('not-displayed');
+                        document.querySelector('[data-breadcrumbs-type="localidad"]').classList.add('not-displayed');
+
+                    } else if (type == 'provincia') {
+
+                        document.querySelector('[data-breadcrumbs-type="provincia"]').classList.remove('not-displayed');
+                        document.querySelector('[data-breadcrumbs-type="localidad"]').classList.add('not-displayed');
+
+                        document.querySelector('[data-breadcrumbs-type="provincia"]').innerHTML = dash.vis.location_card.state.user_location;
+
+                    } else {
+
+                        document.querySelector('[data-breadcrumbs-type="provincia"]').classList.remove('not-displayed');
+                        document.querySelector('[data-breadcrumbs-type="localidad"]').classList.remove('not-displayed');
+
+                        document.querySelector('[data-breadcrumbs-type="provincia"]').innerHTML = dash.vis.location_card.state.user_location_province;
+                        document.querySelector('[data-breadcrumbs-type="localidad"]').innerHTML = dash.vis.location_card.state.user_location;
+
+
+                    }
+
                 },
 
                 monitor_click : function() {
@@ -1480,13 +1662,19 @@ const dash = {
 
                         console.log('clicou no breadcrumb', type);
 
-                        if (type == 'pais') { 
+                        // if (type == 'pais') { 
 
-                            dash.vis.location_card.breadcrumbs.update(type);
-                            //montar um local pais
-                            dash.map.fit_Argentina();
+                        //     dash.vis.location_card.breadcrumbs.update(type);
+                        //     //montar um local pais
+                        //     const local = {
 
-                        } else if (type == 'provincia' & dash.vis.location_card.state.user_location_type == 'localidad') {
+
+                        //     }
+                        //     dash.map.fit_Argentina();
+
+                        // } else 
+                        
+                        if (type == 'provincia' & dash.vis.location_card.state.user_location_type == 'localidad') {
 
                             const current_provincia = dash.vis.location_card.state.user_location_province;
 
@@ -1919,7 +2107,7 @@ const dash = {
 
                         let domain = d3.extent(
                             data, 
-                            d => d[variable]
+                            d => +d[variable]
                         )
 
                         // if (variable == 'cat_media') {
@@ -1990,7 +2178,9 @@ const dash = {
                           .classed("vis-dash-stripplot-labels-variables", true)
                           .style("left", 0)
                           .style("top", (d,i) => dash.vis.stripplot.dimensions.strip_height*i + "px")
-                          .text((d,i) => dash.vis.stripplot.variables[type][i]);
+                          .text((d,i) => dash.vis.stripplot.variables.names[
+                            dash.vis.stripplot.variables[type][i]
+                          ]);
 
                     }
 
@@ -2132,7 +2322,7 @@ const dash = {
                                 .duration(500)
                                 .attr('x', d => {
 
-                                    console.log(d.variable);
+                                    //console.log(d.variable);
 
                                     if (dash.vis.stripplot.scales.x[variable](d[variable])) {
 
@@ -2234,23 +2424,23 @@ const dash = {
                                     
                                 })
                                 .attr('cy', d => 
-                                dash.vis.stripplot.scales.y[d.variable])
+                                dash.vis.stripplot.scales.y[+d.variable])
                                 .attr('cx', d => {
                                     //console.log(d.variable);
 
                                     const variable = d.variable;
 
-                                    if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+                                    if (dash.vis.stripplot.scales.x[variable](+d[variable])) {
 
-                                        console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+                                        //console.log(dash.vis.stripplot.scales.x[variable](+d[variable]));
 
-                                        return dash.vis.stripplot.scales.x[variable](d[variable])
+                                        return dash.vis.stripplot.scales.x[variable](+d[variable])
                                         //-
                                         //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
                                 
                                     } else {
 
-                                        console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
+                                        //console.log(dash.vis.stripplot.scales.x[variable](+d[variable]));
 
                                         return 0
 
@@ -2274,7 +2464,7 @@ const dash = {
                             const force = dash.vis.stripplot.force;
                             const sim = force.simulation;
 
-                            console.log(data_complete);
+                            //console.log(data_complete);
 
                             sim.nodes(data_complete);
 
@@ -2322,18 +2512,18 @@ const dash = {
 
                             dash.vis.stripplot.force.simulation.force('collision', d3.forceCollide().radius(function(d) {
                             
-                                if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+                                //if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
     
                                 return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}))
                                 .force('x', d3.forceX().strength(strength).x(function(d) {
 
                                     const variable = d.variable;
         
-                                    if (dash.vis.stripplot.scales.x[variable](d[variable])) {
+                                    if (dash.vis.stripplot.scales.x[variable](+d[variable])) {
         
                                        // console.log(dash.vis.stripplot.scales.x[variable](d[variable]));
         
-                                        return dash.vis.stripplot.scales.x[variable](d[variable])
+                                        return dash.vis.stripplot.scales.x[variable](+d[variable])
                                         //-
                                         //(d.local == dash.vis.location_card.state.user_location_name ? dash.vis.stripplot.dimensions.rect.highlight.width : dash.vis.stripplot.dimensions.rect.other.width)/2
                                 
@@ -2377,7 +2567,7 @@ const dash = {
 
                             })
                             .style('left', 0)
-                            .text(datum.local);
+                            .text(datum.nam);
 
                             label
                               .style('left', function(variable) {
@@ -2482,7 +2672,7 @@ const dash = {
                         //.force('charge', d3.forceManyBody().strength(charge))
                         .force('collision', d3.forceCollide().radius(function(d) {
                             
-                            if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+                            //if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
 
                             return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}))
                         .alphaMin(0.25)
@@ -2523,7 +2713,7 @@ const dash = {
 
                         const type =  dash.vis.location_card.state.user_location_type;
 
-                        console.log(datum);
+                        //console.log(datum);
 
                         const local_hovered = datum.local;
 
@@ -2545,7 +2735,7 @@ const dash = {
                             let tt = dash.vis.stripplot.sels.d3.container.select('p.dash-stripplot-tooltip');
 
                             tt
-                              .text(local_hovered)
+                              .text(datum.nam)
                               .style('top', (dash.vis.stripplot.scales.y[variable] - dash.vis.stripplot.dimensions.rect.other.height) + 'px');
 
                             tt
@@ -2568,7 +2758,7 @@ const dash = {
 
                         if (type == 'localidad') {
 
-                            console.log('eh localidad, eh o ', local_hovered);
+                            //console.log('eh localidad, eh o ', local_hovered);
                             
                             dash.vis.stripplot.interactions.hover_on_strip.highlight_localidad_on_hover(local_hovered);
                             //dash.vis.stripplot.components.marks.render_lite.localidad(local_hovered);
@@ -2596,7 +2786,7 @@ const dash = {
                         dash.vis.stripplot.force.simulation
                         .force('collision', d3.forceCollide().radius(function(d) {
                             
-                            if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
+                            //if (d.highlighted) { console.log("esse é o destacado. ", d.local, )}
 
                             return d.highlighted ? dash.vis.stripplot.dimensions.rect.highlight.height/4 + 2 : dash.vis.stripplot.dimensions.rect.other.height/4}));
 
@@ -2624,7 +2814,7 @@ const dash = {
 
                         dash.vis.stripplot.force.simulation.force('collision', d3.forceCollide().radius(function(d) {
                         
-                            if (d.hovered) { console.log("esse é o hovered. ", d.local, )}
+                            //if (d.hovered) { console.log("esse é o hovered. ", d.local, )}
 
                             return d.hovered ? dash.vis.stripplot.dimensions.rect.highlight.height/4 : dash.vis.stripplot.dimensions.rect.other.height/4}))
                             .force('x', d3.forceX().strength(strength).x(function(d) {
@@ -2678,7 +2868,7 @@ const dash = {
 
                             local : datum.local,
                             tipo : type,
-                            text : datum.local,
+                            text : datum.nam,
                             provincia : datum.provincia
 
                         }
@@ -2689,6 +2879,13 @@ const dash = {
                     }                     
 
                 }
+            },
+
+            hide_svg: function(option) {
+
+
+                dash.vis.stripplot.sels.d3.container.classed( 'not-displayed', option );
+
             }
 
 
@@ -2721,12 +2918,15 @@ const dash = {
 
         begin : function(data) {
 
-            console.log(data);
+            //console.log(data);
 
             dash.data.localidad = data[0];
             dash.data.mask = data[1];
             dash.data.provincia = data[2];
             dash.data.fopea_data = data[3];
+
+            //get national data
+            dash.utils.evaluate_national_data();
 
             // pre-process localidad data
             dash.data.localidad.features.forEach(el => {
@@ -2758,25 +2958,35 @@ const dash = {
                 // initialize map
 
                 dash.map.world_mask.initialize();
-                dash.map.province.initialize();
                 dash.map.localidad.initialize();
+                dash.map.province.initialize();
                 dash.map.fog_of_war.initialize(); 
 
                 // monitor hover and click events on provinces
 
-                dash.map.province.monitor_hover_event();
-                  //dash.map.province.monitor_click_event();
+                //dash.map.province.monitor_events('on');
 
                 // monitor hover and click events on localidads
 
-                dash.map.localidad.monitor_hover_event();
+                const local = {
+
+                    local: 'Argentina',
+                    tipo : 'pais',
+                    text : 'Argentina'
+
+                }
+
+                dash.vis.render_selected_place(local);
+
+                // commenting for now
+                // dash.map.localidad.monitor_hover_event();
                   //dash.map.localidad.monitor_click_event();
 
                 // monitor click events on localidad or provincia
-                dash.map.monitor_click_event();
+                //dash.map.monitor_click_event('on');
 
                 //fit map to continental Argentina
-                dash.map.fit_Argentina();
+                //dash.map.fit_Argentina();
 
                 // inicializa o scroller
                 //dash.scroller.config();
