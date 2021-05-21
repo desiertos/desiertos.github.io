@@ -1010,6 +1010,45 @@ const app = {
     
                 },
 
+                submit : function(e, search_content) {
+
+                    //console.log("hi!")
+
+                    //const search_content = input_el.value;
+
+                    //console.log(input_el.value);
+
+                    if (
+                        app.data.fopea_data.lista_locais
+                          .map(row => row.text)
+                          .indexOf(search_content) > 0
+                    ) {
+
+                        console.log("valor detectado", search_content);
+
+                        const local = app.data.fopea_data.lista_locais.filter(row => row.text == search_content)[0];
+
+                        console.log("tipo: ", local.tipo);
+                        console.log("nome: ", local.local);
+
+                        const data = app.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
+
+                        console.log("Local e Dados do resultado da pesquisa: ", local, data);
+
+                        app.interactions.story.search_bar.successful_result_action(local, data);
+
+
+                    } else {
+
+                        console.log("Valor invalido, chico")
+
+                        // fazer algo visível na página aqui
+
+                    }
+
+
+                },
+
                 listen_search : function() {
 
                     const ref_btn = app.interactions.story.search_bar.refs.search_button;
@@ -1022,41 +1061,19 @@ const app = {
 
                     btn.addEventListener('click', function(e) {
 
-                        //console.log("hi!")
-
                         const search_content = input_el.value;
 
-                        //console.log(input_el.value);
+                        app.interactions.story.search_bar.submit(e, search_content);
+                    }
+                    );
+                    input_el.addEventListener('keydown', function (e) {
 
-                        if (
-                            app.data.fopea_data.lista_locais
-                              .map(row => row.text)
-                              .indexOf(search_content) > 0
-                        ) {
+                        if (e.code === 'Enter') {  //checks whether the pressed key is "Enter"
 
-                            console.log("valor detectado", search_content);
-
-                            const local = app.data.fopea_data.lista_locais.filter(row => row.text == search_content)[0];
-
-                            console.log("tipo: ", local.tipo);
-                            console.log("nome: ", local.local);
-
-                            const data = app.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
-
-                            console.log("Local e Dados do resultado da pesquisa: ", local, data);
-
-                            app.interactions.story.search_bar.successful_result_action(local, data);
-
-
-                        } else {
-
-                            console.log("Valor invalido, chico")
-
-                            // fazer algo visível na página aqui
-
+                            console.log(e);
+                            const search_content = input_el.value;
+                            app.interactions.story.search_bar.submit(e, search_content);
                         }
-
-
                     });
 
                 },
@@ -1671,6 +1688,12 @@ const app = {
         monitors : function() {
 
             app.interactions.story.search_bar.listen_search();
+
+        },
+
+        prevents_scroll_on_opening : function() {
+
+
 
         },
 
