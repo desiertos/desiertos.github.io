@@ -775,6 +775,7 @@ const app = {
                app.map.clear_highlights_and_popups();
                app.map.fit_Argentina();
                app.map.localidad.toggle_highlight_border('');
+               if (document.querySelector('div.mapboxgl-popup')) document.querySelector('div.mapboxgl-popup').remove();
 
                 //app.interactions.story.toggle_visibility("dashboard_button");
 
