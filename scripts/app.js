@@ -772,6 +772,7 @@ const app = {
                 //app.map_obj.setPaintProperty('localidad', 'fill-outline-color', 'ghostwhite');
                 //app.map_obj.setPaintProperty('localidad', 'fill-opacity', .5);
                // app.map.set_initial_view();
+               app.ctrl.prevents_scroll_on_opening(true);
                app.map.clear_highlights_and_popups();
                app.map.fit_Argentina();
                app.map.localidad.toggle_highlight_border('');
@@ -794,6 +795,8 @@ const app = {
             // },
 
             'location-card' : function() {
+
+                app.ctrl.prevents_scroll_on_opening(false);
 
                 const type = app.vis.location_card.state.user_location_type;
                 const location = app.vis.location_card.state.user_location_name
@@ -1682,6 +1685,7 @@ const app = {
             app.scroller.steps.get();
             app.vis.stripplot.sels.d3.set(); // sets up d3 selections;
             app.utils.load_data();
+            app.ctrl.prevents_scroll_on_opening(true);
             
         },
 
@@ -1691,9 +1695,11 @@ const app = {
 
         },
 
-        prevents_scroll_on_opening : function() {
+        prevents_scroll_on_opening : function(option) {
 
+            const method = option ? 'add' : 'remove';
 
+            document.documentElement.classList[method]('prevent-scrolling');
 
         },
 

@@ -40,6 +40,10 @@ html {
 
 }
 
+.prevent-scrolling {
+    overflow-y: hidden;
+}
+
 img {
     display: block;
     max-width: 100%;
