@@ -199,7 +199,7 @@ const app = {
 
                 const cat_numeric = '' + (app.params.categories.indexOf(category) + 1);
 
-                const available_cities = data
+                let available_cities = data
                   .filter(d => d.provincia == state.user_location_province)
                   .filter(d => d.categoria == cat_numeric)
                   .map(d => (
@@ -208,6 +208,20 @@ const app = {
                           text  : d.nam
                       })
                     );
+
+                if (available_cities.length == 0) {
+
+                    // if there's no location in the province of the desired category, search the entire country.
+
+                    available_cities = data
+                        .filter(d => d.categoria == cat_numeric)
+                        .map(d => (
+                            {
+                                local : d.local,
+                                text  : d.nam
+                            })
+                        );
+                }
                 
                 console.log('available cities for category ', cat_numeric, available_cities)
 
