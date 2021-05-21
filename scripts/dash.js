@@ -73,7 +73,7 @@ const dash = {
         localidad : null,
         mask : null,
         fopea_data : null,
-        argentina : null
+        argentina : {}
 
     },
 
@@ -267,15 +267,16 @@ const dash = {
 
             const data = dash.data.fopea_data.provincia;
 
-            dash.data.argentina = {
+            const variables = ['pob', 'cant_medios', 'cant_periodistas', 'deserts_count', 'forests_count', 'semiserts_count', 'semiforests_count'];
 
-                pob : d3.sum(data, d => +d.pob),
-                cant_medios : d3.sum(data, d => d.cant_medios),
-                cant_periodistas : d3.sum(data, d => d.cant_periodistas)
+            variables.forEach(variable => dash.data.argentina[variable] = d3.sum(data, d=> +d[variable]))
+            // dash.data.argentina = {
 
-            }
+            //     pob : d3.sum(data, d => +d.pob),
+            //     cant_medios : d3.sum(data, d => d.cant_medios),
+            //     cant_periodistas : d3.sum(data, d => d.cant_periodistas),
 
-        },
+        }
 
     },
 
@@ -1772,6 +1773,60 @@ const dash = {
                 }
 
             },
+
+            barchart_count : {
+
+                ref : '.count-chart',
+                ref_fields : '.js--category-count',
+                
+                hide : function(option) {
+
+                    const method = option ? 'add' : 'remove';
+        
+                    document.querySelector(this.ref).classList[method]('not-displayer');
+        
+                },
+
+                evaluate : function(type) {
+
+                    const data = dash.vis.location_card.state.location_data;
+
+                    const fields = document.querySelectorAll(this.ref_fields);
+
+                    const variables = Array.from(fields).map(d => d.dataset.countVariable);
+
+                    const total = variables.reduce(
+                        (
+                            ac, current) =>  ac + +data[current], 
+                            0
+                        );
+
+                    console.log(fields, variables);
+
+                    fields.forEach(field => {
+
+                        const variable = field.dataset.countVariable;
+                        const category = field.dataset.category;
+                        const count = data[variable];
+                        const pct = (count / total) * 100;
+
+                        field.style.flexBasis = pct + '%';
+                        field.innerHTML = 
+                          category 
+                          + 's <span>' 
+                          + count 
+                          + ' (' 
+                          + dash.utils.format_value(pct) 
+                          + '%) </span>';
+
+                    })
+
+
+                }
+
+
+
+            }
 
             // update_text_fields : function() {
 

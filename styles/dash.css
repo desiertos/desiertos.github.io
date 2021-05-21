@@ -1082,3 +1082,42 @@ p.dash-stripplot-tooltip-visible {
     height: 100%;
 
 }
+
+/* bar chart count */
+
+div.counts {
+    display: flex;
+    width: 100%;
+}
+
+div.counts div {
+    color: var(--font-color);
+    flex: 1 1 0%;
+    transition: flex-basis .5s;
+    font-size: .5rem;
+    text-align: left;
+    padding: .2rem;
+    text-transform: capitalize;
+}
+
+div.counts div::before {
+    padding: 0;
+}
+
+div.counts div span {
+    display: block;
+}
+
+.counts-title {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: .6rem;
+    margin: .5rem 0;
+    font-weight: 400;
+    border-top: 1px solid currentColor;
+    padding-top: .75rem;
+}
+
+.counts [data-category]::before {
+    content: ''
+}
