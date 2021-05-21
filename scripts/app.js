@@ -37,13 +37,13 @@ const app = {
         geojsons : {
 
             provincia : '../data/maps/prov2.json',
-            localidad : '../data/maps/mun2.json',
+            localidad : '../data/maps/dep.json',
             mask : '../data/maps/arg_mask.json'
 
         },
 
-        //fopea_data : '../data/output.json',
-        place_names : '../data/places.json',
+        fopea_data : '../data/output_dash.json', 
+        //place_names : '../data/places.json',
 
         layers : {
 
@@ -90,7 +90,7 @@ const app = {
                 fetch(app.params.geojsons.localidad, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
-                fetch(app.params.place_names, {mode: 'cors'}).then( response => response.json())
+                fetch(app.params.fopea_data, {mode: 'cors'}).then( response => response.json())
         
             ])
               .then( data => app.ctrl.begin(data))
@@ -249,82 +249,37 @@ const app = {
 
                 app.map_obj.addLayer({
                     'id': 'localidad',
-                    'type': 'circle',
+                    'type': 'fill',
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'circle-color': ['get', 'color_real'],
-                      'circle-opacity': 0.5,
-                      'circle-stroke-color' : ['get', 'color_real'],
-                      'circle-stroke-width' : 1,
-                      'circle-stroke-opacity' : 1,
-                      'circle-radius' : [
-                            'let',
-                            'sqrt_pob',
-                            ['sqrt', ['to-number', ['get', 'pob'] ] ],
-
-                            [
-                                'interpolate', ['linear'], ['zoom'],
-
-                                3, [
-                                    'interpolate', ['linear'],
-                                    ['var', 'sqrt_pob'],
-                                    //0, 0,
-                                    Math.sqrt(app.data.min_pob), 2,
-                                    Math.sqrt(app.data.max_pob), 15
-                                ],
-
-                                12, [
-                                    'interpolate', ['linear'],
-                                    ['var', 'sqrt_pob'],
-                                    //0, 0,
-                                    Math.sqrt(app.data.min_pob), 6,
-                                    Math.sqrt(app.data.max_pob), 45
-                                ]
-                                
-                            ]
-                        ]
+                      'fill-color': ['get', 'color_real'],
+                      'fill-outline-color' : 'transparent',
+                      'fill-opacity' : 1
                     }
-                }, 'road-label'); // puts behind road-label
+                }); 
+
+                app.map_obj.addLayer({
+                    'id': 'localidad-border',
+                    'type': 'line',
+                    'source': 'localidad',
+                    'layout': {},
+                    'paint': {
+                      'line-color': '#666',
+                      'line-width': 0,
+                    }
+                }); 
 
                 app.map_obj.addLayer({
                     'id': 'localidad-highlight',
-                    'type': 'circle',
+                    'type': 'line',
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'circle-color': 'transparent',
-                      'circle-stroke-color' : '#999',
-                      'circle-stroke-width' : 1,
-                      'circle-radius' : [
-                            'let',
-                            'sqrt_pob',
-                            ['sqrt', ['to-number', ['get', 'pob'] ] ],
-
-                            [
-                                'interpolate', ['linear'], ['zoom'],
-
-                                3, [
-                                    'interpolate', ['linear'],
-                                    ['var', 'sqrt_pob'],
-                                    //0, 0,
-                                    Math.sqrt(app.data.min_pob), 2 + 4,
-                                    Math.sqrt(app.data.max_pob), 15 + 4
-                                ],
-
-                                12, [
-                                    'interpolate', ['linear'],
-                                    ['var', 'sqrt_pob'],
-                                    //0, 0,
-                                    Math.sqrt(app.data.min_pob), 6 + 4,
-                                    Math.sqrt(app.data.max_pob), 45 + 4
-                                ]
-                                
-                            ]
-                        ]
-                    },
-                    'filter': ['==', 'localidad', '']
-                }, 'road-label'); // puts behind road-label
+                      'line-color': 'black',
+                      'line-width': 3,
+                    }, 'filter': ['==', 'local', '']
+                }); 
 
             },
 
@@ -341,54 +296,52 @@ const app = {
 
             style_selected_city : function(localidad) {
 
-                app.map_obj.setPaintProperty(
-                    
-                    'localidad', 
-                    'circle-opacity',
-                    [
-                        'case',
-                        [
-                            '==',
-                            ['get', 'local'],
-                            localidad
-                        ],
-                        1,
-                        .5
-                    ]
-                )
+                if (localidad != '') {
 
-                app.map_obj.setPaintProperty(
+                    app.map_obj.setPaintProperty(
                     
-                    'localidad', 
-                    'circle-stroke-color',
-                    [
-                        'case',
+                        'localidad', 
+                        'fill-opacity',
                         [
-                            '==',
-                            ['get', 'local'],
-                            localidad
-                        ],
-                        '#212121',
-                        ['get', 'color_real']
+                            'case',
+                            [
+                                '==',
+                                ['get', 'local'],
+                                localidad
+                            ],
+                            1,
+                            .5
+                        ]
+                    );
+    
+                    app.map_obj.setPaintProperty(
                         
-                    ]
-                )
-
-                app.map_obj.setPaintProperty(
-                    
-                    'localidad', 
-                    'circle-stroke-width',
-                    [
-                        'case',
-                        [
-                            '==',
-                            ['get', 'local'],
-                            localidad
-                        ],
-                        2,
+                        'localidad-border', 
+                        'line-width',
                         1
-                    ]
-                )
+                    );
+
+                } else {
+
+                    app.map_obj.setPaintProperty(
+                    
+                        'localidad', 
+                        'fill-opacity',
+                        1
+                    );
+    
+                    app.map_obj.setPaintProperty(
+                        
+                        'localidad-border', 
+                        'line-width',
+                        0
+                    );
+
+                }
+
+
+
+                // toggle highlight border?
 
             }
 
@@ -421,16 +374,27 @@ const app = {
                     'layout': {},
                     'paint': {
                       'line-color': '#666',
-                      'line-width': 2
+                      'line-width': 1
+                    }
+                });
+
+                app.map_obj.addLayer({
+                    'id': 'provincia-highlight',
+                    'type': 'line',
+                    'source': 'provincia',
+                    'layout': {},
+                    'paint': {
+                      'line-color': '#666',
+                      'line-width': 3
                     },
-                    'filter': ['==', 'provincia', '']}); // puts behind road-label
+                    'filter': ['==', 'provincia', '']});
 
             },
 
             toggle_highlight_border_provincia : function(provincia) {
 
                 app.map_obj.setFilter(
-                    'provincia-border', [
+                    'provincia-highlight', [
                         '==',
                         ['get', 'nam'],
                         provincia
@@ -528,9 +492,14 @@ const app = {
 
             const location_data = app.data.fopea_data[type].filter(d => d.local == location)[0];
 
-            const location_coordinates = app.data.localidad.features
+            const location_feature = app.data.localidad.features
             .filter(d => d.properties.local == location)
-            [0].geometry.coordinates;
+            [0]//.geometry.coordinates;
+
+            let location_coordinates = [
+                location_feature.properties.xc,
+                location_feature.properties.yc
+            ];
 
             console.log('Location Data for', name, location_data);
 
@@ -685,25 +654,7 @@ const app = {
             app.map_obj.setPaintProperty(
                     
                 'localidad', 
-                'circle-opacity',
-                category == 'all' ? 
-                .5 :
-                [
-                    'case',
-                    [
-                        '==',
-                        ['get', 'categoria'],
-                        category
-                    ],
-                    .5,
-                    0
-                ]
-            );
-
-            app.map_obj.setPaintProperty(
-                    
-                'localidad', 
-                'circle-stroke-opacity',
+                'fill-opacity',
                 category == 'all' ? 
                 1 :
                 [
@@ -717,6 +668,24 @@ const app = {
                     0
                 ]
             );
+
+            // app.map_obj.setPaintProperty(
+                    
+            //     'localidad', 
+            //     'circle-stroke-opacity',
+            //     category == 'all' ? 
+            //     1 :
+            //     [
+            //         'case',
+            //         [
+            //             '==',
+            //             ['get', 'categoria'],
+            //             category
+            //         ],
+            //         1,
+            //         0
+            //     ]
+            // );
 
         }
 
@@ -914,6 +883,7 @@ const app = {
 
                 app.map.fit_Argentina();
                 app.map.clear_highlights_and_popups();
+                app.map.localidad.style_selected_city('');
                 app.map.highlight_category("4");
 
             },
@@ -1081,7 +1051,7 @@ const app = {
 
                     // populates fields
 
-                    app.vis.location_card.update_text_fields();
+                    //app.vis.location_card.update_text_fields();
 
                     // with the fields updated, resize svg
 
@@ -1691,11 +1661,12 @@ const app = {
             app.data.localidad = data[0];
             app.data.mask = data[1];
             app.data.provincia = data[2];
-            app.data.fopea_data = {
-                localidad : data[0].features.map(d => d.properties),
-                provincia : data[2].features.map(d => d.properties),
-                lista_locais : data[3]
-            };
+            app.data.fopea_data = data[3];
+            // {
+            //     localidad : data[0].features.map(d => d.properties),
+            //     provincia : data[2].features.map(d => d.properties),
+            //     lista_locais : data[3]
+            // };
 
             const pobs = data[0].features.map(d => d.properties.pob);
 
