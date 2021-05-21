@@ -319,7 +319,16 @@ const dash = {
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'line-color': '#666',
+                      'line-color': [
+                        'case',
+                        [
+                            'boolean', 
+                            ['feature-state', 'hover'], 
+                            false
+                        ],
+                        '#212121',
+                        '#666'
+                    ],
                       'line-width': [
                         'case',
                         [
@@ -327,7 +336,7 @@ const dash = {
                             ['feature-state', 'hover'], 
                             false
                         ],
-                        2,
+                        3,
                         0
                     ]
                     }
@@ -365,6 +374,22 @@ const dash = {
                         ['get', 'local'],
                         localidad
                 ]);
+
+                dash.map_obj.setPaintProperty(
+                    
+                    'localidad', 
+                    'fill-opacity',
+                    [
+                        'case',
+                        [
+                            '==',
+                            ['get', 'local'],
+                            localidad
+                        ],
+                        1,
+                        .8
+                    ]
+                );
 
             },
 
@@ -1829,7 +1854,7 @@ const dash = {
                         const pct = (count / total) * 100;
 
                         field.style.flexBasis = pct + '%';
-                        field.innerHTML = 
+                        field.innerHTML = pct == 0 ? '' : 
                           count 
                           + '<span> (' 
                           + dash.utils.format_value(pct) 
