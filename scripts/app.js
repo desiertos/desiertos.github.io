@@ -181,7 +181,7 @@ const app = {
 
                 const categories = app.params.categories;
 
-                location_category = categories[ data['categoria'] - 1 ];
+                location_category = categories[ +data['categoria'] - 1 ];
                 
             }
 
@@ -199,8 +199,6 @@ const app = {
 
                 const cat_numeric = '' + (app.params.categories.indexOf(category) + 1);
 
-                console.log(cat_numeric);
-
                 const available_cities = data
                   .filter(d => d.provincia == state.user_location_province)
                   .filter(d => d.categoria == cat_numeric)
@@ -210,10 +208,12 @@ const app = {
                           text  : d.nam
                       })
                     );
+                
+                console.log('available cities for category ', cat_numeric, available_cities)
 
                 const amount_available_cities = available_cities.length;
 
-                console.log(available_cities);
+                //console.log(available_cities);
 
                 // get a random city
 
@@ -491,6 +491,11 @@ const app = {
             const type = 'localidad';
 
             const location_data = app.data.fopea_data[type].filter(d => d.local == location)[0];
+
+            const categoria = location_data.categoria;
+
+            location_data.color_real =
+            app.params.colors[app.params.categories[+categoria-1]];
 
             const location_feature = app.data.localidad.features
             .filter(d => d.properties.local == location)
@@ -974,7 +979,7 @@ const app = {
                       .filter(d => d.tipo == "localidad")
                       .sort((a,b) => a.local - b.local);
 
-                    console.log(data);
+                    //console.log(data);
     
                     data.forEach(row => {
     
@@ -1023,7 +1028,7 @@ const app = {
 
                             const data = app.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
 
-                            console.log("Dados: ", data);
+                            console.log("Local e Dados do resultado da pesquisa: ", local, data);
 
                             app.interactions.story.search_bar.successful_result_action(local, data);
 
@@ -1051,7 +1056,7 @@ const app = {
 
                     // populates fields
 
-                    //app.vis.location_card.update_text_fields();
+                    app.vis.location_card.update_text_fields();
 
                     // with the fields updated, resize svg
 
@@ -1208,7 +1213,7 @@ const app = {
 
                     const field = document.querySelector(refs[ref]);
 
-                    console.log(ref, field, refs[ref], origin_of_information);
+                    console.log('Populating field... ', ref, field, refs[ref], origin_of_information);
 
                     field.innerHTML = (ref == 'type' & origin_of_information == 'localidad') ?
                     ('departamento de ' + state.user_location_province) :
@@ -1656,7 +1661,7 @@ const app = {
 
         begin : function(data) {
 
-            console.log(data);
+            //console.log(data);
 
             app.data.localidad = data[0];
             app.data.mask = data[1];
@@ -1670,7 +1675,7 @@ const app = {
 
             const pobs = data[0].features.map(d => d.properties.pob);
 
-            console.log(pobs);
+            //console.log(pobs);
 
             app.data.max_pob = Math.max(...pobs);
             app.data.min_pob = Math.min(...pobs);
