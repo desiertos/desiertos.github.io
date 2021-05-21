@@ -155,7 +155,7 @@ const app = {
 
         get_category_from_data : function(local, data) {
 
-            console.log(local, data);
+            //console.log(local, data);
 
             let location_category;
 
@@ -223,7 +223,7 @@ const app = {
                         );
                 }
                 
-                console.log('available cities for category ', cat_numeric, available_cities)
+                //console.log('available cities for category ', cat_numeric, available_cities)
 
                 const amount_available_cities = available_cities.length;
 
@@ -520,7 +520,7 @@ const app = {
                 location_feature.properties.yc
             ];
 
-            console.log('Location Data for', name, location_data);
+            //console.log('Location Data for', name, location_data);
 
             const new_popup = app.map.popup(name);
 
@@ -611,7 +611,7 @@ const app = {
 
             // this 'name' will be used by the add_popup
 
-            console.log(type, location);
+            //console.log(type, location);
 
             // type provincia, localidad
 
@@ -638,14 +638,14 @@ const app = {
 
             const location_data = app.data.fopea_data[type].filter(d => d.local == location)[0];
 
-            console.log(location_data);
+            //console.log(location_data);
 
             let bbox_highlighted = [
                 location_data.xmin, location_data.ymin,
                 location_data.xmax, location_data.ymax
             ];  
             
-            console.log(bbox_highlighted);
+            //console.log(bbox_highlighted);
         
             app.map_obj.fitBounds(
                 bbox_highlighted, 
@@ -752,7 +752,7 @@ const app = {
 
                     app.scroller.render[step_anterior]();
 
-                    console.log("saiu, ", step_anterior);
+                    //console.log("saiu, ", step_anterior);
                 },
 
                 offset: 0.5, // enter at middle of viewport
@@ -1060,7 +1060,7 @@ const app = {
                     const btn = document.querySelector(ref_btn);
                     const input_el = document.querySelector(ref_input);
 
-                    console.log(btn);
+                    //console.log(btn);
 
                     btn.addEventListener('click', function(e) {
 
@@ -1073,7 +1073,7 @@ const app = {
 
                         if (e.code === 'Enter') {  //checks whether the pressed key is "Enter"
 
-                            console.log(e);
+                            //console.log(e);
                             const search_content = input_el.value;
                             app.interactions.story.search_bar.submit(e, search_content);
                         }
@@ -1248,7 +1248,7 @@ const app = {
 
                     const field = document.querySelector(refs[ref]);
 
-                    console.log('Populating field... ', ref, field, refs[ref], origin_of_information);
+                    //console.log('Populating field... ', ref, field, refs[ref], origin_of_information);
 
                     field.innerHTML = (ref == 'type' & origin_of_information == 'localidad') ?
                     ('departamento de ' + state.user_location_province) :
@@ -1286,7 +1286,7 @@ const app = {
 
                 let remain_cat1 = state.remaining_categories[0];
 
-                console.log('Remain cat1', remain_cat1);
+                //console.log('Remain cat1', remain_cat1);
 
                 populate_field(
                     'text_remaining_category1', 
@@ -1301,7 +1301,7 @@ const app = {
 
                 let remain_cat2 = state.remaining_categories[1];
 
-                console.log('Remain cat2', remain_cat2);
+                //console.log('Remain cat2', remain_cat2);
 
                 populate_field(
                     'text_remaining_category2', 
@@ -1316,7 +1316,7 @@ const app = {
 
                 let remain_cat3 = state.remaining_categories[2];
 
-                console.log('Remain cat3', remain_cat3);
+                //console.log('Remain cat3', remain_cat3);
 
                 populate_field(
                     'text_remaining_category3', 
@@ -1500,7 +1500,7 @@ const app = {
                     const dimensions = app.vis.stripplot.dimensions;
                     const scales = app.vis.stripplot.scales;
 
-                    console.log("setting scales...", type, variables)
+                    //console.log("setting scales...", type, variables)
 
                     variables.forEach((variable,i) => {
 
