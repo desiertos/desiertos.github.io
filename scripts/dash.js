@@ -699,6 +699,15 @@ const dash = {
     
                 if (option == 'on') {
 
+                    if (dash.map.province.hoveredStateId) {
+                        dash.map_obj.setFeatureState(
+                            { source: 'provincia', id: dash.map.province.hoveredStateId },
+                            { hover: false }
+                        );
+                    }
+
+                    //dash.map.localidad.hoveredStateId = null;
+
                     dash.map_obj.on('mousemove', 'provincia', dash.map.province.mouse_enter_handler);
     
                     dash.map_obj.on('mouseleave', 'provincia', dash.map.province.mouse_leave_handler);
@@ -717,7 +726,7 @@ const dash = {
     
                     dash.map_obj.off('click', 'provincia', dash.map.province.click_event_handler);
 
-                    dash.map.province.hoveredStateId = null;
+                    //dash.map.province.hoveredStateId = null;
                     
                 }
     
@@ -1339,7 +1348,9 @@ const dash = {
                 dash.map.localidad.toggle_highlight('');
 
             } else if (local.tipo == 'localidad') {
+
                 dash.map.localidad.toggle_highlight(local.local);
+
             }
 
             //// seria o caso de levar isso para o render step do scroller?
@@ -1383,6 +1394,8 @@ const dash = {
                 dash.vis.stripplot.dimensions.set_size();
                 dash.vis.stripplot.scales.range.set();
                 dash.vis.stripplot.scales.set(local.tipo);
+
+                dash.vis.location_card.barchart_count.hide(true);
     
                 // render
     
@@ -1407,6 +1420,11 @@ const dash = {
                 dash.vis.stripplot.interactions.hover_on_strip.monitor();
                 dash.vis.stripplot.interactions.click_on_strip.monitor();
 
+            } else {
+
+                console.log('barchart');
+                dash.vis.location_card.barchart_count.hide(false);
+                dash.vis.location_card.barchart_count.evaluate();
 
             }
 
@@ -1783,11 +1801,11 @@ const dash = {
 
                     const method = option ? 'add' : 'remove';
         
-                    document.querySelector(this.ref).classList[method]('not-displayer');
+                    document.querySelector(this.ref).classList[method]('not-displayed');
         
                 },
 
-                evaluate : function(type) {
+                evaluate : function() {
 
                     const data = dash.vis.location_card.state.location_data;
 
@@ -1812,10 +1830,8 @@ const dash = {
 
                         field.style.flexBasis = pct + '%';
                         field.innerHTML = 
-                          category 
-                          + 's <span>' 
-                          + count 
-                          + ' (' 
+                          count 
+                          + '<span> (' 
                           + dash.utils.format_value(pct) 
                           + '%) </span>';
 
