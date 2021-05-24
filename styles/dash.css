@@ -464,14 +464,16 @@ input#location-search {
 
 button.relato {
 
-    position: absolute;
-    top: 1.5rem;
-    right: 1rem;
+    /*position: absolute;*/
+    /*top: 1.5rem;*/
+    /*right: 1rem;*/
     font-family: var(--font-body);
-    background-color: white;
-    color: var(--font-color);
+    background-color: var(--font-color);
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: .1em;
     border: 2px solid var(--font-color);
-    padding: .2rem .4rem;
+    padding: .1rem .2rem;
     font-size: .7rem;
 
 }
@@ -549,6 +551,18 @@ aside button.close-aside {
 aside button.close-aside:hover {
     transform-origin: center center;
     transform: scale(1.1);
+}
+
+article[data-provincia-informe] {
+
+    display: none;
+
+}
+
+article[data-provincia-informe].active {
+
+    display: block;
+    
 }
 
 /* Story - location card*/
