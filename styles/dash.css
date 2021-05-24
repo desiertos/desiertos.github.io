@@ -29,6 +29,8 @@
 
     --color-grey: #9A9A9A;
 
+    font-size: calc(.5em + 1vw);
+
 }
 
 * {
@@ -513,11 +515,13 @@ aside h2 {
         
 }
 
-aside h3 {
-    margin-top: 0;
-    margin-bottom: 1rem;
+aside footer .investigator {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    padding-top: .75rem;
     font-family: var(--font-body);
-    font-weight: normal;
+    font-weight: bold;
+    border-top: 2px solid grey;
 }
 
 aside.folded {
@@ -1094,7 +1098,7 @@ div.counts div {
     color: var(--font-color);
     flex: 1 1 0%;
     transition: flex-basis .5s;
-    font-size: .5rem;
+    font-size: .6rem;
     text-align: left;
     padding: .2rem;
     text-transform: capitalize;
