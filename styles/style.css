@@ -27,6 +27,8 @@
     --color-vis-variable-label : #636363;
     --color-vis-axis : #E5E5E5;
 
+    font-size: calc(.5em + .75vw);
+
 }
 
 * {
