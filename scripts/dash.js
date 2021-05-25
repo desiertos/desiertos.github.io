@@ -267,7 +267,7 @@ const dash = {
 
             const data = dash.data.fopea_data.provincia;
 
-            const variables = ['pob', 'cant_medios', 'cant_periodistas', 'deserts_count', 'forests_count', 'semiserts_count', 'semiforests_count'];
+            const variables = ['pob', 'cant_medios', 'cant_periodistas', 'deserts_count', 'forests_count', 'semideserts_count', 'semiforests_count'];
 
             variables.forEach(variable => dash.data.argentina[variable] = d3.sum(data, d=> +d[variable]))
             // dash.data.argentina = {
