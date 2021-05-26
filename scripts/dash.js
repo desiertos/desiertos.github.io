@@ -1337,7 +1337,7 @@ const dash = {
             ref : {
 
                 button : 'button.menu-toggle',
-                menu : 'nav.menu'
+                menu : 'ul.menu'
 
             },
 
