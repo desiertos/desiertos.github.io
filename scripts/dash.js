@@ -648,7 +648,23 @@ const dash = {
 
             },
 
+            popup: new mapboxgl.Popup(
+                {
+                    closeButton: false,
+                    loseOnClick: false
+                }),
+
             mouse_enter_handler : function (e) {
+
+                // pop up
+                let coordinates = [
+                    e.features[0].properties.xc,
+                    e.features[0].properties.yc
+                ]; 
+
+                let name = e.features[0].properties.nam;
+
+                dash.map.province.popup.setLngLat(coordinates).setHTML(name).addTo(dash.map_obj);
 
                 // precisa desse if aqui para fazer tirar o estado de hover da provincia anterior quando passa para outra provincia
 
@@ -683,6 +699,8 @@ const dash = {
             },
 
             mouse_leave_handler : function () {
+
+                dash.map.province.popup.remove();
     
                 if (dash.map.province.hoveredStateId) {
                     dash.map_obj.setFeatureState(
