@@ -1137,6 +1137,32 @@ const app = {
 
         },
 
+        menu : {
+
+            ref : {
+
+                button : 'button.menu-toggle',
+                menu : 'ul.menu'
+
+            },
+
+            monitor_click : function() {
+
+                const btn = document.querySelector(this.ref.button);
+                const menu = document.querySelector(this.ref.menu);
+
+                btn.addEventListener('click', function(e) {
+
+                    menu.classList.toggle('is-open');
+                    btn.classList.toggle('clicked');
+
+                })
+
+
+            }
+
+        }
+
     },
 
     vis : {
@@ -1686,6 +1712,7 @@ const app = {
             app.vis.stripplot.sels.d3.set(); // sets up d3 selections;
             app.utils.load_data();
             app.ctrl.prevents_scroll_on_opening(true);
+            app.interactions.menu.monitor_click();
             
         },
 
