@@ -55,7 +55,7 @@ header {
     left: 0;
     right: 0;
     height: var(--header-height);
-    z-index: 1;
+    z-index: 3;
     background-color: white;
     border-bottom: 2px solid var(--header-border-color);
     display: flex;
@@ -106,6 +106,58 @@ nav {
     margin-left: auto;
     align-items: center;
 }
+
+/* menu */
+
+nav.menu.is-open {
+
+    display: flex;
+
+}
+
+nav.menu {
+
+    display: none;
+    position: fixed;
+    top: var(--header-height);
+    bottom: 0;
+    right: 0;
+    width: 200px; /*corrigir*/
+    flex-direction: column;
+    outline: 1px solid tomato;
+}
+
+.menu li > a {
+
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    text-align: center;
+
+}
+
+.menu li {
+
+    text-transform: uppercase;
+    font-family: var(--font-body);
+    flex: 1 1 auto;
+    list-style: none;
+    border: 1px solid var(--font-color);
+    background-color: white;
+    font-size: .8rem;
+    width: 100%;
+    justify-content: center;
+
+    display: flex;
+    align-items: center;
+
+}
+
+.menu li img {
+    max-height: var(--header-height);
+}
+
+/* fim menu */
 
 .menu-toggle {
     color: var(--header-border-color);

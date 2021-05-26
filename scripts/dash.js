@@ -1330,6 +1330,31 @@ const dash = {
 
             }
 
+        },
+
+        menu : {
+
+            ref : {
+
+                button : 'button.menu-toggle',
+                menu : 'nav.menu'
+
+            },
+
+            monitor_click : function() {
+
+                const btn = document.querySelector(dash.interactions.menu.ref.button);
+                const menu = document.querySelector(dash.interactions.menu.ref.menu);
+
+                btn.addEventListener('click', function(e) {
+
+                    menu.classList.toggle('is-open');
+
+                })
+
+
+            }
+
         }
 
     },
@@ -3039,6 +3064,7 @@ const dash = {
             dash.interactions.relato_periodista.monitor('close');
             dash.interactions.relato_periodista.monitor('toggle');
             dash.vis.location_card.breadcrumbs.monitor_click();
+            dash.interactions.menu.monitor_click();
 
             dash.utils.load_data();
             
