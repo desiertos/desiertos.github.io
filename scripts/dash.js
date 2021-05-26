@@ -267,7 +267,7 @@ const dash = {
 
             const data = dash.data.fopea_data.provincia;
 
-            const variables = ['pob', 'cant_medios', 'cant_periodistas', 'deserts_count', 'forests_count', 'semiserts_count', 'semiforests_count'];
+            const variables = ['pob', 'cant_medios', 'cant_periodistas', 'deserts_count', 'forests_count', 'semideserts_count', 'semiforests_count'];
 
             variables.forEach(variable => dash.data.argentina[variable] = d3.sum(data, d=> +d[variable]))
             // dash.data.argentina = {
@@ -319,7 +319,16 @@ const dash = {
                     'source': 'localidad',
                     'layout': {},
                     'paint': {
-                      'line-color': '#666',
+                      'line-color': [
+                        'case',
+                        [
+                            'boolean', 
+                            ['feature-state', 'hover'], 
+                            false
+                        ],
+                        '#212121',
+                        '#666'
+                    ],
                       'line-width': [
                         'case',
                         [
@@ -327,7 +336,7 @@ const dash = {
                             ['feature-state', 'hover'], 
                             false
                         ],
-                        2,
+                        3,
                         0
                     ]
                     }
@@ -365,6 +374,22 @@ const dash = {
                         ['get', 'local'],
                         localidad
                 ]);
+
+                dash.map_obj.setPaintProperty(
+                    
+                    'localidad', 
+                    'fill-opacity',
+                    [
+                        'case',
+                        [
+                            '==',
+                            ['get', 'local'],
+                            localidad
+                        ],
+                        1,
+                        .8
+                    ]
+                );
 
             },
 
@@ -1224,7 +1249,8 @@ const dash = {
 
                 text : '.investigator-story',
                 close_button : 'button.close-aside',
-                toggle_button : 'button.relato'
+                toggle_button : 'button.relato',
+                articles : '[data-provincia-informe]'
 
             },
 
@@ -1274,6 +1300,34 @@ const dash = {
 
                 btn.addEventListener('click', dash.interactions.relato_periodista.open_close);
 
+            },
+
+            update_informe : function(provincia) {
+
+                const articles = document.querySelectorAll(this.refs.articles);
+
+                articles.forEach(article => {
+
+                    console.log('testando os articles...', article.dataset.provinciaInforme);
+
+                    if (article.dataset.provinciaInforme == provincia) article.classList.add('active')
+                    else article.classList.remove('active');
+
+                })
+
+            },
+
+            show_button_informe : function(option) {
+
+                const method = option ? 'remove' : 'add';
+
+                console.log(option, method);
+
+                const btn = document.querySelector(this.refs.toggle_button);
+
+                btn.classList[method]('not-displayed');
+
+
             }
 
         }
@@ -1315,6 +1369,8 @@ const dash = {
                 dash.map.localidad.monitor_events('off');
                 dash.map.province.monitor_events('on');
 
+                dash.interactions.relato_periodista.show_button_informe(false);
+
             } else {
 
                 data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
@@ -1324,6 +1380,11 @@ const dash = {
                 dash.vis.stripplot.hide_svg(false);
 
                 if (local.tipo == 'provincia') {
+
+                    console.log('Botão relato. Update informe', local.text, local.local);
+
+                    dash.interactions.relato_periodista.show_button_informe(true);
+                    dash.interactions.relato_periodista.update_informe(local.text);
 
                     dash.vis.stripplot.hide_svg(true);
 
@@ -1353,7 +1414,7 @@ const dash = {
 
             }
 
-            //// seria o caso de levar isso para o render step do scroller?
+            //// seria o caso de levar isso para o step do scroller?
 
             // check if new selection is another localidad in the same province, or if it is another province (in case a province was selected)
 
@@ -1390,6 +1451,8 @@ const dash = {
             // vis only for localidad now
 
             if (local.tipo == 'localidad') {
+
+                dash.interactions.relato_periodista.show_button_informe(false);
 
                 dash.vis.stripplot.dimensions.set_size();
                 dash.vis.stripplot.scales.range.set();
@@ -1525,7 +1588,7 @@ const dash = {
 
                     category_description : () => dash.vis.location_card.texts[dash.vis.location_card.state.user_location_category].first,
 
-                    medio_prototipico : () => dash.vis.location_card.state.location_data['Descripción del medio prototípico']
+                    medio_prototipico : () => ''//dash.vis.location_card.state.location_data['Descripción del medio prototípico']
 
                 },
 
@@ -1829,7 +1892,7 @@ const dash = {
                         const pct = (count / total) * 100;
 
                         field.style.flexBasis = pct + '%';
-                        field.innerHTML = 
+                        field.innerHTML = pct == 0 ? '' : 
                           count 
                           + '<span> (' 
                           + dash.utils.format_value(pct) 
