@@ -1349,6 +1349,7 @@ const dash = {
                 btn.addEventListener('click', function(e) {
 
                     menu.classList.toggle('is-open');
+                    btn.classList.toggle('clicked');
 
                 })
 

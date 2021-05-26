@@ -10,6 +10,7 @@
     --title-color : #3a3a3a;
     --font-color : #212121; /*#4f4f4f;*/
     --font-color20 : #21212120;
+    --color-highlight : #EEC471;
 
     --color-desierto: #D27B51; /*E37E71;*/
     --color-semidesierto: #DAB28D; /*#F4B180;*/
@@ -109,6 +110,12 @@ button.menu-toggle {
     align-items: center;
 }
 
+button.menu-toggle.clicked {
+
+    background-color: var(--font-color);
+    color: white;
+}
+
 /* menu */
 
 .menu.is-open {
@@ -144,6 +151,7 @@ button.menu-toggle {
     width: 100%;
     height: 100%;
     text-decoration: none;
+    color: var(--font-color);
 }
 
 .menu li > a,
@@ -153,6 +161,12 @@ button.menu-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
+
+}
+
+.menu li > a:hover {
+
+    background-color: var(--color-highlight);
 
 }
 
@@ -169,6 +183,12 @@ button.menu-toggle {
     display: block;
     transform: translateX(100%);
     transition: transform .2s;
+}
+
+.menu li.limited-height {
+
+    flex: 0 0 var(--header-height);
+
 }
 
 .menu li + li {
@@ -207,12 +227,8 @@ button.menu-toggle {
     transition-delay: calc(var(--delay) * 7);
 } 
 
-
-
-
-
 .menu li img {
-    max-height: var(--header-height);
+    max-height: .9rem;
 }
 
 /* fim menu */
