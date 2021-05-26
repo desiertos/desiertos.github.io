@@ -548,6 +548,28 @@ const dash = {
 
                 dash.vis.render_selected_place(local);
 
+            },
+
+            sets_opacity_on_hover : function(option) {
+
+                if (option == 'off') {
+
+                    dash.map_obj.setPaintProperty('localidad', 'fill-opacity', 1);
+
+                } else {
+
+                    dash.map_obj.setPaintProperty('localidad', 'fill-opacity', [
+                        'case',
+                        [
+                            'boolean', 
+                            ['feature-state', 'hover'], 
+                            false
+                        ],
+                        1,
+                        .8
+                      ])
+                }
+
             }
 
         },
@@ -1395,6 +1417,8 @@ const dash = {
                 dash.map.localidad.monitor_events('off');
                 dash.map.province.monitor_events('on');
 
+                dash.map.localidad.sets_opacity_on_hover('off');
+
                 dash.interactions.relato_periodista.show_button_informe(false);
 
             } else {
@@ -1404,6 +1428,8 @@ const dash = {
                 dash.vis.location_card.info_table.styles_country_view(local.tipo == 'provincia'); // if provincia, styles like country
 
                 dash.vis.stripplot.hide_svg(false);
+
+                dash.map.localidad.sets_opacity_on_hover('on');
 
                 if (local.tipo == 'provincia') {
 
@@ -1440,10 +1466,7 @@ const dash = {
 
                 }
 
-                
-
             }
-
 
             // if province, highlight on map
 
