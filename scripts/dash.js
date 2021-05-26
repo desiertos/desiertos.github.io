@@ -1426,13 +1426,32 @@ const dash = {
 
             console.log(data);
 
+            // center map on province
+            if (local.tipo != 'pais') {
+
+                if (local.tipo == 'provincia') { 
+
+                    dash.map.highlight_feature(local.local, type = local.tipo);
+
+                } else {
+
+                    dash.map.highlight_feature(local.provincia, type = 'provincia');
+                    dash.map.province.toggle_highlight_border_provincia(local.provincia);
+
+                }
+
+                
+
+            }
+
+
             // if province, highlight on map
 
             if (local.tipo == 'provincia') {
 
-                dash.map.highlight_feature(local.local, type = 'provincia');
                 dash.map.province.toggle_highlight_border_provincia(local.local);
                 dash.map.localidad.toggle_highlight('');
+                //dash.map.highlight_feature(local.local, type = 'provincia');
 
             } else if (local.tipo == 'localidad') {
 
