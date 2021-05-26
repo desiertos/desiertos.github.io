@@ -116,6 +116,20 @@ button.menu-toggle.clicked {
     color: white;
 }
 
+.menu-toggle {
+    color: var(--header-border-color);
+    align-self: center;
+    background-color: transparent;
+    border: none;
+    font-size: 2rem;
+}
+
+.menu-toggle:hover {
+
+    color: var(--font-color);
+
+}
+
 /* menu */
 
 .menu.is-open {
@@ -232,14 +246,6 @@ button.menu-toggle.clicked {
 }
 
 /* fim menu */
-
-.menu-toggle {
-    color: var(--header-border-color);
-    align-self: center;
-    background-color: transparent;
-    border: none;
-    font-size: 2rem;
-}
 
 .dashboard--title {
 
