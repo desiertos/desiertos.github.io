@@ -1377,19 +1377,22 @@ const dash = {
             ref : {
 
                 button : 'button.menu-toggle',
-                menu : 'ul.menu'
+                menu : 'ul.menu',
+                backdrop : '.menu-backdrop'
 
             },
 
             monitor_click : function() {
 
-                const btn = document.querySelector(dash.interactions.menu.ref.button);
-                const menu = document.querySelector(dash.interactions.menu.ref.menu);
+                const btn = document.querySelector(this.ref.button);
+                const menu = document.querySelector(this.ref.menu);
+                const bkdrop = document.querySelector(this.ref.backdrop);
 
                 btn.addEventListener('click', function(e) {
 
                     menu.classList.toggle('is-open');
                     btn.classList.toggle('clicked');
+                    bkdrop.classList.toggle('activated');
 
                 })
 
