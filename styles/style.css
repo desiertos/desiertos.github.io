@@ -10,6 +10,7 @@
     --title-color : #3a3a3a;
     --font-color : #212121; /*#4f4f4f;*/
     --font-color20 : #21212120;
+    --color-highlight : #EEC471;
 
     --color-desierto: #E37E71;
     --color-semidesierto: #F4B180;
@@ -230,7 +231,7 @@ a.go-to-dashboard {
     text-transform: uppercase;
     text-align: center;
     letter-spacing: .1em;
-    background-color: #EEC471;
+    background-color: var(--color-highlight);
 
 }
 
