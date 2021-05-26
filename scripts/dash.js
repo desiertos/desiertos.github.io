@@ -548,6 +548,28 @@ const dash = {
 
                 dash.vis.render_selected_place(local);
 
+            },
+
+            sets_opacity_on_hover : function(option) {
+
+                if (option == 'off') {
+
+                    dash.map_obj.setPaintProperty('localidad', 'fill-opacity', 1);
+
+                } else {
+
+                    dash.map_obj.setPaintProperty('localidad', 'fill-opacity', [
+                        'case',
+                        [
+                            'boolean', 
+                            ['feature-state', 'hover'], 
+                            false
+                        ],
+                        1,
+                        .8
+                      ])
+                }
+
             }
 
         },
@@ -626,7 +648,23 @@ const dash = {
 
             },
 
+            popup: new mapboxgl.Popup(
+                {
+                    closeButton: false,
+                    loseOnClick: false
+                }),
+
             mouse_enter_handler : function (e) {
+
+                // pop up
+                let coordinates = [
+                    e.features[0].properties.xc,
+                    e.features[0].properties.yc
+                ]; 
+
+                let name = e.features[0].properties.nam;
+
+                dash.map.province.popup.setLngLat(coordinates).setHTML(name).addTo(dash.map_obj);
 
                 // precisa desse if aqui para fazer tirar o estado de hover da provincia anterior quando passa para outra provincia
 
@@ -661,6 +699,8 @@ const dash = {
             },
 
             mouse_leave_handler : function () {
+
+                dash.map.province.popup.remove();
     
                 if (dash.map.province.hoveredStateId) {
                     dash.map_obj.setFeatureState(
@@ -1330,6 +1370,32 @@ const dash = {
 
             }
 
+        },
+
+        menu : {
+
+            ref : {
+
+                button : 'button.menu-toggle',
+                menu : 'ul.menu'
+
+            },
+
+            monitor_click : function() {
+
+                const btn = document.querySelector(dash.interactions.menu.ref.button);
+                const menu = document.querySelector(dash.interactions.menu.ref.menu);
+
+                btn.addEventListener('click', function(e) {
+
+                    menu.classList.toggle('is-open');
+                    btn.classList.toggle('clicked');
+
+                })
+
+
+            }
+
         }
 
     },
@@ -1369,6 +1435,8 @@ const dash = {
                 dash.map.localidad.monitor_events('off');
                 dash.map.province.monitor_events('on');
 
+                dash.map.localidad.sets_opacity_on_hover('off');
+
                 dash.interactions.relato_periodista.show_button_informe(false);
 
             } else {
@@ -1378,6 +1446,8 @@ const dash = {
                 dash.vis.location_card.info_table.styles_country_view(local.tipo == 'provincia'); // if provincia, styles like country
 
                 dash.vis.stripplot.hide_svg(false);
+
+                dash.map.localidad.sets_opacity_on_hover('on');
 
                 if (local.tipo == 'provincia') {
 
@@ -1400,13 +1470,29 @@ const dash = {
 
             console.log(data);
 
+            // center map on province
+            if (local.tipo != 'pais') {
+
+                if (local.tipo == 'provincia') { 
+
+                    dash.map.highlight_feature(local.local, type = local.tipo);
+
+                } else {
+
+                    dash.map.highlight_feature(local.provincia, type = 'provincia');
+                    dash.map.province.toggle_highlight_border_provincia(local.provincia);
+
+                }
+
+            }
+
             // if province, highlight on map
 
             if (local.tipo == 'provincia') {
 
-                dash.map.highlight_feature(local.local, type = 'provincia');
                 dash.map.province.toggle_highlight_border_provincia(local.local);
                 dash.map.localidad.toggle_highlight('');
+                //dash.map.highlight_feature(local.local, type = 'provincia');
 
             } else if (local.tipo == 'localidad') {
 
@@ -3039,6 +3125,7 @@ const dash = {
             dash.interactions.relato_periodista.monitor('close');
             dash.interactions.relato_periodista.monitor('toggle');
             dash.vis.location_card.breadcrumbs.monitor_click();
+            dash.interactions.menu.monitor_click();
 
             dash.utils.load_data();
             
