@@ -2268,8 +2268,8 @@ const dash = {
 
                 names : {
 
-                    pobXmedios : 'Poblatión x Medios',
-                    pobXperiodistas : 'Poblatión x Periodistas',
+                    pobXmedios : 'Población x Medios',
+                    pobXperiodistas : 'Población x Periodistas',
                     cat_media : 'Categoria Promedia',
                     'Impacto de la publicidad oficial' : 'Impacto de la publicidad oficial'
 
