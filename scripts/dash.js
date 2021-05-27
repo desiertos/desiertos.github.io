@@ -250,16 +250,25 @@ const dash = {
 
         },
 
-        format_value : function(x) {
+        format_value : function(x, digits = 0) {
 
-            const locale = {
+            if (!x) return '0'
 
-                "decimal": ",",
-                "thousands": ".",
-                "grouping": [3]
-            }       
-            
-            return d3.formatDefaultLocale(locale).format(",.0f")(x)
+            else {
+
+                const locale = {
+
+                    "decimal": ",",
+                    "thousands": ".",
+                    "grouping": [3]
+                }  
+                
+                const formatter = ',.' + digits + 'f';
+                
+                return d3.formatDefaultLocale(locale).format(formatter)(x)
+
+
+            }
 
         },
 
@@ -1984,7 +1993,7 @@ const dash = {
                         field.innerHTML = pct == 0 ? '' : 
                           count 
                           + '<span> (' 
-                          + dash.utils.format_value(pct) 
+                          + dash.utils.format_value(pct, digits = 1) 
                           + '%) </span>';
 
                     })
