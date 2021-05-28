@@ -1162,6 +1162,33 @@ p.dash-stripplot-tooltip-visible {
 
 }
 
+.map-container .mapboxgl-ctrl-attrib.mapboxgl-compact {
+
+    margin-right: 29px;
+
+}
+
+.map-container .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-group {
+
+    box-shadow : none;
+    border-radius : 0;
+    margin-right: 29px;
+    margin-bottom: calc( 2 * 29px);
+
+}
+
+.map-container .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-group button {
+
+    border: 1px solid var(--font-color);
+
+}
+
+.map-container .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-group button + button {
+
+    border-top: none;
+
+}
+
 
 
 @media screen and (max-width: 620px) {

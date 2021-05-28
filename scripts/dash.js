@@ -3189,6 +3189,11 @@ const dash = {
                 zoom: dash.params.mapbox.start.zoom // starting zoom
             });
 
+            dash.map_obj.addControl(
+                new mapboxgl.NavigationControl(
+                    options = { showCompass : false }
+                ), 'bottom-right');
+
             dash.map_obj.on('load', function() {
 
                 // initialize map
