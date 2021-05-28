@@ -28,9 +28,15 @@ const dash = {
 
                 },
 
-                zoom : 5.24
+                zoom : 3
 
-            }
+            },
+
+            maxZoom : 2.5,
+            bounds : [
+                [-87, -56],
+                [-40, -21]
+            ]
 
         },
 
@@ -3197,7 +3203,9 @@ const dash = {
                     dash.params.mapbox.start.center.lng, 
                     dash.params.mapbox.start.center.lat
                 ], // starting position [lng, lat]
-                zoom: dash.params.mapbox.start.zoom // starting zoom
+                zoom: dash.params.mapbox.start.zoom, // starting zoom
+                minZoom: dash.params.mapbox.maxZoom,
+                maxBounds : dash.params.mapbox.bounds
             });
 
             dash.map_obj.addControl(
