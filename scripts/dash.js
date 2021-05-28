@@ -1686,7 +1686,7 @@ const dash = {
 
                     category_description : () => dash.vis.location_card.texts[dash.vis.location_card.state.user_location_category].first,
 
-                    medio_prototipico : () => ''//dash.vis.location_card.state.location_data['Descripción del medio prototípico']
+                    medio_prototipico : () => dash.vis.location_card.state.location_data['Descripción del medio prototípico']
 
                 },
 
@@ -1995,6 +1995,9 @@ const dash = {
                           + '<span> (' 
                           + dash.utils.format_value(pct, digits = 1) 
                           + '%) </span>';
+
+                        if (pct == 0) field.classList.add('zero')
+                        else field.classList.remove('zero');
 
                     })
 

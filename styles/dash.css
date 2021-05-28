@@ -1286,6 +1286,10 @@ div.counts div span {
     display: block;
 }
 
+div.counts div.zero {
+    padding: 0;
+}
+
 .counts-title {
     text-transform: uppercase;
     letter-spacing: 1px;
