@@ -1686,7 +1686,18 @@ const dash = {
 
                     category_description : () => dash.vis.location_card.texts[dash.vis.location_card.state.user_location_category].first,
 
-                    medio_prototipico : () => dash.vis.location_card.state.location_data['Descripción del medio prototípico']
+                    medio_prototipico : () => {
+                        
+                        const prov = dash.vis.location_card.state.user_location_name;
+
+                        const mini_data = dash.data.fopea_data.medios_prototipicos
+                                 .filter(d => d.provincia == prov)[0];
+
+                        console.log(mini_data);
+                        
+                        return mini_data.desc;
+
+                    }
 
                 },
 
