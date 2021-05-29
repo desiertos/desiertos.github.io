@@ -1243,6 +1243,57 @@ const dash = {
     
                 },
 
+                clear_search : function() {
+
+                    const ref = this.refs.input;
+
+                    document.querySelector(ref).value = null
+
+                },
+
+                submit : function(e, search_content) {
+
+                    //console.log("hi!")
+
+                    //const search_content = input_el.value;
+
+                    //console.log(input_el.value);
+
+                    console.log('Submited: ', search_content);
+
+                    if (
+                        dash.data.fopea_data.lista_locais
+                          .map(row => row.text)
+                          .indexOf(search_content) > 0
+                    ) {
+
+                        console.log("valor detectado", search_content);
+
+                        const local = dash.data.fopea_data.lista_locais.filter(row => row.text == search_content)[0];
+
+                        //console.log(local);
+
+                        console.log("tipo: ", local.tipo);
+                        console.log("nome: ", local.local);
+
+                        //const data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
+
+                        //console.log("Local e Dados do resultado da pesquisa: ", local, data);
+
+                        dash.vis.render_selected_place(local);
+
+
+                    } else {
+
+                        console.log("Valor invalido, chico")
+
+                        // fazer algo visível na página aqui
+
+                    }
+
+
+                },
+
                 listen_search : function() {
 
                     const ref_btn = dash.interactions.story.search_bar.refs.search_button;
@@ -1251,48 +1302,26 @@ const dash = {
                     const btn = document.querySelector(ref_btn);
                     const input_el = document.querySelector(ref_input);
 
-                    console.log(btn);
+                    //console.log(btn);
 
                     btn.addEventListener('click', function(e) {
 
-                        //console.log("hi!")
-
                         const search_content = input_el.value;
 
-                        //console.log(input_el.value);
+                        dash.interactions.story.search_bar.submit(e, search_content);
+                    }
+                    );
+                    input_el.addEventListener('keydown', function (e) {
 
-                        if (
-                            dash.data.fopea_data.lista_locais
-                              .map(row => row.text)
-                              .indexOf(search_content) > 0
-                        ) {
+                        if (e.code === 'Enter') {  //checks whether the pressed key is "Enter"
 
-                            console.log("valor detectado", search_content);
-
-                            const local = dash.data.fopea_data.lista_locais.filter(row => row.text == search_content)[0];
-
-                            console.log("tipo: ", local.tipo);
-                            console.log("nome: ", local.local);
-
-                            // const data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
-
-                            console.log("Dados: ", data);
-
-                            dash.vis.render_selected_place(local);
-
-
-                        } else {
-
-                            console.log("Valor invalido, chico")
-
-                            // fazer algo visível na página aqui
-
+                            //console.log(e);
+                            const search_content = input_el.value;
+                            dash.interactions.story.search_bar.submit(e, search_content);
                         }
-
-
                     });
 
-                }
+                },
 
             },
 
@@ -1522,6 +1551,8 @@ const dash = {
             // local has the form { text, local, tipo }
 
             console.log('Renderizando ', local.local, local.tipo);
+
+            dash.interactions.story.search_bar.clear_search();
 
             let data;
 
