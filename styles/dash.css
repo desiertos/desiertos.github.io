@@ -53,7 +53,7 @@ img {
     max-width: 100%;
 }
 
-header {
+header.header-dashboard {
     position: fixed;
     top: 0;
     left: 0;
@@ -660,14 +660,14 @@ aside {
     z-index: 2;
     top: calc( var(--header-height) * 2 + 1px);
     left: 0;
-    width: 19rem;
+    width: 380px;/*19rem;*/
     padding: 1.7rem;
     padding-top: 2rem;
     font-size: .8rem;
     line-height: 1.5;
     height: calc(100vh - var(--header-height) * 2 );
     opacity: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
     /*pointer-events: unset;*/
     background-color: white;
     font-family: var(--font-title);
@@ -677,18 +677,52 @@ aside {
 
 aside h2 {
 
-    font-size: 1.4rem;
-    margin-bottom: .5rem;
+    font-size: 1.625rem;
+    margin-bottom: .375rem;
+    font-weight: 500;
         
 }
 
-aside footer .investigator {
-    margin-top: 1rem;
-    margin-bottom: 0;
-    padding-top: .75rem;
+aside .retranca-informe {
+
+    display: block;
+    font-size: .75rem;
+    text-transform: uppercase;
     font-family: var(--font-body);
+    margin-bottom: .5rem;
+    letter-spacing: .1em;
+
+}
+
+aside p.lead-informe {
+
+    font-family: var(--font-body);
+    font-size: 1rem;
+    margin-top: 0;
+
+}
+
+aside p {
+
+    font-size: 1rem;
+
+}
+
+aside li {
+
+    font-size: 1rem;
+
+}
+
+aside header .investigator {
+    margin-bottom: 2rem;
+    margin-top: 0;
+    padding-bottom: .75rem;
+    font-family: var(--font-body);
+    font-size: .875rem;
     font-weight: bold;
-    border-top: 2px solid grey;
+    border-bottom: 2px solid grey;
+    color: var(--font-color);
 }
 
 aside.folded {
