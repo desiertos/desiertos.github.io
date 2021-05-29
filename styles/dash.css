@@ -153,6 +153,7 @@ button.menu-toggle.clicked {
 .menu-backdrop.activated {
 
     opacity: .3;
+    pointer-events: auto;
 
 }
 
@@ -659,7 +660,7 @@ button.relato.clicked {
 aside {
 
     position: fixed; /*absolute;*/
-    z-index: 2;
+    z-index: 5;
     top: calc( var(--header-height) * 2 + 1px);
     left: 0;
     width: .25vw;
@@ -759,8 +760,8 @@ aside button.close-aside {
     height: var(--height-tabs);
     width: var(--height-tabs);
     font-size: 1.5rem;
-    border-right: 1px solid var(--font-color);
-    border-bottom: 1px solid var(--font-color);
+    border: 1px solid var(--font-color);
+    border-top: none;
 }
 
 /*
@@ -800,7 +801,7 @@ div[role="tablist"] button {
     border: 1px solid var(--font-color);
     border-top: none;
     font-size: .6rem;
-    border-left: none;
+    border-right: none;
     font-weight: 500;
 
 }

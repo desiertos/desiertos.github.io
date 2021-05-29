@@ -1318,6 +1318,8 @@ const dash = {
                 const aside_is_folded = aside.classList.contains('folded');
                 
                 aside.classList.toggle('folded');
+
+                const bkdrop = document.querySelector(dash.interactions.menu.ref.backdrop);
                 
                 document.querySelector(dash.interactions.relato_periodista.refs.toggle_button).classList.toggle('clicked');
 
@@ -1327,7 +1329,11 @@ const dash = {
                     console.log('está folded e vai aparecer, esconde o overflow');
                     document.documentElement.classList.toggle('aside-shown-no-overflow-here');
 
+                    bkdrop.classList.add('activated');
+
                 } else { 
+
+                    bkdrop.classList.remove('activated');
 
                     // aside is visible and is about to close: keep overflow hidden until the transition end.
                     // BUT! until the OPACITY transition end. if we do not specify the propertyName, it will toggle the class twice.
