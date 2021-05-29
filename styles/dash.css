@@ -33,6 +33,8 @@
 
     --delay: .05s;
 
+    --height-tabs: 1.85rem;
+
     /*font-size: calc(.5em + .75vw);*/
 
 }
@@ -662,8 +664,9 @@ aside {
     left: 0;
     width: .25vw;
     min-width: 380px;/*19rem;*/
-    padding: 1.7rem;
-    padding-top: 2rem;
+    /*padding: 1.7rem;
+    padding-top: 0;*/
+    padding: 0;
     font-size: .8rem;
     line-height: 1.5;
     /*height: calc(100vh - var(--header-height) * 2 );*/
@@ -677,9 +680,10 @@ aside {
     transition: opacity .15s, transform .5s;
 }
 
-aside article + article {
+aside article {
 
-    margin-top: 3rem;
+    padding: 1.7rem;
+    /*margin-top: 2rem;*/
 
 }
 
@@ -750,9 +754,13 @@ aside button.close-aside {
     border: none;
     background-color: transparent;
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: 0px;
+    right: 0px;
+    height: var(--height-tabs);
+    width: var(--height-tabs);
     font-size: 1.5rem;
+    border-right: 1px solid var(--font-color);
+    border-bottom: 1px solid var(--font-color);
 }
 
 aside button.close-aside:hover {
@@ -771,6 +779,38 @@ div[data-provincia-informe].active {
     display: block;
     
 }
+
+div[role="tablist"] {
+
+    display: flex;
+    padding-right: var(--height-tabs);
+    height: var(--height-tabs);
+
+}
+
+div[role="tablist"] button {
+
+    flex: 1;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    border-radius: 0;
+    background-color: white;
+    border: none;
+    border: 1px solid var(--font-color);
+    border-top: none;
+    font-size: .75rem;
+    border-left: none;
+    font-weight: 500;
+
+}
+
+div[role="tablist"] button[aria-selected="true"] {
+
+    border-bottom: none;
+
+
+}
+
 
 /* Story - location card*/
 

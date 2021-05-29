@@ -1383,6 +1383,97 @@ const dash = {
                 btn.classList[method]('not-displayed');
 
 
+            },
+
+            tabs : {
+
+                informes_with_tabs : [
+
+                    '[data-provincia-informe="Buenos Aires"]'//,
+                    //'data-provincia-informe="Córdoba"',
+                    //'data-provincia-informe="Santa Fe"'
+
+                ],
+
+                refs : {
+
+                    tabs : '[role="tab"]',
+                    tablist : '[role="tablist"]'
+
+                },
+
+                monitor : function(informe) {
+
+                    window.addEventListener("DOMContentLoaded", () => {
+                        const tabs = document.querySelectorAll(informe + ' [role="tab"]');
+                        const tabList = document.querySelector(informe + ' [role="tablist"]');
+                      
+                        // Add a click event handler to each tab
+                        tabs.forEach(tab => {
+                          tab.addEventListener("click", this.changeTabs);
+                        });
+                      
+                        // Enable arrow navigation between tabs in the tab list
+                        let tabFocus = 0;
+                      
+                        tabList.addEventListener("keydown", e => {
+                          // Move right
+                          if (e.keyCode === 39 || e.keyCode === 37) {
+                            tabs[tabFocus].setAttribute("tabindex", -1);
+                            if (e.keyCode === 39) {
+                              tabFocus++;
+                              // If we're at the end, go to the start
+                              if (tabFocus >= tabs.length) {
+                                tabFocus = 0;
+                              }
+                              // Move left
+                            } else if (e.keyCode === 37) {
+                              tabFocus--;
+                              // If we're at the start, move to the end
+                              if (tabFocus < 0) {
+                                tabFocus = tabs.length - 1;
+                              }
+                            }
+                      
+                            tabs[tabFocus].setAttribute("tabindex", 0);
+                            tabs[tabFocus].focus();
+                          }
+                        });
+                    });
+
+                },
+                    
+                changeTabs : function(e) {
+
+                    const target = e.target;
+                    const parent = target.parentNode;
+                    const grandparent = parent.parentNode;
+                    
+                    // Remove all current selected tabs
+                    parent
+                        .querySelectorAll('[aria-selected="true"]')
+                        .forEach(t => t.setAttribute("aria-selected", false));
+                    
+                    // Set this tab as selected
+                    target.setAttribute("aria-selected", true);
+                    
+                    // Hide all tab panels
+                    grandparent
+                        .querySelectorAll('[role="tabpanel"]')
+                        .forEach(p => p.setAttribute("hidden", true));
+                    
+                    // Show the selected panel
+                    grandparent.parentNode
+                        .querySelector(`#${target.getAttribute("aria-controls")}`)
+                        .removeAttribute("hidden");
+                },
+
+                init_monitor : function() {
+
+                    this.informes_with_tabs.forEach(informe => this.monitor(informe));
+
+                }
+
             }
 
         },
@@ -3156,6 +3247,7 @@ const dash = {
 
             dash.interactions.relato_periodista.monitor('close');
             dash.interactions.relato_periodista.monitor('toggle');
+            dash.interactions.relato_periodista.tabs.init_monitor();
             dash.vis.location_card.breadcrumbs.monitor_click();
             dash.interactions.menu.monitor_click();
 

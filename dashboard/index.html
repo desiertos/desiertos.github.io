@@ -139,7 +139,24 @@
             <button class="close-aside">&#215;</button>
 
             <div data-provincia-informe="Buenos Aires" aria-hidden="true">
-                <article id="pba-conurbano">
+
+                <div role="tablist" aria-label="Sample Tabs">
+
+                    <button role="tab" aria-selected="true" aria-controls="pba-conurbano" id="tab-pba-conurbano" tabindex="0">
+                        Conurbano
+                        </button>
+
+                    <button role="tab" aria-selected="false" aria-controls="pba-2" id="tab-pba-2" tabindex="-1">
+                        Zona 2
+                        </button>
+
+                    <button role="tab" aria-selected="false" aria-controls="pba-3" id="tab-pba-3" tabindex="-1">
+                        Zona 3
+                    </button>
+
+                </div>
+
+                <article id="pba-conurbano" role="tabpanel" tabindex="0" aria-labelledby="tab-pba-conurbano">
                   <header>
                      <h2>
                       <span class="retranca-informe">Conurbano bonaerense</span>
@@ -161,7 +178,7 @@
               
                 </article>
 
-                <article id="pba-2">
+                <article id="pba-2" role="tabpanel" tabindex="0" aria-labelledby="tab-pba-2">
                   <header>
                      <h2>
                       <span class="retranca-informe">Buenos Aires (Zona 2)</span>
@@ -183,7 +200,7 @@
               
                 </article>
 
-                <article id="pba-3">
+                <article id="pba-3" role="tabpanel" tabindex="0" aria-labelledby="tab-pba-3">
                   <header>
                      <h2>
                       <span class="retranca-informe">Buenos Aires (zona 3)</span>
