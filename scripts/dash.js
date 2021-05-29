@@ -1264,7 +1264,7 @@ const dash = {
                     if (
                         dash.data.fopea_data.lista_locais
                           .map(row => row.text)
-                          .indexOf(search_content) > 0
+                          .indexOf(search_content) >= 0
                     ) {
 
                         console.log("valor detectado", search_content);
