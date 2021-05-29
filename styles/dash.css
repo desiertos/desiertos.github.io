@@ -675,6 +675,12 @@ aside {
     transition: opacity .15s, transform .5s;
 }
 
+aside article + article {
+
+    margin-top: 3rem;
+
+}
+
 aside h2 {
 
     font-size: 1.625rem;
@@ -752,13 +758,13 @@ aside button.close-aside:hover {
     transform: scale(1.1);
 }
 
-article[data-provincia-informe] {
+div[data-provincia-informe] {
 
     display: none;
 
 }
 
-article[data-provincia-informe].active {
+div[data-provincia-informe].active {
 
     display: block;
     
