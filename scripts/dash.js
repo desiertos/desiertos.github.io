@@ -1389,9 +1389,9 @@ const dash = {
 
                 informes_with_tabs : [
 
-                    '[data-provincia-informe="Buenos Aires"]'//,
-                    //'data-provincia-informe="Córdoba"',
-                    //'data-provincia-informe="Santa Fe"'
+                    '[data-provincia-informe="Buenos Aires"]',
+                    '[data-provincia-informe="Córdoba"]',
+                    '[data-provincia-informe="Santa Fe"]'
 
                 ],
 

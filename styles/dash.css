@@ -763,10 +763,11 @@ aside button.close-aside {
     border-bottom: 1px solid var(--font-color);
 }
 
+/*
 aside button.close-aside:hover {
     transform-origin: center center;
     transform: scale(1.1);
-}
+}*/
 
 div[data-provincia-informe] {
 
@@ -798,7 +799,7 @@ div[role="tablist"] button {
     border: none;
     border: 1px solid var(--font-color);
     border-top: none;
-    font-size: .75rem;
+    font-size: .6rem;
     border-left: none;
     font-weight: 500;
 

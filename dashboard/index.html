@@ -321,7 +321,21 @@
             </div>
 
             <div data-provincia-informe="Córdoba" aria-hidden="true">
-                <article id="gran-cordoba">
+
+                <div role="tablist" aria-label="Sample Tabs">
+
+                    <button role="tab" aria-selected="true" aria-controls="gran-cordoba" id="tab-gran-cordoba" tabindex="0">
+                        Córdoba y Gran Córdoba
+                        </button>
+
+                    <button role="tab" aria-selected="false" aria-controls="resto-cordoba" id="tab-resto-cordoba" tabindex="-1">
+                        Resto de Córdoba
+                        </button>
+
+                </div>
+
+
+                <article id="gran-cordoba" role="tabpanel" tabindex="0" aria-labelledby="tab-gran-cordoba">
                     <header>
                         <h2>
                         <span class="retranca-informe">Córdoba y Gran Córdoba</span>
@@ -343,7 +357,7 @@
                 
                 </article>
 
-                <article id="resto-cordoba">
+                <article id="resto-cordoba" role="tabpanel" tabindex="0" aria-labelledby="tab-resto-cordoba">
                     <header>
                         <h2>
                         <span class="retranca-informe">Resto de Córdoba</span>
@@ -703,8 +717,20 @@
             </div>
             
             <div data-provincia-informe="Santa Fe" aria-hidden="true">
+
+                <div role="tablist" aria-label="Sample Tabs">
+
+                    <button role="tab" aria-selected="true" aria-controls="santa-fe-sur" id="tab-santa-fe-sur" tabindex="0">
+                        Rosario y sur de Santa Fe
+                        </button>
+
+                    <button role="tab" aria-selected="false" aria-controls="santa-fe-norte" id="tab-santa-fe-norte" tabindex="-1">
+                        Centro y norte de Santa Fe
+                        </button>
+
+                </div>
             
-                <article id="santa-fe-sur">
+                <article id="santa-fe-sur" role="tabpanel" tabindex="0" aria-labelledby="tab-santa-fe-sur">
                     <header>
                         <h2>
                         <span class="retranca-informe">Rosario y sur de Santa Fe</span>
@@ -726,7 +752,7 @@
                 
                 </article>
                 
-                <article id="santa-fe-norte">
+                <article id="santa-fe-norte" role="tabpanel" tabindex="0" aria-labelledby="tab-santa-fe-norte">
                     <header>
                         <h2>
                         <span class="retranca-informe">Centro y norte de Santa Fe</span>
