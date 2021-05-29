@@ -1226,7 +1226,7 @@ const dash = {
     
                     const parent = document.querySelector(ref);
     
-                    const data = dash.data.fopea_data.lista_locais.filter(d => d.tipo == "localidad");
+                    const data = dash.data.fopea_data.lista_locais; //.filter(d => d.tipo == "localidad");
     
                     data.forEach(row => {
     
@@ -1550,7 +1550,7 @@ const dash = {
 
             // local has the form { text, local, tipo }
 
-            console.log('Renderizando ', local.local, local.tipo);
+            console.log('Renderizando ', local);
 
             dash.interactions.story.search_bar.clear_search();
 
