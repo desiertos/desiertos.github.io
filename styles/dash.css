@@ -411,16 +411,18 @@ h2 {
     padding: 2px;
     margin-top: .25rem;
     cursor: pointer;
-    transition: transform .5s;
+    /*transition: transform .5s;*/
 
 
 }
 
-.dashboard--breadcrumbs li:hover {
+.dashboard--breadcrumbs li:hover:not(.dashboard--breadcrumbs-active) {
 
     /*transform: scale(1.1); /*translate(1px, 1px);*/
-    box-shadow: 0 0 5px #212121;
-    transition: transform .5s;
+    /*box-shadow: 0 0 5px #212121;*/
+    background-color: var(--color-highlight);
+    color: var(--font-color);
+    /*transition: transform .5s;*/
 
 }
 
