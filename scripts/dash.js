@@ -2301,9 +2301,9 @@ const dash = {
 
                 axis_line : {
 
-                    top : 20,
+                    top : 25,
                     width : 1,
-                    bottom : 20
+                    bottom : 60
 
                 },
 
