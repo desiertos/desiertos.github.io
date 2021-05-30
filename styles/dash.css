@@ -1496,6 +1496,16 @@ main.metodologia {
 
 }
 
+@media (max-width: 46rem) {
+
+    .metodologia header {
+
+        margin: 0 auto;
+        max-width: 40rem;
+
+    }
+}
+
 .metodologia p.dek {
 
     margin: 0;
