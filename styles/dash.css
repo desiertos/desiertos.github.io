@@ -341,7 +341,7 @@ button.menu-toggle.clicked {
     text-transform: uppercase;
     font-size: .7rem;
     font-weight: bold;
-    letter-spacing: .07rem;
+    letter-spacing: .1em;
     content: attr(data-menu-option);
 
 }
@@ -633,9 +633,37 @@ input#location-search.unfolded {
 
 [data-category-highlight] {
 
-    text-transform: uppercase;
+    border: 1px solid var(--font-color);
+    padding-left: 0;
+    /*padding: 4px 7px;*/
+    display: inline-block
+
+
 
 }
+
+[data-category-highlight]::before {
+
+    display: inline;
+    padding: 0 4px;
+    text-align: center;
+    font-size: .8rem;
+
+
+}
+
+
+[data-category-highlight]::after {
+
+    text-transform: uppercase;
+    padding: 0 4px;
+    color: var(--font-color);
+    border-left: 1px solid var(--font-color);
+    letter-spacing: .1em;
+    content: attr(data-category-highlight);
+
+}
+
 
 /*.story-step:last-child {
 
@@ -1041,7 +1069,7 @@ p[data-text_field='medio_prototipico'] {
 
 [data-category-highlight='bosque'] {
 
-    color : var(--color-bosque)
+    background-color : var(--color-bosque)
 
 }
 
@@ -1063,7 +1091,7 @@ p[data-text_field='medio_prototipico'] {
 
 [data-category-highlight='semibosque'] {
 
-    color : var(--color-semibosque)
+    background-color : var(--color-semibosque)
 
 }
 
@@ -1085,7 +1113,7 @@ p[data-text_field='medio_prototipico'] {
 
 [data-category-highlight='semidesierto'] {
 
-    color : var(--color-semidesierto)
+    background-color : var(--color-semidesierto)
 
 }
 
@@ -1107,7 +1135,7 @@ p[data-text_field='medio_prototipico'] {
 
 [data-category-highlight='desierto'] {
 
-    color : var(--color-desierto)
+    background-color : var(--color-desierto)
 
 }
 
