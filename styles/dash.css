@@ -1499,8 +1499,19 @@ main.metodologia {
 .metodologia section.faq summary {
 
     border-top: 1px solid var(--font-color);
-    border-bottom: 1px solid var(--font-color);
     line-height: 2rem;
+
+}
+
+.metodologia section.faq details:last-of-type summary {
+
+    border-bottom: 1px solid var(--font-color);
+
+}
+
+.metodologia section.faq details[open] summary {
+
+    border-bottom: 1px solid var(--font-color);
 
 }
 
@@ -1516,6 +1527,13 @@ main.metodologia {
 
     font-family: var(--font-title);
     line-height: 1.5;
+
+}
+
+.metodologia .details-content {
+
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 
 }
 
