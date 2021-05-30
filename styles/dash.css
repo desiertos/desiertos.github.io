@@ -1532,7 +1532,9 @@ main.metodologia {
 .metodologia section.faq summary {
 
     border-top: 1px solid var(--font-color);
-    line-height: 2rem;
+    line-height: 1.5;
+    padding-top: 5px;
+    padding-bottom: 5px;
 
 }
 
@@ -1556,10 +1558,20 @@ main.metodologia {
 
 }
 
-.metodologia section.faq details p {
+.metodologia section.faq details p,
+ul.methodology-text,
+ol.methodology-text
+ {
 
     font-family: var(--font-title);
     line-height: 1.5;
+
+}
+
+ul.methodology-text li + li,
+ol.methodology-text li + li {
+
+    margin-top: 1rem;
 
 }
 
@@ -1576,6 +1588,10 @@ main.metodologia {
     margin-top: 1rem;
     flex-wrap: wrap;
 
+}
+
+.metodologia .lists.no-wrap {
+    flex-wrap: nowrap;
 }
 
 .metodologia .lists > div {
