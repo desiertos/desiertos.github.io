@@ -1574,6 +1574,7 @@ main.metodologia {
 
     display: flex;
     margin-top: 1rem;
+    flex-wrap: wrap;
 
 }
 
@@ -1581,6 +1582,20 @@ main.metodologia {
 
     flex: 33%;
     
+}
+
+.metodologia .lists > div.categoria-criteria {
+
+    flex: 50%;
+    display: flex;
+    margin-left: 0;
+    margin-right: 2rem;
+    margin-bottom: 1rem;
+    
+}
+
+.metodologia .lists > div.categoria-criteria .wrapper-categoria-table {
+    flex: 50%;
 }
 
 .metodologia .lists .list-title {
@@ -1596,13 +1611,19 @@ main.metodologia {
 
 }
 
-.metodologia .lists > div + div {
+.metodologia .lists .categoria-title {
+    margin-bottom: .8rem;
+}
+
+.metodologia .lists > div + div,
+.categoria-criteria > div + div {
 
     margin-left: 2rem;
 
 }
 
-.metodologia .lists ul {
+.metodologia .lists ul,
+.metodologia .lists ol {
 
     list-style: none;
     padding: 0;
