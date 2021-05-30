@@ -1472,6 +1472,7 @@ div.counts div.zero {
     content: ''
 }
 
+
 /* metodologia */
 
 main.metodologia {
@@ -1480,6 +1481,8 @@ main.metodologia {
     scroll-behavior: smooth;
     padding-top: 3rem;
     background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
 
 }
 
@@ -1520,8 +1523,6 @@ main.metodologia {
 
 .metodologia section.faq {
 
-    padding-left: 10px;
-    padding-right: 10px;
     padding-top: 2rem;
     max-width: 40rem;
     margin: 0 auto;
