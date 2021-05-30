@@ -634,21 +634,17 @@ input#location-search.unfolded {
 [data-category-highlight] {
 
     border: 1px solid var(--font-color);
-    padding-left: 0;
-    /*padding: 4px 7px;*/
-    display: inline-block
-
-
+    padding: 4px;
+    font-size: .8rem;
 
 }
 
 [data-category-highlight]::before {
 
-    display: inline;
-    padding: 0 4px;
     text-align: center;
-    font-size: .8rem;
-
+    padding: 4px;
+    padding-left: 0;
+    border-right: 1px solid var(--font-color);
 
 }
 
@@ -656,9 +652,8 @@ input#location-search.unfolded {
 [data-category-highlight]::after {
 
     text-transform: uppercase;
-    padding: 0 4px;
+    padding-left: 4px;
     color: var(--font-color);
-    border-left: 1px solid var(--font-color);
     letter-spacing: .1em;
     content: attr(data-category-highlight);
 
