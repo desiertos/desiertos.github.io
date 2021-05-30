@@ -1456,6 +1456,7 @@ main.metodologia {
     margin-top: var(--header-height);
     scroll-behavior: smooth;
     padding-top: 3rem;
+    background-color: white;
 
 }
 
@@ -1516,4 +1517,56 @@ main.metodologia {
     font-family: var(--font-title);
     line-height: 1.5;
 
+}
+
+.metodologia .lists {
+
+    display: flex;
+    margin-top: 1rem;
+
+}
+
+.metodologia .lists > div {
+
+    flex: 33%;
+    
+}
+
+.metodologia .lists .list-title {
+
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 500;
+    font-size: .7rem;
+    font-family: var(--font-body);
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--font-color);
+    margin: 0;
+
+}
+
+.metodologia .lists > div + div {
+
+    margin-left: 2rem;
+
+}
+
+.metodologia .lists ul {
+
+    list-style: none;
+    padding: 0;
+    margin: 0
+
+}
+
+.metodologia .lists li {
+
+    padding: .5rem 0;
+    font-size: .7rem;
+
+}
+
+.metodologia .lists li + li {
+
+    border-top: 1px solid #E2E2E2;
 }
