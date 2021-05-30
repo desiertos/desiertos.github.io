@@ -1808,7 +1808,7 @@ const dash = {
 
                     category_description : () => '',
 
-                    medio_prototipico : () => '<strong>UN GRAN DESIERTO</strong>. En Argentina, un país de dimensiones continentales, el acceso a información de calidad se limita a unas pocas regiones. Existe un periodismo relativamente vigoroso en las zonas más pobladas y desarrolladas de la nación, como alrededor de la Capital Federal y en regiones urbanas como Córdoba y Rosario. Sin embargo, no se puede decir lo mismo de las inmensas áreas alejadas de estos centros. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pretium felis sit amet lorem mollis semper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis, urna eget fringilla ultrices, lorem tortor euismod erat.'
+                    medio_prototipico : () => 'La Argentina es un país heterogéneo, con realidades que difieren de distrito en distrito. Cada provincia conforma un universo distinto: fronteras adentro coexisten poblaciones con necesidades informativas diferentes. Pero estas demandas chocan contra el paradigma centralista, que históricamente llevó a mirar hacia el puerto porteño. La producción de información periodística replica ese modelo y repercute en la configuración de espacios gigantescos sedientos de cobertura. Por primera vez, una investigación traduce al lenguaje de los datos, y mapea la distribución desigual de medios de comunicación y de periodistas con la finalidad de dimensionar el fenómeno expansivo de los desiertos de noticias locales.'
 
                 },
 
@@ -1839,7 +1839,7 @@ const dash = {
 
                     name : () => dash.vis.location_card.state.user_location,
 
-                    category : () => dash.vis.location_card.state.user_location_category,
+                    category : () => dash.vis.location_card.state.user_location_category + ' informativo',
 
                     category_description : () => dash.vis.location_card.texts[dash.vis.location_card.state.user_location_category].first,
 
@@ -2065,7 +2065,7 @@ const dash = {
 
                 bosque : {
                     
-                    first : 'Estás en un <span data-category-highlight="bosque">bosque</span>. Esto significa que su localidad está bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales y mejora la calidad de la vida pública.',
+                    first : 'Estás en un <span class="all-caps">bosque informativo</span>. Esto significa que en tu comunidad hay condiciones razonables para el ejercicio de un periodismo profesional, que permite a las personas informarse sobre los problemas de su entorno y mejorar la calidad de la vida pública local. En otras palabras: en este lugar es posible saber lo que pasa y, eventualmente, oír voces críticas, aunque ello no implique que no haya amenazas para medios y periodistas.',
 
                     second: 'Un <span data-category-highlight="bosque">bosque</span> es una región bien servida por un periodismo profesional de calidad, que permite a las personas estar bien informadas sobre los problemas locales. La localidad de <span class="js--random-location-bosque"></span> es un ejemplo de este tipo de región.'
 
@@ -2073,7 +2073,7 @@ const dash = {
 
                 semibosque : {
                     
-                    first : 'Estás en un <span data-category-highlight="semibosque">semibosque</span>. Esto significa que su localidad tiene un buen acceso al periodismo profesional, pero con algunos problemas graves. Si bien es posible obtener información a través de los periódicos locales, existen fallas en la cobertura que pueden dañar la calidad de la vida pública.',
+                    first : 'Estás en un <span class="all-caps">semibosque informativo</span>. Esto significa que en tu comunidad hay condiciones para el ejercicio del periodismo profesional, pero que este enfrenta limitaciones y riesgos que podrían ser graves. Si bien es posible que recibas noticias sobre tu entorno, existen déficits capaces de afectar la diversidad y profundidad de la cobertura, en especial de la información sensible para la calidad de la vida pública local.',
 
                     second : 'Un <span data-category-highlight="semibosque">semibosque</span> es una región que tiene acceso al periodismo profesional, pero con algunos problemas serios. Si bien es posible obtener información a través de los periódicos locales, existen fallas en la cobertura. La localidad de <span class="js--random-location-semibosque"></span> es un ejemplo de este tipo de región.'
 
@@ -2082,7 +2082,7 @@ const dash = {
  
                 semidesierto : {
                     
-                    first : 'Estás en un <span data-category-highlight="semidesierto">semidesierto</span>. Esto significa que su localidad tiene serios problemas para acceder a un periodismo de calidad, aunque la prensa profesional esté presente. Esto causa problemas considerables en la calidad de la vida pública.',
+                    first : 'Estás en un <span class="all-caps">semidesierto informativo</span>. Esto significa que en tu comunidad hay condiciones escasas para el ejercicio del periodismo profesional. Existen medios y periodistas, pero la producción de noticias locales presenta dificultades serias, en especial cuando se trata de la difusión de información sensible para la calidad de la vida pública local. Es posible que en este lugar sea más sencillo saber qué pasa afuera que adentro.',
 
                     second : 'Un <span data-category-highlight="semidesierto">semidesierto</span> es una región que tiene serios problemas para acceder a un periodismo de calidad, a pesar de que la prensa profesional está presente, como en la localidad de <span class="js--random-location-semidesierto"></span>.'
 
@@ -2090,7 +2090,7 @@ const dash = {
 
                 desierto : {
                     
-                    first : 'Estás en un <span data-category-highlight="desierto">desierto</span>. Esto significa que, en la práctica, casi no hay periodismo profesional de calidad en tu localidad. Esto afecta gravemente a la calidad de la vida pública.',
+                    first : 'Estás en un <span class="all-caps">desierto informativo</span>. Esto significa que en tu comunidad hay condiciones sumamente débiles para el ejercicio del periodismo profesional, o que este está restringido o no ha conseguido desarrollarse de un modo estable. Puede que existan medios y periodistas, pero que estos tiendan a contar lo que pasa en otros ámbitos o estén acotados al discurso oficial. En este lugar faltan las noticias locales verificadas o resulta muy difícil acceder a ellas.',
 
                     second : 'En un <span data-category-highlight="desierto">desierto</span>, en la práctica, casi no hay periodismo profesional de calidad. Este es el caso de <span class="js--random-location-desierto"></span>.'
 
@@ -2416,8 +2416,8 @@ const dash = {
 
                 names : {
 
-                    pobXmedios : 'Población x Medios',
-                    pobXperiodistas : 'Población x Periodistas',
+                    pobXmedios : 'Población x Medios detectados',
+                    pobXperiodistas : 'Población x Periodistas detectados',
                     cat_media : 'Categoria Promedia',
                     'Impacto de la publicidad oficial' : 'Impacto de la publicidad oficial'
 

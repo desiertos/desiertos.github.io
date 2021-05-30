@@ -862,11 +862,13 @@ div[role="tablist"] button[aria-selected="true"] {
 
     text-transform: uppercase;
     font-size: .8rem;
-    padding: .5rem 1rem;
+    font-weight: 500;
+    padding: .3rem 1rem;
     border-top: 1px solid var(--font-color);
     border-bottom: 1px solid var(--font-color);
     line-height: normal;
     margin-top: .4rem;
+    letter-spacing: .1em;
 
 
 }
@@ -937,8 +939,12 @@ p[data-text_field="category_description"] {
 
 [data-category]::before {
 
-    padding-right: 1rem;
+    padding-right: .8rem;
 
+}
+
+span.all-caps {
+    text-transform: uppercase;
 }
 
 p[data-text_field='medio_prototipico'] {
