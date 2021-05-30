@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lusitana:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,600;1,700;1,800&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles/dash.css">
+    <title>Desiertos de noticias em la Argentina</title>
+</head>
+<body>
+
+    <header class='header-dashboard'>
+
+        <div class="brands-wrapper">
+            <div class="brands">
+              <a href="https://www.fopea.org/" target="_blank"><img src="../img/brands/logo-fopea.png" alt="Logotipo de Fopea"></a>
+              <div class="pipe"></div>
+              <a href="https://newsinitiative.withgoogle.com/" target="_blank"><img src="../img/brands/google.svg" alt="Logotipo da Google News Initiative"></a>
+            </div>
+        </div>
+        <h1 class="dashboard--title">Desiertos de noticias em la Argentina</h1>
+        <button class="menu-toggle">&#8801;</button>
+    </header>
+
+    <div class="menu-backdrop"></div>
+
+    <nav>      
+        <ul class="menu">
+            <li class="no-link limited-height">desiertos de noticias</li>
+            <li><a href="./index.html">¿Accedes a noticias locales?</a></li>
+            <li><a href="./dashboard/index.html">Mapa interactivo</a></li>
+            <li><a href="./metodologia.html">Metodología</a></li>
+            <li><a href="./creditos.html">Conclusiones y créditos</a></li>
+            <li><a href="./etica.html">Código de Ética</a></li>
+            <li class="limited-height">
+                <a href="https://www.fopea.org/" target="_blank"><img src="../img/brands/logo-fopea.png" alt="Logotipo de Fopea"></a>
+            </li>
+            <li class="limited-height">
+                <a href="https://newsinitiative.withgoogle.com/" target="_blank"><img src="../img/brands/google.svg" alt="Logotipo da Google News Initiative"></a>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="metodologia">
+
+        <article>
+
+            <header class="full-bleed header-conclusiones">
+                <h2>
+                    <span class="kicker">
+                        Mayo de 2021
+                    </span>
+
+                    Conclusiones
+
+                    <span class="conclusiones-author">
+                        Por FOPEA
+                    </span>
+
+                </h2>
+
+                <p class="dek">
+                    (380) Estas conclusiones surgen de una investigación inédita llevada adelante en todo el país entre noviembre de 2020 y abril de 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tempus cursus eros a rutrum. Cras facilisis massa ac tortor suscipit malesuada. Nunc maximus, lectus tempor tristique convallis, leo massa scelerisque odio, in commodo elit augue sed magna.
+                </p>
+
+            </header>
+
+
+            <div class="limited-width">
+
+                <h3 class="conclusiones-text-title">
+                    Desiertos Informativos de la Argentina
+                </h3>
+                <p class="conclusiones-dek-text-title">
+                    (150 - 200) Inserte aquí una delgada línea introduciendo las conclusiones. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tempus cursus eros a rutrum.
+                </p>
+ 
+            </div>
+
+            <figure class="conclusiones-barchart-argentina full-bleed">
+
+                <p class="screen-reader">
+                    This is a bar chart showing the counting.
+                </p>
+
+                <p class="conclusiones-barchart-argentina-main-label">
+                    Argentina
+                </p>
+
+                <div class="counts">
+                    <div class='js--category-count' data-count='47,9%' data-basis="47.9" data-category='desierto'></div>  
+                    <div class='js--category-count' data-count='25,2%' data-category='semidesierto'></div>  
+                    <div class='js--category-count' data-count='17,1%' data-category='semibosque'></div>                    
+                    <div class='js--category-count' data-count='9,8%' data-category='bosque'></div>
+                </div>
+
+            </figure>
+
+        </article>
+
+    </main>
+
+
+    <script>
+
+        // menu
+
+        const menu = {
+
+            ref : {
+
+                button : 'button.menu-toggle',
+                menu : 'ul.menu',
+                backdrop : '.menu-backdrop'
+
+            },
+
+            monitor_click : function() {
+
+                const btn = document.querySelector(this.ref.button);
+                const menu = document.querySelector(this.ref.menu);
+                const bkdrop = document.querySelector(this.ref.backdrop);
+
+                btn.addEventListener('click', function(e) {
+
+                    menu.classList.toggle('is-open');
+                    btn.classList.toggle('clicked');
+                    bkdrop.classList.toggle('activated');
+
+                })
+
+            }
+
+        }
+
+        menu.monitor_click();
+
+
+
+
+    </script>
+
+    
+</body>
+</html>

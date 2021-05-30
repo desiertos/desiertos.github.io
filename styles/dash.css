@@ -593,7 +593,7 @@ input#location-search.unfolded {
   
   .search-button img {
     object-fit: cover;
-  }
+}
 
 /* Story */
 
@@ -1475,6 +1475,7 @@ div.counts div.zero {
 
 /* metodologia */
 
+
 main.metodologia {
 
     margin-top: var(--header-height);
@@ -1488,15 +1489,27 @@ main.metodologia {
 
 .metodologia header {
 
-    margin: 0 3rem;
     border-bottom: 1px solid var(--font-color);
     padding-bottom: 1rem;
 
 }
 
+.header-conclusiones {
+
+    border-bottom: 4px solid var(--font-color);
+
+}
+
+.full-bleed {
+
+    margin: 0 3rem;
+    max-width: 1300px;
+
+}
+
 @media (max-width: 46rem) {
 
-    .metodologia header {
+    .full-bleed {
 
         margin: 0 auto;
         max-width: 40rem;
@@ -1521,7 +1534,8 @@ main.metodologia {
     font-size: .75rem;
 }
 
-.metodologia section.faq {
+.metodologia section.faq,
+.limited-width  {
 
     padding-top: 2rem;
     max-width: 40rem;
@@ -1658,4 +1672,71 @@ ol.methodology-text li + li {
 .metodologia .lists li + li {
 
     border-top: 1px solid #E2E2E2;
+}
+
+/* complemento conclusiones */
+
+span.conclusiones-author {
+
+    display: block;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    margin-top: 3px;
+    font-weight: normal;
+
+}
+
+.conclusiones-text-title {
+
+    font-size: 2rem;
+    font-family: var(--font-title);
+    font-weight: 500;
+    margin-bottom: .3rem;
+
+}
+
+.conclusiones-dek-text-title {
+
+    font-size: .8rem;
+    margin-top: 0;
+
+}
+
+.conclusiones-barchart-argentina-main-label {
+    margin-bottom: 0.3rem;
+    font-size: .9rem;
+}
+
+.conclusiones-barchart-argentina div.counts {
+    height: 10rem;
+}
+
+.conclusiones-barchart-argentina div.counts div {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-basis: attr(data-basis) "%";
+
+}
+
+.conclusiones-barchart-argentina div.counts div::before {
+
+    content: attr(data-category) "s";
+    padding-top: 6px;
+    padding-left: 10px;
+    text-transform: uppercase;
+    font-size: .6rem;
+
+
+}
+
+.conclusiones-barchart-argentina div.counts div::after {
+
+    content: attr(data-count);
+    font-weight: 500;
+    font-size: 2rem;
+    padding-left: 10px;
+    padding-bottom: 4px;
+
 }
