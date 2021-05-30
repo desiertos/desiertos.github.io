@@ -18,7 +18,7 @@ const app = {
         mapbox : {
 
             token : 'pk.eyJ1IjoidGlhZ29tYnAiLCJhIjoiY2thdjJmajYzMHR1YzJ5b2huM2pscjdreCJ9.oT7nAiasQnIMjhUB-VFvmw',
-            style : 'mapbox://styles/tiagombp/ckn87x7w014i517qodqof85bi',
+            style : 'mapbox://styles/tiagombp/ckn87x7w014i517qodqof85bi?optimize=true',
             start : {
 
                 center : {
