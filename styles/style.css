@@ -280,12 +280,18 @@ button.menu-toggle.clicked {
 /* fim menu */
 
 
-.title {
+.dashboard--title {
 
     text-transform: uppercase;
-    font-size : 1rem;
+    font-size : .8rem;
     font-family: var(--font-body);
     margin: 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+    transition: opacity .5s;
 
 }
 
