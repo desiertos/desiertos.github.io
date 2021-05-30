@@ -420,9 +420,30 @@ a.button-go-on {
 
     color: transparent;
     text-decoration: none;
+    display: flex;
+    justify-content: flex-end;
+    max-width: 36vw;
+    width: 36rem;
+    margin: 0 auto;
+}
+
+a.button-go-on span {
+
+    font-size: 2rem;
+    font-weight: 100;
+    border: 1px solid var(--font-color);
+    color: var(--font-color);
+    width: 2rem;
+    height: 4rem;
+    /* transform-origin: right; */
+    transform: scaleY(.5);
+    display: inline-block;
+    text-align: center;
+    line-height: 4rem;
 
 }
 
+/*
 a.button-go-on::before {
 
     position: absolute;
@@ -433,7 +454,7 @@ a.button-go-on::before {
     transform: rotate(90deg) scaleX(.75);
     font-weight: 300;
 
-}
+}*/
 
 /* search */
 
