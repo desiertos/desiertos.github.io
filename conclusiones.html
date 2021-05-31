@@ -95,11 +95,115 @@
                 </p>
 
                 <div class="counts">
-                    <div class='js--category-count' data-count='47,9%' data-basis="47.9" data-category='desierto'></div>  
-                    <div class='js--category-count' data-count='25,2%' data-category='semidesierto'></div>  
-                    <div class='js--category-count' data-count='17,1%' data-category='semibosque'></div>                    
-                    <div class='js--category-count' data-count='9,8%' data-category='bosque'></div>
+                    <div class='js--category-count' data-count='47,9%' data-category='desierto' style="flex-basis: 47.9%;"></div>  
+                    <div class='js--category-count' data-count='25,2%' data-category='semidesierto' style="flex-basis: 25.2%;"></div>  
+                    <div class='js--category-count' data-count='17,1%' data-category='semibosque' style="flex-basis: 17.1%;"></div>                    
+                    <div class='js--category-count' data-count='9,8%' data-category='bosque' style="flex-basis: 9.8%;"></div>
                 </div>
+
+            </figure>
+
+            <div class="limited-width">
+
+                <p class="conclusiones-text">
+                    (500) Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin felis velit, posuere ac eleifend in, rutrum ac risus. Nulla convallis tincidunt nisi eu efficitur. Aenean condimentum aliquet dui, sed auctor dolor. Cras elementum nulla eu mattis finibus. Duis vel vestibulum lectus. Vestibulum vestibulum eros tellus, vel tempus ipsum tempor ut. Phasellus auctor tincidunt posuere. Curabitur egestas, ante eget maximus vehicula.
+                </p>
+
+                <div class="conclusiones-table-wrapper">
+
+                    <div class="conclusiones-table-medios">
+
+                        <p class="conclusiones-table-title">
+                            medios
+                        </p>
+
+                        <div class="conclusiones-table-info-wrapper">
+                            
+                            <p class="conclusiones-table-number">
+                                2.464
+                            </p>
+
+                            <p class="conclusiones-table-text">
+                                medios en todo el país
+                            </p>
+
+                        </div>
+
+                        <div class="conclusiones-table-info-wrapper">
+
+                            <p class="conclusiones-table-text">
+                                un medio cada
+                            </p>
+                            
+                            <p class="conclusiones-table-number">
+                                13.451
+                            </p>
+
+                            <p class="conclusiones-table-text">
+                                habitantes
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="conclusiones-table-medios">
+
+                        <p class="conclusiones-table-title">
+                            periodistas
+                        </p>
+
+                        <div class="conclusiones-table-info-wrapper">
+                            
+                            <p class="conclusiones-table-number">
+                                13.597
+                            </p>
+
+                            <p class="conclusiones-table-text">
+                                periodistas en todo el país
+                            </p>
+
+                        </div>
+
+                        <div class="conclusiones-table-info-wrapper">
+
+                            <p class="conclusiones-table-text">
+                                un periodista cada
+                            </p>
+                            
+                            <p class="conclusiones-table-number">
+                                3.826
+                            </p>
+
+                            <p class="conclusiones-table-text">
+                                habitantes
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <p class="conclusiones-highlight">
+                    En promedio, un medio tiene 5 periodistas en la Argentina.
+                </p>
+
+                <div class="conclusiones-ranking-container">
+
+                    <svg class="conclusiones-ranking">
+
+                    </svg>
+
+                </div>
+
+            </div>
+
+
+
+
+
+
 
             </figure>
 
@@ -107,7 +211,7 @@
 
     </main>
 
-
+    <script src="./scripts/d3.v6.min.js"></script>
     <script>
 
         // menu
@@ -140,7 +244,98 @@
 
         }
 
+        const vis = {
+
+            refs : {
+
+                container : '.conclusiones-ranking-container',
+                svg : 'svg.conclusiones-ranking'
+
+            },
+
+            data : {
+
+                file : './data/ranking.json',
+
+                raw : null,
+
+                read : function() {
+
+                    fetch(this.file, {mode: 'cors'})
+                      .then( response => response.json() )
+                      .then( data => vis.begin(data) );
+
+                }
+
+            },
+
+            sizing : {
+
+                h : 1000,
+                w : null,
+
+                margin : {
+
+                    left : 100
+
+                },
+
+                get : function() {
+
+                    let w = +d3.select(vis.refs.container).style('width').slice(0,-2);
+
+                    console.log(w);
+
+                    this.w = w;
+
+                }
+
+            },
+
+            components : {
+
+                scales : {
+
+                    x : d3.scaleLinear(),
+                    w : d3.scaleLinear(),
+                    y : d3.scaleBand(),
+
+                    set : function() {
+
+                        this.x.range([vis.sizing.margin.left, vis.sizing.w])
+                        this.w.range([0, vis.sizing.w])
+                        this.y.range([0, vis.sizing.h])
+
+                        this.x.domain([0,1]);
+                        this.w.domain([0,1]);
+                        this.y.domain(vis.data.raw.map(d => d.nam));
+
+                    }
+
+                }
+            },
+
+            init : function() {
+
+                vis.sizing.get();
+                vis.data.read();
+
+            },
+
+            begin : function(data) {
+
+                console.log(data);
+
+                this.data.raw = data;
+                vis.components.scales.set();
+
+            }
+
+        }
+
         menu.monitor_click();
+
+        vis.init();
 
 
 
