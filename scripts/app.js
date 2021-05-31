@@ -1067,8 +1067,17 @@ const app = {
                         const search_content = input_el.value;
 
                         app.interactions.story.search_bar.submit(e, search_content);
-                    }
-                    );
+                        
+                    });
+
+                    input_el.addEventListener('change', function(e){
+
+                        const search_content = e.target.value;
+
+                        dash.interactions.story.search_bar.submit(e, search_content);
+
+                    });
+
                     input_el.addEventListener('keydown', function (e) {
 
                         if (e.code === 'Enter') {  //checks whether the pressed key is "Enter"
