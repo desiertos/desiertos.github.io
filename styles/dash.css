@@ -11,6 +11,7 @@
     --font-color : #212121; /*#4f4f4f;*/
     --font-color20 : #21212120;
     --color-highlight : #EEC471;
+    --color-highlight2 : #DAB28D;
 
 
     --color-desierto: #D27B51; /*E37E71;*/
@@ -209,7 +210,7 @@ button.menu-toggle.clicked {
 
 .menu li > a:hover {
 
-    background-color: var(--color-highlight);
+    background-color: #E2E2E2;
 
 }
 
@@ -224,6 +225,13 @@ button.menu-toggle.clicked {
     font-size: .8rem;
     width: 100%;
     display: block;
+
+}
+
+.menu li.menu-highlight {
+
+    background-color: var(--color-highlight2);
+    font-weight: 600;
 
 }
 
@@ -597,6 +605,71 @@ input#location-search.unfolded {
   .search-button img {
     object-fit: cover;
 }
+
+/* share */
+
+.download-map {
+
+    /*padding: .8rem 0;*/
+    position: absolute;
+    bottom: var(--size-controls);
+    right: var(--size-controls);
+    width: 10rem;
+    z-index: 1;
+    /*border: 1px solid var(--font-color);*/
+    height: var(--size-controls);
+    background: transparent;
+
+
+}
+
+.download-map a {
+
+    width: 10rem;
+    flex: 1;
+    display: flex;
+    height: var(--size-controls);
+    font-size: .6rem;
+    background: white;
+    font-family: var(--font-body);  
+    padding-right: 0;
+    color: var(--font-color);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--font-color);
+    text-decoration: none;
+    padding-left: 5px;
+
+}
+
+.download-map a span {
+
+    height: var(--size-controls);
+    line-height: var(--size-controls);
+    display: block;
+
+}
+
+.download-map a span.download-content{
+
+    flex: 1 0 0;
+    text-align: center;
+
+}
+
+.download-map a span.download-icon {
+
+    text-align: center;
+    font-size: 1rem;
+    flex: 0 0 var(--size-controls);
+    border-left: 1px solid var(--font-color);
+
+
+}
+
+
 
 /* Story */
 

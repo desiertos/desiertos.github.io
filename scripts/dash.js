@@ -1335,6 +1335,26 @@ const dash = {
 
             },
 
+            download_map : {
+
+                ref: '.download-map a',
+
+                monitor : function() {
+
+                    const link = document.querySelector(this.ref);
+
+                    link.addEventListener('click', event => {
+
+                        const poster = dash.map_obj.getCanvas().toDataURL();
+
+                        link.href = poster;
+
+                    });
+
+                }
+
+            }
+
         },
 
         relato_periodista : {
@@ -3344,7 +3364,8 @@ const dash = {
                 ], // starting position [lng, lat]
                 zoom: dash.params.mapbox.start.zoom, // starting zoom
                 //minZoom: dash.params.mapbox.maxZoom,
-                maxBounds : dash.params.mapbox.bounds
+                maxBounds : dash.params.mapbox.bounds,
+                preserveDrawingBuffer: true
             });
 
             dash.map_obj.addControl(
@@ -3394,6 +3415,8 @@ const dash = {
 
                 // Load images to use as patterns
                 dash.utils.load_patterns();
+
+                dash.interactions.story.download_map.monitor();
               
             });
 
