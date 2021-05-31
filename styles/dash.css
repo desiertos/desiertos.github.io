@@ -612,7 +612,7 @@ input#location-search.unfolded {
 
     /*padding: .8rem 0;*/
     position: absolute;
-    bottom: var(--size-controls);
+    bottom: calc(var(--size-controls) + 1rem);
     right: var(--size-controls);
     width: 10rem;
     z-index: 1;
@@ -1790,7 +1790,7 @@ span.conclusiones-author {
 }
 
 .conclusiones-barchart-argentina div.counts {
-    height: 10rem;
+    height: 9rem;
 }
 
 .conclusiones-barchart-argentina div.counts div {
@@ -1879,6 +1879,23 @@ p.conclusiones-text {
 
 }
 
+h4.conclusiones-subtitle {
+
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-top: 2rem;
+    margin-bottom: .5rem;
+
+}
+
+ul.conclusiones-bullets li {
+
+    font-family: var(--font-title);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+
+}
 
 /* accessibility */
 
@@ -1893,3 +1910,4 @@ p.conclusiones-text {
     white-space: nowrap;
     border-width: 0;
   }
+
