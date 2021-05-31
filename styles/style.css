@@ -209,7 +209,7 @@ button.menu-toggle.clicked {
 
 .menu li > a:hover {
 
-    background-color: var(--color-highlight);
+    background-color: #e2e2e2;
 
 }
 
@@ -224,6 +224,13 @@ button.menu-toggle.clicked {
     font-size: .8rem;
     width: 100%;
     display: block;
+
+}
+
+.menu li.menu-highlight {
+
+    background-color: var(--color-highlight2);
+    font-weight: 600;
 
 }
 
