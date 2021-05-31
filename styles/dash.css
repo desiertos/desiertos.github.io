@@ -564,10 +564,13 @@ input#location-search {
     border: 1px solid var(--font-color);
     border-left: none;
     outline: none;
-    font-size: .8rem;
+    font-size: .6rem;
     background: white;
     font-family: var(--font-body);  
     padding: 4px;
+    color: var(--font-color);
+    text-transform: uppercase;
+    letter-spacing: .1em;
     /*transform-origin: left;
     transform: scaleX(0);
     transition: transform .5s;*/

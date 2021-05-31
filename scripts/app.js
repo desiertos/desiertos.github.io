@@ -1074,7 +1074,7 @@ const app = {
 
                         const search_content = e.target.value;
 
-                        dash.interactions.story.search_bar.submit(e, search_content);
+                        app.interactions.story.search_bar.submit(e, search_content);
 
                     });
 
