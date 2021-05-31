@@ -1801,7 +1801,8 @@ const app = {
                     app.params.mapbox.start.center.lng, 
                     app.params.mapbox.start.center.lat
                 ], // starting position [lng, lat]
-                zoom: app.params.mapbox.start.zoom // starting zoom
+                zoom: app.params.mapbox.start.zoom, // starting zoom
+                preserveDrawingBuffer: true
             });
 
             app.map_obj.on('load', function() {
