@@ -756,6 +756,11 @@ aside .retranca-informe {
 
 }
 
+article[role="tabpanel"] span.retranca-informe {
+    /* esconde chapeu quando tem tab*/
+    display: none;
+}
+
 aside p.lead-informe {
 
     font-family: var(--font-body);
