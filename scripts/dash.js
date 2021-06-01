@@ -2976,10 +2976,10 @@ const dash = {
                                 dash.vis.stripplot.dimensions.rect.highlight.height) + 'px'
 
                             })
-                            .style('left', 0)
+                            .style('left', variable => dash.vis.stripplot.scales.x[variable]( datum[variable] ) + "px")
                             .text(datum.nam);
 
-                            label
+                            /*label
                               .style('left', function(variable) {
 
                                 let label_width = +d3.select(this).style('width').slice(0,-2);
@@ -2994,7 +2994,7 @@ const dash = {
 
                               }
                               )
-                            ;
+                            ;*/
 
                     }
 
