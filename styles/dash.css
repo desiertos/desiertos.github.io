@@ -1420,6 +1420,27 @@ p.dash-stripplot-tooltip-visible {
     e aí dentro do media mudaria para 100vw
     */
 
+    .scene {
+        perspective-origin: center bottom;
+        perspective: 1000px;
+    }
+
+    .outer-container {
+        transition: transform .5s;
+        transform-style: preserve-3d;
+        position: relative;
+    }
+
+    .outer-container > div {
+
+        backface-visibility: hidden;
+
+    }
+
+    .is-flipped {
+        transform: rotateY(180deg);
+    }
+
     .map-container {
 
         width: 100vw;
@@ -1430,6 +1451,7 @@ p.dash-stripplot-tooltip-visible {
     .story-container {
 
         width: 100vw;
+        transform: rotateY(180deg);
     
     }
 
