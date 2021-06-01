@@ -1420,6 +1420,31 @@ p.dash-stripplot-tooltip-visible {
     e aí dentro do media mudaria para 100vw
     */
 
+    .outer-container > div:first-child {
+        z-index: 2;
+        opacity : 1;
+        transition: opacity 1s;
+    }
+
+    .outer-container > div:last-child {
+        z-index: -1;
+        opacity : 0;
+        transition: opacity 1s;
+    }
+
+    .outer-container.alternate > div:first-child {
+        z-index: -1;
+        opacity : 0;
+        transition: opacity 1s;
+    }
+
+    .outer-container.alternate > div:last-child {
+        z-index: 2;
+        opacity : 1;
+        transition: opacity 1s;
+    }
+    /**/
+/*
     .scene {
         perspective-origin: center bottom;
         perspective: 1000px;
@@ -1439,19 +1464,19 @@ p.dash-stripplot-tooltip-visible {
 
     .is-flipped {
         transform: rotateY(180deg);
-    }
+    }*/
 
     .map-container {
 
         width: 100vw;
-        z-index: 0;
+        /*z-index: 0;*/
     
     }
 
     .story-container {
 
         width: 100vw;
-        transform: rotateY(180deg);
+        /*transform: rotateY(180deg);*/
     
     }
 
