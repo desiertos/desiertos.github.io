@@ -22,10 +22,10 @@
     --header-border-color: lightgrey;
     --header-height: 2.5rem;
 
-    --emoji-bosque: '🌳 ';
-    --emoji-semibosque: '🌲 ';
-    --emoji-desierto: '🏜 ';
-    --emoji-semidesierto: '⛰ ';
+    --emoji-bosque: url('../img/icon_Bosque.svg'); /*'🌳 ';*/
+    --emoji-semibosque: url('../img/icon_Semibosque.svg'); /*'🌲 ';*/
+    --emoji-desierto: url('../img/icon_Desierto.svg');/*'🏜 ';*/
+    --emoji-semidesierto: url('../img/icon_Semidesierto.svg'); /*'⛰ ';*/
 
     --color-vis-variable-label : #636363;
     --color-vis-axis : #E5E5E5;
@@ -598,25 +598,38 @@ input#location-search {
 
 }
 
+/* Data category */
+
 [data-category-highlight] {
 
-    text-transform: uppercase;
-    letter-spacing: .1em;
     border: 1px solid var(--font-color);
-    padding: 1px;
     font-size: .7rem;
-    display: inline-block;
     font-family: var(--font-body);
+    display: inline-flex;
+    align-items: baseline;
+    line-height: 1.5;
+    font-weight: 500;
 
 }
 
 [data-category-highlight]::before {
 
-    text-align: center;
-    padding: 1px;
-    margin-right: 2px;
-    padding-left: 0;
     border-right: 1px solid var(--font-color);
+    content: '';
+    width: calc(.7rem * 1.5 + 0px); /*fonte do elemento * 1.1875 - line height normal do chrome? padronizei em 1.2*/
+    background-size: contain;
+    align-self: stretch; 
+
+}
+
+
+[data-category-highlight]::after {
+
+    text-transform: uppercase;
+    padding: 0px .4em;
+    color: var(--font-color);
+    letter-spacing: .1em;
+    content: attr(data-category-highlight-text);
 
 }
 
@@ -717,7 +730,7 @@ input#location-search {
 [data-category-highlight='bosque']::before,
 [data-menu-option='bosque']::before {
 
-    content: var(--emoji-bosque);
+    background-image: var(--emoji-bosque);
 
 }
 
@@ -739,7 +752,7 @@ input#location-search {
 [data-category-highlight='semibosque']::before,
 [data-menu-option='semibosque']::before {
 
-    content: var(--emoji-semibosque);
+    background-image: var(--emoji-semibosque);
 
 }
 
@@ -761,7 +774,7 @@ input#location-search {
 [data-category-highlight='semidesierto']::before,
 [data-menu-option='semidesierto']::before {
 
-    content: var(--emoji-semidesierto);
+    background-image: var(--emoji-semidesierto);
 
 }
 
@@ -783,7 +796,7 @@ input#location-search {
 [data-category-highlight='desierto']::before,
 [data-menu-option='desierto']::before {
 
-    content: var(--emoji-desierto);
+    background-image: var(--emoji-desierto);
 
 }
 
