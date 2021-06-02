@@ -22,10 +22,10 @@
     --header-border-color: lightgrey;
     --header-height: 2.5rem;
 
-    --emoji-bosque: '🌳 ';
-    --emoji-semibosque: '🌲 ';
-    --emoji-desierto: '🏜 ';
-    --emoji-semidesierto: '⛰ ';
+    --emoji-bosque: url('../img/icon_Bosque.svg'); /*'🌳 ';*/
+    --emoji-semibosque: url('../img/icon_Semibosque.svg'); /*'🌲 ';*/
+    --emoji-desierto: url('../img/icon_Desierto.svg');/*'🏜 ';*/
+    --emoji-semidesierto: url('../img/icon_Semidesierto.svg'); /*'⛰ ';*/
 
     --color-vis-variable-label : #636363;
     --color-vis-axis : #E5E5E5;
@@ -335,9 +335,11 @@ button.menu-toggle.clicked {
 
     width: var(--header-height);
     height: var(--header-height);
-    display: inline;
+    /*background-size: var(--header-height) var(--header-height);*/
+    content: '';
+    background-size: contain;
+    display: inline-block;
     text-align: center;
-    margin-right: 1rem;
     border-right: 1px solid var(--font-color);
     border-left: 1px solid var(--font-color);
 
@@ -347,6 +349,7 @@ button.menu-toggle.clicked {
 
     color: var(--font-color);
     text-transform: uppercase;
+    margin-left: .7rem;
     font-size: .7rem;
     font-weight: bold;
     letter-spacing: .1em;
@@ -707,20 +710,24 @@ input#location-search.unfolded {
 
 }
 
+/* Data category */
+
 [data-category-highlight] {
 
     border: 1px solid var(--font-color);
-    padding: 4px;
     font-size: .8rem;
+    display: inline-flex;
+    line-height: 1.2;
+    font-weight: 500;
 
 }
 
 [data-category-highlight]::before {
 
-    text-align: center;
-    padding: 4px;
-    padding-left: 0;
     border-right: 1px solid var(--font-color);
+    content: '';
+    width: calc(.8rem * 1.2 + 8px); /*fonte do elemento * 1.1875 - line height normal do chrome? padronizei em 1.2*/
+    background-size: contain;
 
 }
 
@@ -728,7 +735,7 @@ input#location-search.unfolded {
 [data-category-highlight]::after {
 
     text-transform: uppercase;
-    padding-left: 4px;
+    padding: 4px 7px;
     color: var(--font-color);
     letter-spacing: .1em;
     content: attr(data-category-highlight);
@@ -970,12 +977,23 @@ div[role="tablist"] button[aria-selected="true"] {
     padding: .3rem 1rem;
     border-top: 1px solid var(--font-color);
     border-bottom: 1px solid var(--font-color);
-    line-height: normal;
+    line-height: 1.2; /*normal;*/
     margin-top: .4rem;
     letter-spacing: .1em;
 
 
 }
+/*
+.story-step p[data-category]::before {
+
+    content: '';
+    /*width: calc(.8rem * 1.2); /*fonte do elemento * 1.1875 - line height normal do chrome? padronizei em 1.2*/
+    /*height: calc(.8rem * 1.2);
+    background-size: contain;
+
+}*/
+
+
 
 .story-step .card-text {
 
@@ -1135,12 +1153,19 @@ p[data-text_field='medio_prototipico'] {
 
 }
 
+/* this works 
+[data-menu-option='bosque'] span {
+    display: inline-block;
+    width: var(--header-height);
+    background-image: url("../img/icon_Bosque.svg");
+    background-size: contain;
+} */
+
 [data-category='bosque']::before, 
 [data-category-highlight='bosque']::before,
 [data-menu-option='bosque']::before {
 
-    content: var(--emoji-bosque);
-
+    background-image: var(--emoji-bosque);
 }
 
 [data-category-highlight='bosque'] {
@@ -1161,7 +1186,7 @@ p[data-text_field='medio_prototipico'] {
 [data-category-highlight='semibosque']::before,
 [data-menu-option='semibosque']::before {
 
-    content: var(--emoji-semibosque);
+    background-image: var(--emoji-semibosque);
 
 }
 
@@ -1183,7 +1208,7 @@ p[data-text_field='medio_prototipico'] {
 [data-category-highlight='semidesierto']::before,
 [data-menu-option='semidesierto']::before {
 
-    content: var(--emoji-semidesierto);
+    background-image: var(--emoji-semidesierto);
 
 }
 
@@ -1205,7 +1230,7 @@ p[data-text_field='medio_prototipico'] {
 [data-category-highlight='desierto']::before,
 [data-menu-option='desierto']::before {
 
-    content: var(--emoji-desierto);
+    background-image: var(--emoji-desierto);
 
 }
 
