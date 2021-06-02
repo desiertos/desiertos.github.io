@@ -302,6 +302,8 @@ button.menu-toggle.clicked {
 
 }
 
+/* menu categorias */
+
 .dashboard--menu {
 
     list-style: none;
@@ -327,6 +329,7 @@ button.menu-toggle.clicked {
     line-height: var(--header-height);
     padding-left: 0;
     display: flex;
+    transition: flex-grow .3s;
 
 
 }
@@ -356,6 +359,23 @@ button.menu-toggle.clicked {
     content: attr(data-menu-option);
 
 }
+
+.dashboard--menu:hover li:not(:hover) {
+
+    flex: 0;
+    transition: flex-grow .3s;
+
+}
+
+.dashboard--menu:hover li:not(:hover)::after {
+
+    content: '';
+    flex-basis: 0;
+    transition: flex-basis .5s;
+    margin: 0;
+
+}
+
 
 
 
