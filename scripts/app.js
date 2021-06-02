@@ -1251,7 +1251,7 @@ const app = {
                     
                     first : 'Estás en un <span data-category-highlight="bosque" data-category-highlight-text="bosque informativo"></span>. Esto significa que en tu comunidad hay condiciones razonables para el ejercicio de un periodismo profesional, que permite a las personas informarse sobre los problemas de su entorno y mejorar la calidad de la vida pública local.',
 
-                    second: 'Un <span data-category-highlight="bosque" data-category-highlight-text="bosque informativo">bosque informativo</span> es una zona donde hay condiciones razonables para el ejercicio del periodismo profesional, que es el que está al servicio de la comunidad. En este lugar es posible saber lo que pasa y, eventualmente, oír voces críticas, aunque ello no implique que no haya amenazas para medios y periodistas. La localidad de <span class="js--random-location-bosque"></span> es un ejemplo de este tipo de región.'
+                    second: 'Un <span data-category-highlight="bosque" data-category-highlight-text="bosque informativo"></span> es una zona donde hay condiciones razonables para el ejercicio del periodismo profesional, que es el que está al servicio de la comunidad. En este lugar es posible saber lo que pasa y, eventualmente, oír voces críticas, aunque ello no implique que no haya amenazas para medios y periodistas. La localidad de <span class="js--random-location-bosque"></span> es un ejemplo de este tipo de región.'
 
                 },
 
