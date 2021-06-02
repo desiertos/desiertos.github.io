@@ -797,6 +797,12 @@ const app = {
             'location-card' : function() {
 
                 app.ctrl.prevents_scroll_on_opening(false);
+                
+                const destination_focus = document.querySelector(
+                    app.interactions.story.search_bar.refs.destination_focus
+                );
+
+                destination_focus.focus();
 
                 const type = app.vis.location_card.state.user_location_type;
                 const location = app.vis.location_card.state.user_location_name
@@ -1134,16 +1140,12 @@ const app = {
 
                     // scrolls to card
 
-                    // const destination_step = document.querySelector(
-                    //     app.interactions.story.search_bar.refs.destination_step
-                    // );
-
-                    const destination_focus = document.querySelector(
-                        app.interactions.story.search_bar.refs.destination_focus
+                    const destination_step = document.querySelector(
+                        app.interactions.story.search_bar.refs.destination_step
                     );
 
-                    //destination_step.scrollIntoView({behavior: "smooth"});
-                    destination_focus.focus();
+                    destination_step.scrollIntoView({behavior: "smooth"});
+
 
 
                 }
