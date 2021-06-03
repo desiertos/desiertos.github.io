@@ -98,15 +98,9 @@ header.header-dashboard {
   /*align-self: center;*/
 }
 
-.brands a:first-child img {
-  width: 3rem;
-  /*align-self: center;*/
-  margin-left: 1rem;
-}
-
-.brands a:last-child img {
-  height: .9rem;
-    /*align-self: center;*/
+.brands a img {
+    height: 1.1rem;
+    margin-left: calc( var(--header-height) / 2 - 0.55rem);
 }
 
 button.menu-toggle {
@@ -230,7 +224,7 @@ button.menu-toggle.clicked {
 
 .menu li.menu-highlight {
 
-    background-color: var(--color-highlight2);
+    background-color: var(--color-highlight);
     font-weight: 600;
 
 }
@@ -282,7 +276,7 @@ button.menu-toggle.clicked {
 */
 
 .menu li img {
-    max-height: .9rem;
+    max-height: 1.1rem;
 }
 
 /* fim menu */
