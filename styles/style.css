@@ -197,6 +197,10 @@ button.menu-toggle.clicked {
     color: var(--font-color);
 }
 
+.menu li.menu-highlight > a {
+    color: inherit;
+}
+
 .menu li > a,
 .menu li.no-link {
 
@@ -229,8 +233,9 @@ button.menu-toggle.clicked {
 
 .menu li.menu-highlight {
 
-    background-color: var(--color-highlight2);
-    font-weight: 600;
+    background-color: #212121;
+    color: white;
+    font-weight: 400;
 
 }
 
@@ -885,8 +890,8 @@ line.vis-story-stripplot-axis {
 
     font-family: var(--font-body) !important;
     padding: 10px 10px !important;
-    letter-spacing: .1em;
-    text-transform: uppercase;
+    /*letter-spacing: .1em;
+    text-transform: uppercase;*/
     /* part of the style is inline, so we need to use JS to style it */
 
 }

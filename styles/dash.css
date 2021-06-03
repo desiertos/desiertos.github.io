@@ -200,6 +200,10 @@ button.menu-toggle.clicked {
     color: var(--font-color);
 }
 
+.menu li.menu-highlight > a {
+    color: inherit;
+}
+
 .menu li > a,
 .menu li.no-link {
 
@@ -232,8 +236,9 @@ button.menu-toggle.clicked {
 
 .menu li.menu-highlight {
 
-    background-color: var(--color-highlight);
-    font-weight: 600;
+    background-color: #212121;
+    color: white;
+    font-weight: 400;
 
 }
 
@@ -1068,6 +1073,11 @@ p[data-text_field="category_description"] {
 
     border-left: 1px solid currentColor;
 
+}
+
+.dashboard-basic-info-table[data-categoria-local="bosque"] [data-infotable-group="medios"]      span.name::after,
+.dashboard-basic-info-table[data-categoria-local="bosque"] [data-infotable-group="periodistas"] span.name::after {
+    content: " *";
 }
 
 
@@ -2038,7 +2048,7 @@ span.conclusiones-author {
     font-size: 2rem;
     font-family: var(--font-title);
     font-weight: 500;
-    margin-bottom: .3rem;
+    margin-bottom: 1rem;
 
 }
 
@@ -2171,12 +2181,12 @@ ul.conclusiones-bullets li {
 
 ul.codigo-etica--valores {
 
-    list-style: none;
+    /*list-style: none;*/
     margin-bottom: 2rem;
     margin-top: 2rem;
-    margin-left: 0;
+    /*margin-left: 0;*/
     font-size: .8rem;
-    padding-left: 0;
+    /*padding-left: 0;*/
 
 }
 
