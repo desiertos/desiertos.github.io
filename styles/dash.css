@@ -1506,6 +1506,8 @@ p.dash-stripplot-tooltip-visible {
         padding: 10px;
         padding-top: 0;
         background-color: white;
+        border: 1px solid var(--font-color);
+        border-top: none;
 
     }
 
@@ -1517,26 +1519,44 @@ p.dash-stripplot-tooltip-visible {
         border: 1px solid var(--font-color);
         border-bottom: 1px solid var(--color-grey);
         background-color: white;
+        height: 1.5rem;
+
+    }
+
+    button.expand-card svg {
+
+        transform: rotate(180deg);
+        transition: transform .7s .3s;
+
+    }
+
+    .story-container.expanded button.expand-card svg {
+
+        transform: rotate(0);
 
     }
 
     .dashboard--breadcrumbs {
 
-        margin: 0 -10px;
+        margin: 0 -11px;
         margin-top: -1px; /*pulling one pixel to overlap the button border */
         border-top: 1px solid var(--color-grey);
         border-bottom: 1px solid var(--font-color);
+        display: flex;
 
     }
 
 
     .dashboard--breadcrumbs li {
 
-        width: 33%;
+        flex: 33%;
         margin-top: -1px; /*pulling over the ul border */
         margin-bottom: -1px;
         text-align: center;
         padding: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
     }
 
@@ -1548,7 +1568,13 @@ p.dash-stripplot-tooltip-visible {
 
     .dashboard--breadcrumbs li.dashboard--breadcrumbs-active {
 
-        margin-bottom: 1px solid white;
+        border-bottom: 1px solid white;
+    }
+
+    .dashboard--breadcrumbs li:not([data-breadcrumbs-type="localidad"]) {
+
+        flex-grow: 0;
+
     }
     
     #location-card h2 {
