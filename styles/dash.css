@@ -217,6 +217,7 @@ button.menu-toggle.clicked {
 .menu li > a:hover {
 
     background-color: #E2E2E2;
+    color: #212121;
 
 }
 
@@ -1075,9 +1076,39 @@ p[data-text_field="category_description"] {
 
 }
 
-.dashboard-basic-info-table[data-categoria-local="bosque"] [data-infotable-group="medios"]      span.name::after,
-.dashboard-basic-info-table[data-categoria-local="bosque"] [data-infotable-group="periodistas"] span.name::after {
-    content: " *";
+.dashboard--basic-info-table .info-table--note {
+    display: none;
+}
+
+[data-categoria-local="bosque"] {
+    position: relative;
+}
+
+[data-categoria-local="bosque"] span.name::after {
+
+   content: " *";
+
+
+}
+
+[data-categoria-local="bosque"]:hover {
+
+    cursor: pointer;
+
+}
+
+[data-categoria-local="bosque"]:hover .info-table--note {
+
+    display: block;
+    position: absolute;
+    background-color: #E5E5E5;
+    padding: 1em;
+    width: 180px;
+    border: 2px solid var(--font-color);
+    right: 10px;
+    z-index: 1;
+    top: 2rem;
+
 }
 
 

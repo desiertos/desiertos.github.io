@@ -1972,6 +1972,19 @@ const dash = {
 
                         const field_type = field.dataset.infotable_field;
 
+                        // updates category para mostrar ou não o asterisco
+
+                        if (
+                            field_type == 'medios' 
+                            &
+                            dash.vis.location_card.state.user_location_type == 'localidad' ) 
+                            
+                            field.parentNode.dataset.categoriaLocal = dash.vis.location_card.state.user_location_category;
+
+                        else field.dataset.categoriaLocal = "none";
+
+                        /////
+
                         field.innerHTML = this[field_type]();
 
                     })
@@ -2480,8 +2493,8 @@ const dash = {
 
                 names : {
 
-                    pobXmedios : 'Población x Medios detectados',
-                    pobXperiodistas : 'Población x Periodistas detectados',
+                    pobXmedios : 'Población x Medios Relevados',
+                    pobXperiodistas : 'Población x Periodistas Detectados',
                     cat_media : 'Categoria Promedia',
                     'Impacto de la publicidad oficial' : 'Impacto de la publicidad oficial'
 
