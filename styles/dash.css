@@ -59,6 +59,12 @@ img {
     max-width: 100%;
 }
 
+input {
+
+    border-radius: 0; /*ios fix*/
+
+}
+
 header.header-dashboard {
     position: fixed;
     top: 0;
@@ -1478,6 +1484,8 @@ p.dash-stripplot-tooltip-visible {
 
         width: 100vw;
         z-index: 0;
+        top: var(--header-height);
+        height: calc(100vh - var(--header-height));
     
     }
 
@@ -1604,22 +1612,29 @@ p.dash-stripplot-tooltip-visible {
         top: calc( var(--header-height) + 5vw);
     }
 
+    .dashboard--menu li {
+        align-items: center;
+        line-height: unset;
+    }
+
     .dashboard--menu li::after {
 
         color: var(--font-color);
         text-transform: uppercase;
-        font-size: .7rem;
+        font-size: .4rem;
         font-weight: bold;
-        letter-spacing: .07rem;
-        content: '';
-        display: none;
+        letter-spacing: 0;
+        /*content: '';*/
+        display: inline;
+        margin-left: 0;
+        flex: 1;
     
     }
 
     .dashboard--menu li::before {
 
         border-right: none;
-        width: 100%;
+        width: var(--size-controls);
         margin-right: 0;
         transition: width .5s;
         height: var(--size-controls);
@@ -1663,6 +1678,13 @@ p.dash-stripplot-tooltip-visible {
     .download-map span.download-text {
         display: none;
     }
+
+    .download-map a span.download-icon {
+
+        border-left: none;
+
+    }
+
 
     .map-container .mapboxgl-ctrl-bottom-right {
 

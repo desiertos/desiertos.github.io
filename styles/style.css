@@ -47,6 +47,12 @@ html {
 
 }
 
+input {
+
+    border-radius: 0; /*ios fix*/
+
+}
+
 .prevent-scrolling {
     overflow-y: hidden;
 }
