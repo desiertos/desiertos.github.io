@@ -37,6 +37,8 @@
     --height-tabs: 1.85rem;
     --size-controls: 29px;
 
+    --map-bkg : #F4F0EC;
+
     /*font-size: calc(.5em + .75vw);*/
 
 }
@@ -1458,6 +1460,7 @@ p.dash-stripplot-tooltip-visible {
 
 }
 
+/* MOBILE */
 
 
 @media screen and (max-width: 620px) {
@@ -1466,6 +1469,10 @@ p.dash-stripplot-tooltip-visible {
     --var-width-sections: 50vw;
     e aí dentro do media mudaria para 100vw
     */
+
+    body {
+        background-color: var(--map-bkg);
+    }
 
     .map-container {
 
@@ -1589,6 +1596,14 @@ p.dash-stripplot-tooltip-visible {
 
     }
 
+    .dashboard--menu {
+        width: unset;
+        height: var(--size-controls);
+        left: 5vw;
+        right: 5vw;
+        top: calc( var(--header-height) + 5vw);
+    }
+
     .dashboard--menu li::after {
 
         color: var(--font-color);
@@ -1607,13 +1622,67 @@ p.dash-stripplot-tooltip-visible {
         width: 100%;
         margin-right: 0;
         transition: width .5s;
+        height: var(--size-controls);
     
     }
 
-    .dashboard--title {
+
+    /*.dashboard--title {
 
         opacity: 0;
         transition: opacity .5s;
+
+    }*/
+
+    .container-search-dashboard {
+
+        width: unset;
+        left: 5vw;
+        right: 5vw;
+        top: calc( 5vw + var(--header-height) + var(--size-controls) + 10px - 2*var(--header-height));
+
+    }
+
+    .download-map {
+
+        bottom: unset;
+        right: unset;
+        left: 5vw;  
+        width: var(--size-controls);
+        top: calc( 5vw + var(--header-height) + var(--size-controls) + 10px - 2*var(--header-height) + 3*var(--size-controls) + 20px);
+
+    }
+
+    .download-map a {
+
+        padding: 0;
+        width: var(--size-controls);
+
+    }
+
+    .download-map span.download-text {
+        display: none;
+    }
+
+    .map-container .mapboxgl-ctrl-bottom-right {
+
+        top: calc( 5vw + var(--header-height) + var(--size-controls) + 10px - 2*var(--header-height) + var(--size-controls) + 10px);
+        left: 5vw !important;
+    
+    }
+
+    .map-container .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-group {
+
+        margin: 0;
+        display: inline-block;
+        float:unset;
+
+    }
+
+    .map-container .mapboxgl-ctrl-attrib.mapboxgl-compact {
+
+        margin-right: 5vw;
+        margin-top: 60vh;
 
     }
 
