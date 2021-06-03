@@ -1181,7 +1181,7 @@ p[data-text_field='medio_prototipico'] {
     background-size: contain;
 } */
 
-[data-category='bosque']::before, 
+/*[data-category='bosque']::before, */
 [data-category-highlight='bosque']::before,
 [data-menu-option='bosque']::before {
 
@@ -1202,7 +1202,7 @@ p[data-text_field='medio_prototipico'] {
 
 }
 
-[data-category='semibosque']::before, 
+/*[data-category='semibosque']::before, */
 [data-category-highlight='semibosque']::before,
 [data-menu-option='semibosque']::before {
 
@@ -1224,7 +1224,7 @@ p[data-text_field='medio_prototipico'] {
 
 }
 
-[data-category='semidesierto']::before, 
+/*[data-category='semidesierto']::before, */
 [data-category-highlight='semidesierto']::before,
 [data-menu-option='semidesierto']::before {
 
@@ -1246,7 +1246,7 @@ p[data-text_field='medio_prototipico'] {
 
 }
 
-[data-category='desierto']::before, 
+/*[data-category='desierto']::before, */
 [data-category-highlight='desierto']::before,
 [data-menu-option='desierto']::before {
 
