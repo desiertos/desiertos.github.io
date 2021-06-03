@@ -815,7 +815,7 @@ aside {
     top: calc( var(--header-height) * 2 + 1px);
     left: 0;
     width: .25vw;
-    min-width: 380px;/*19rem;*/
+    min-width: min(380px, 100vw);
     /*padding: 1.7rem;
     padding-top: 0;*/
     padding: 0;
@@ -1493,7 +1493,7 @@ p.dash-stripplot-tooltip-visible {
 
         width: 100vw;
         background-color: transparent;
-        transform: translateY(70vh);
+        transform: translateY(60vh);
         transition: transform .5s;
     
     }
@@ -1697,14 +1697,14 @@ p.dash-stripplot-tooltip-visible {
 
         margin: 0;
         display: inline-block;
-        float:unset;
+        float: none;
 
     }
 
     .map-container .mapboxgl-ctrl-attrib.mapboxgl-compact {
 
         margin-right: 5vw;
-        margin-top: 60vh;
+        margin-top: 55vh;
 
     }
 
