@@ -1582,6 +1582,28 @@ const dash = {
 
             }
 
+        },
+
+        expand_card_mobile : {
+
+            ref : 'button.expand-card',
+
+            target : '.story-container',
+
+            monitor : function() {
+
+                const el = document.querySelector(this.ref);
+                const card = document.querySelector(this.target);
+
+                el.addEventListener('click', e => {
+                    
+                    console.log('cliquei no botao');
+                    card.classList.toggle('expanded');
+
+                });
+
+            }
+
         }
 
     },
@@ -3329,6 +3351,7 @@ const dash = {
             dash.interactions.relato_periodista.tabs.init_monitor();
             dash.vis.location_card.breadcrumbs.monitor_click();
             dash.interactions.menu.monitor_click();
+            dash.interactions.expand_card_mobile.monitor();
 
             dash.utils.load_data();
             
