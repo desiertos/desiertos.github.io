@@ -214,6 +214,7 @@ button.menu-toggle.clicked {
 .menu li > a:hover {
 
     background-color: #e2e2e2;
+    color: #212121;
 
 }
 
