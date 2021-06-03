@@ -356,7 +356,7 @@ button.menu-toggle.clicked {
     text-transform: uppercase;
     margin-left: .7rem;
     font-size: .7rem;
-    font-weight: bold;
+    font-weight: 500;
     letter-spacing: .1em;
     content: attr(data-menu-option);
 
@@ -1480,6 +1480,28 @@ p.dash-stripplot-tooltip-visible {
         background-color: var(--map-bkg);
     }
 
+    header.header-dashboard {
+
+        justify-content: space-between;
+
+    }
+
+    .dashboard--title {
+
+        font-size: .7rem;
+        position: static; 
+        transform: unset;
+
+    }
+
+    button.menu-toggle {
+
+        margin-left: 0;
+    }
+
+
+    
+
     .map-container {
 
         width: 100vw;
@@ -1502,6 +1524,10 @@ p.dash-stripplot-tooltip-visible {
 
         transform: translateY(0);
 
+    }
+
+    aside {
+        top: calc( var(--header-height) + 1px);
     }
 
     .story-step {
@@ -1617,14 +1643,16 @@ p.dash-stripplot-tooltip-visible {
         line-height: unset;
     }
 
+    .dashboard--menu li:last-child {
+        border-right: 1px solid var(--font-color);
+    }
+
     .dashboard--menu li::after {
 
-        color: var(--font-color);
-        text-transform: uppercase;
-        font-size: .4rem;
-        font-weight: bold;
+        font-size: .5rem;
         letter-spacing: 0;
         /*content: '';*/
+        padding-left: 5px;
         display: inline;
         margin-left: 0;
         flex: 1;
@@ -1633,12 +1661,24 @@ p.dash-stripplot-tooltip-visible {
 
     .dashboard--menu li::before {
 
-        border-right: none;
+        /*border-right: none;*/
         width: var(--size-controls);
         margin-right: 0;
         transition: width .5s;
         height: var(--size-controls);
     
+    }
+
+    .dashboard--menu li[data-menu-option="semidesierto"]::after {
+
+        content: 'semi desierto';
+        
+    }
+
+    .dashboard--menu li[data-menu-option="semibosque"]::after {
+
+        content: 'semi bosque';
+        
     }
 
 
@@ -1654,7 +1694,7 @@ p.dash-stripplot-tooltip-visible {
         width: unset;
         left: 5vw;
         right: 5vw;
-        top: calc( 5vw + var(--header-height) + var(--size-controls) + 10px - 2*var(--header-height));
+        top: calc( 5vw + var(--header-height)*2 + var(--size-controls) + 10px - 2*var(--header-height));
 
     }
 
@@ -1664,7 +1704,7 @@ p.dash-stripplot-tooltip-visible {
         right: unset;
         left: 5vw;  
         width: var(--size-controls);
-        top: calc( 5vw + var(--header-height) + var(--size-controls) + 10px - 2*var(--header-height) + 3*var(--size-controls) + 20px);
+        top: calc( 5vw + var(--header-height)*2 + var(--size-controls) + 10px - 2*var(--header-height) + 3*var(--size-controls) + 20px);
 
     }
 
@@ -1688,7 +1728,7 @@ p.dash-stripplot-tooltip-visible {
 
     .map-container .mapboxgl-ctrl-bottom-right {
 
-        top: calc( 5vw + var(--header-height) + var(--size-controls) + 10px - 2*var(--header-height) + var(--size-controls) + 10px);
+        top: calc( 5vw + var(--header-height)*2 + var(--size-controls) + 10px - 2*var(--header-height) + var(--size-controls) + 10px);
         left: 5vw !important;
     
     }
@@ -1704,7 +1744,7 @@ p.dash-stripplot-tooltip-visible {
     .map-container .mapboxgl-ctrl-attrib.mapboxgl-compact {
 
         margin-right: 5vw;
-        margin-top: 55vh;
+        margin-top: 50vh;
 
     }
 
