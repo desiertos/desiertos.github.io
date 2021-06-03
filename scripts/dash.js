@@ -1570,6 +1570,18 @@ const dash = {
 
             }
 
+        },
+
+        menu_categoria : {
+
+            ref : '.dashboard--menu',
+
+            monitor: function() {
+
+                const menu = document.querySelector(this.ref);
+
+            }
+
         }
 
     },
