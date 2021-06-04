@@ -1992,12 +1992,21 @@ main.metodologia {
 }
 
 .metodologia section.faq,
+.metodologia section.creditos,
 .limited-width  {
 
     padding-top: 2rem;
     max-width: 40rem;
     margin: 0 auto;
     counter-reset: item;
+
+}
+
+.metodologia section.faq {
+
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--font-color);
+
 
 }
 
@@ -2032,7 +2041,8 @@ main.metodologia {
 
 .metodologia section.faq details p,
 ul.methodology-text,
-ol.methodology-text
+ol.methodology-text,
+.metodologia section.creditos p
  {
 
     font-family: var(--font-title);
@@ -2130,6 +2140,49 @@ ol.methodology-text li + li {
 .metodologia .lists li + li {
 
     border-top: 1px solid #E2E2E2;
+}
+
+.metodologia section.creditos img {
+
+    width: 15%;
+
+}
+
+.metodologia section.creditos h3 {
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: .75rem;
+    border-bottom: 1px solid #9A9A9A;
+    padding-bottom: .4rem;
+}
+
+.metodologia section.creditos h4 {
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: .7rem;
+    margin-bottom: 0;
+    margin-top: 2rem;
+    line-height: 2;
+
+}
+
+.metodologia section.creditos h4:last-of-type {
+
+    border-top: 1px solid #9A9A9A;
+    padding-top: .6rem;
+    padding-bottom: .3rem;
+
+
+}
+
+.metodologia section.creditos p {
+
+    margin: 0;
+
+}
+
+.metodologia section.creditos img.logo-google {
+    width: 33%;
 }
 
 /* complemento conclusiones */
