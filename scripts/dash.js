@@ -1321,7 +1321,7 @@ const dash = {
                           .indexOf(search_content) >= 0
                     ) {
 
-                        console.log("valor detectado", search_content);
+                        //console.log("valor detectado", search_content);
 
                         const local = dash.data.fopea_data.lista_locais.filter(row => row.text == search_content)[0];
 
@@ -1329,6 +1329,10 @@ const dash = {
 
                         console.log("tipo: ", local.tipo);
                         console.log("nome: ", local.local);
+
+                        local.text = local.name;
+
+                        console.log("CIRURGIA NO OBJETO LOCAL", local);
 
                         //const data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
 
