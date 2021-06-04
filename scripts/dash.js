@@ -1289,11 +1289,11 @@ const dash = {
 
                     const input = document.querySelector('#location-search');
 
-                    new Awesomplete(input, {
-                        list: 'datalist',
-                        maxItems: 15,
-                        minChars: 1
-                    });
+                    // new Awesomplete(input, {
+                    //     list: 'datalist',
+                    //     maxItems: 15,
+                    //     minChars: 1
+                    // });
     
                 },
 
