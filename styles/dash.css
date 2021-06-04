@@ -695,6 +695,17 @@ input#location-search.unfolded {
     object-fit: cover;
 }
 
+.container-search-dashboard .awesomplete > ul {
+    top: var(--size-controls);
+    font-size: .7rem;
+    letter-spacing: 1px;
+}
+
+.container-search-dashboard div.awesomplete {
+    flex: 1;
+    display: flex;
+}
+
 /* share */
 
 .download-map {

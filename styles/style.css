@@ -30,6 +30,8 @@
     --color-vis-variable-label : #636363;
     --color-vis-axis : #E5E5E5;
 
+    --size-controls: 29px;
+
     font-size: calc(.5em + .75vw);
 
     --delay: .05s;
@@ -509,8 +511,6 @@ input#location-search {
     /*transform-origin: left;
     transform: scaleX(0);
     transition: transform .5s;*/
-
-
 }
 /*
 input#location-search.unfolded {
@@ -529,11 +529,22 @@ input#location-search.unfolded {
     width: var(--size-controls);
   }
   
-  .search-button img {
+.search-button img {
     object-fit: cover;
-    width: 20px;
-    height: 20px;
+    /*width: 20px;
+    height: 20px;*/
 }
+
+.container-search .awesomplete > ul {
+    top: var(--size-controls);
+    font-size: .7rem;
+}
+
+.container-search  div.awesomplete {
+    flex: 1;
+    display: flex;
+}
+
 
 
 /* old
