@@ -1279,14 +1279,21 @@ const dash = {
     
                         const new_option = document.createElement("option");
                         
-    
+                        new_option.label = row.text.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
                         new_option.value = row.text;
-                        new_option.dataset.name = row.localidade;
                         new_option.dataset.tipoLocalidade = row.tipo;
     
                         parent.appendChild(new_option);
     
                     })
+
+                    const input = document.querySelector('#location-search');
+
+                    new Awesomplete(input, {
+                        list: 'datalist',
+                        maxItems: 15,
+                        minChars: 1
+                    });
     
                 },
 
@@ -1359,9 +1366,17 @@ const dash = {
                         
                     });
 
+                    //substitutes accents as user types
+                    input_el.addEventListener('input',function(){
+                        //console.log('fire INPUT')
+                        this.value = this.value.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                    });
+
                     input_el.addEventListener('change', function(e){
 
                         const search_content = e.target.value;
+
+                        console.log('Changed');
 
                         dash.interactions.story.search_bar.submit(e, search_content);
 
