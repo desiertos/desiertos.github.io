@@ -368,22 +368,23 @@ button.menu-toggle.clicked {
 
 }
 
-.dashboard--menu:hover li:not(:hover) {
+.dashboard--menu:not(.menu-clicked):hover li:not(:hover),
+.dashboard--menu.menu-clicked li:not(.category-selected) {
 
     flex: 0;
     transition: flex-grow .3s;
 
 }
 
-.dashboard--menu:hover li:hover::before {
+.dashboard--menu:not(.menu-clicked):hover li:hover::before,
+.dashboard--menu.menu-clicked li.category-selected::before {
 
     border-left: none;
 
 }
 
-
-
-.dashboard--menu:hover li:not(:hover)::after {
+.dashboard--menu:not(.menu-clicked):hover li:not(:hover)::after,
+.dashboard--menu.menu-clicked li:not(.category-selected)::after  {
 
     content: '';
     flex-basis: 0;

@@ -1591,9 +1591,64 @@ const dash = {
 
             ref : '.dashboard--menu',
 
+            clear_option_selected : function() {
+
+                const current_option = document.querySelector(this.ref + ' .category-selected');
+
+                console.log("opcao selecionada atual é ", current_option);
+
+                if (current_option) current_option.classList.remove('category-selected');
+
+            },
+
             monitor: function() {
 
                 const menu = document.querySelector(this.ref);
+
+                menu.addEventListener('click', function(e) {
+
+                    const li = e.target;
+
+                    if (menu.classList.contains('menu-clicked')) {
+
+                        // já estava clicado. a pessoa pode ter clicado na mesma opção (aí tiramos a seleção),
+                        // ou ter clicado numa outra opção. vamos testar.
+
+                        if (li.classList.contains('category-selected')) {
+
+                            // clicou na mesma, remove seleção
+
+                            menu.classList.remove('menu-clicked');
+                            li.classList.remove('category-selected');
+
+                            // remove filtro do layer -- a implementar
+
+                        } else {
+
+                            // clicou em outra
+
+                            // remove selecao atual
+                            dash.interactions.menu_categoria.clear_option_selected();
+                            // marca no seleção
+                            li.classList.add('category-selected');
+
+                            // chama filtro mapbox
+
+                        }
+
+                    } else {
+
+                        // menu estava inativo e agora está sendo clicado
+
+                        menu.classList.add('menu-clicked');
+                        li.classList.add('category-selected');
+
+                        // chama filtro mapbox
+
+
+                    }
+
+                })
 
             }
 
@@ -3381,6 +3436,7 @@ const dash = {
             dash.vis.location_card.breadcrumbs.monitor_click();
             dash.interactions.menu.monitor_click();
             dash.interactions.expand_card_mobile.monitor();
+            dash.interactions.menu_categoria.monitor();
 
             dash.utils.load_data();
             
