@@ -1279,14 +1279,21 @@ const dash = {
     
                         const new_option = document.createElement("option");
                         
-    
+                        new_option.label = row.text.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
                         new_option.value = row.text;
-                        new_option.dataset.name = row.localidade;
                         new_option.dataset.tipoLocalidade = row.tipo;
     
                         parent.appendChild(new_option);
     
                     })
+
+                    const input = document.querySelector('#location-search');
+
+                    new Awesomplete(input, {
+                        list: 'datalist',
+                        maxItems: 15,
+                        minChars: 1
+                    });
     
                 },
 
@@ -1314,7 +1321,7 @@ const dash = {
                           .indexOf(search_content) >= 0
                     ) {
 
-                        console.log("valor detectado", search_content);
+                        //console.log("valor detectado", search_content);
 
                         const local = dash.data.fopea_data.lista_locais.filter(row => row.text == search_content)[0];
 
@@ -1322,6 +1329,10 @@ const dash = {
 
                         console.log("tipo: ", local.tipo);
                         console.log("nome: ", local.local);
+
+                        local.text = local.name;
+
+                        console.log("CIRURGIA NO OBJETO LOCAL", local);
 
                         //const data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
 
@@ -1359,9 +1370,17 @@ const dash = {
                         
                     });
 
+                    //substitutes accents as user types
+                    input_el.addEventListener('input',function(){
+                        //console.log('fire INPUT')
+                        this.value = this.value.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                    });
+
                     input_el.addEventListener('change', function(e){
 
                         const search_content = e.target.value;
+
+                        console.log('Changed');
 
                         dash.interactions.story.search_bar.submit(e, search_content);
 
@@ -1776,11 +1795,15 @@ const dash = {
 
                     //vai ligar quando chegar na província, e depois só desliga quando voltar para o país
 
-                    dash.map.localidad.monitor_events('off');
-                    dash.map.localidad.monitor_events('on');
-                    dash.map.province.monitor_events('off');
+                    //dash.map.localidad.monitor_events('off');
+                    //dash.map.localidad.monitor_events('on');
+                    //dash.map.province.monitor_events('off');
 
                 }
+
+                dash.map.localidad.monitor_events('off');
+                dash.map.localidad.monitor_events('on');
+                dash.map.province.monitor_events('off');
 
             }
 
