@@ -370,6 +370,8 @@ button.menu-toggle.clicked {
 
 @media (hover: hover) {
 
+    /* these are the same rules that apply to clicks below, but I put these hover effects inside this media query to avoid "sticky hover" effect on mobile.*/
+
     .dashboard--menu:not(.menu-clicked):hover li:not(:hover) {
 
         flex: 0;
