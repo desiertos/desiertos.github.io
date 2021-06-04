@@ -375,6 +375,14 @@ button.menu-toggle.clicked {
 
 }
 
+.dashboard--menu:hover li:hover::before {
+
+    border-left: none;
+
+}
+
+
+
 .dashboard--menu:hover li:not(:hover)::after {
 
     content: '';
