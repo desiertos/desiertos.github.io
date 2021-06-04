@@ -368,7 +368,32 @@ button.menu-toggle.clicked {
 
 }
 
-.dashboard--menu:not(.menu-clicked):hover li:not(:hover),
+@media (hover: hover) {
+
+    .dashboard--menu:not(.menu-clicked):hover li:not(:hover) {
+
+        flex: 0;
+        transition: flex-grow .3s;
+
+    }
+
+    .dashboard--menu:not(.menu-clicked):hover li:hover::before {
+
+        border-left: none;
+
+    }
+
+    .dashboard--menu:not(.menu-clicked):hover li:not(:hover)::after {
+
+        content: '';
+        flex-basis: 0;
+        transition: flex-basis .5s;
+        margin: 0;
+
+    }
+
+}
+
 .dashboard--menu.menu-clicked li:not(.category-selected) {
 
     flex: 0;
@@ -376,14 +401,12 @@ button.menu-toggle.clicked {
 
 }
 
-.dashboard--menu:not(.menu-clicked):hover li:hover::before,
 .dashboard--menu.menu-clicked li.category-selected::before {
 
     border-left: none;
 
 }
 
-.dashboard--menu:not(.menu-clicked):hover li:not(:hover)::after,
 .dashboard--menu.menu-clicked li:not(.category-selected)::after  {
 
     content: '';
