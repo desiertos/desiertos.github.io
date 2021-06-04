@@ -11,6 +11,8 @@ const dash = {
 
     },
 
+    mobile : false,
+
     params : {
 
         categories : ['desierto', 'semidesierto', 'semibosque', 'bosque'],
@@ -32,10 +34,10 @@ const dash = {
 
             },
 
-            maxZoom : 2.5,
+            maxZoom : 2.2,
             bounds : [
-                [-90, -60],
-                [-33, -18]
+                [-90, -80],
+                [-35, -8]
             ]
 
         },
@@ -290,6 +292,12 @@ const dash = {
             //     pob : d3.sum(data, d => +d.pob),
             //     cant_medios : d3.sum(data, d => d.cant_medios),
             //     cant_periodistas : d3.sum(data, d => d.cant_periodistas),
+
+        },
+
+        detect_mobile : function() {
+
+            dash.mobile = window.innerWidth <= 620
 
         }
 
@@ -891,13 +899,20 @@ const dash = {
 
         fit_Argentina : function() {
 
+            dash.utils.detect_mobile();
+
+            const padding = dash.mobile ?
+            {top: 30, bottom: 140, left: 10, right: 10} :
+            null;
+
             dash.map_obj.fitBounds([
-                [-75, -21],
-                [-53, -56]],
+                [-74, -20],
+                [-52, -56]],
 
                 { 
                     pitch: 0,
-                    bearing : 0
+                    bearing : 0,
+                    padding : padding
                 }
             );
 
@@ -3354,6 +3369,7 @@ const dash = {
 
         init : function() {
 
+            dash.utils.detect_mobile();
             dash.utils.colors.populate();
             //dash.scroller.steps.get();
             dash.vis.stripplot.sels.d3.set(); // sets up d3 selections;
