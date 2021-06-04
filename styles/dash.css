@@ -344,7 +344,7 @@ button.menu-toggle.clicked {
 
 .dashboard--menu li::before {
 
-    width: var(--header-height);
+    min-width: var(--header-height);
     height: var(--header-height);
     /*background-size: var(--header-height) var(--header-height);*/
     content: '';
@@ -368,29 +368,79 @@ button.menu-toggle.clicked {
 
 }
 
-.dashboard--menu:hover li:not(:hover) {
+@media (hover: hover) {
+
+    /* these are the same rules that apply to clicks below, but I put these hover effects inside this media query to avoid "sticky hover" effect on mobile.*/
+
+    .dashboard--menu:not(.menu-clicked):hover li:not(:hover) {
+
+        flex: 0;
+        transition: flex-grow .3s;
+
+    }
+
+    .dashboard--menu:not(.menu-clicked):hover li:hover::before {
+
+        border-left: none;
+
+    }
+
+    .dashboard--menu:not(.menu-clicked):hover li:not(:hover)::after {
+
+        content: '';
+        flex-basis: 0;
+        transition: flex-basis .5s;
+        margin: 0;
+
+    }
+
+}
+
+.dashboard--menu.menu-clicked li:not(.category-selected) {
 
     flex: 0;
     transition: flex-grow .3s;
 
 }
 
-.dashboard--menu:hover li:hover::before {
+.dashboard--menu.menu-clicked li.category-selected::before {
 
     border-left: none;
 
 }
 
-
-
-.dashboard--menu:hover li:not(:hover)::after {
+.dashboard--menu.menu-clicked li:not(.category-selected)::after  {
 
     content: '';
     flex-basis: 0;
     transition: flex-basis .5s;
     margin: 0;
+    padding-left: 0;
 
 }
+
+@media (min-width: 621px) {
+
+    /* don't do this on mobile*/
+
+    .dashboard--menu.menu-clicked li.category-selected::after {
+
+        content: attr(data-option-description);
+        text-transform: none;
+        margin-left: .7rem;
+        font-size: .7rem;
+        font-weight: 400;
+        letter-spacing: 0;
+        line-height: 1;
+        padding-top: calc(var(--header-height) / 4);
+    
+    }
+
+}
+
+
+
+
 
 
 
@@ -1711,7 +1761,7 @@ p.dash-stripplot-tooltip-visible {
     .dashboard--menu li::before {
 
         /*border-right: none;*/
-        width: var(--size-controls);
+        min-width: var(--size-controls);
         margin-right: 0;
         transition: width .5s;
         height: var(--size-controls);
