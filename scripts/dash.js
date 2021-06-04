@@ -226,6 +226,8 @@ const dash = {
 
         },
 
+        get_numeric_category_from_name : (category) => '' + (dash.params.categories.indexOf(category) + 1),
+
         generate_random_remaining_locations : function(remaining_categories) {
 
             const data = dash.data.fopea_data.cidade;
@@ -433,6 +435,36 @@ const dash = {
                     //     option == 'on' ? 1 : 0
                     // ]
                 );
+
+            },
+
+            color_map_category : function(category) {
+
+                if (category != '') {
+
+                    const cat = dash.utils.get_numeric_category_from_name(category);
+
+                    dash.map_obj.setPaintProperty(
+                        'localidad', 'fill-color',
+                        [
+                            'case',
+                            [
+                                '==',
+                                ['get', 'categoria'],
+                                cat
+                            ],
+                            ['get', 'color_real'],
+                            '#f0e9df'
+                        ]
+                    );
+
+                } else {
+
+                    dash.map_obj.setPaintProperty(
+                        'localidad', 'fill-color', ['get', 'color_real']
+                    );
+
+                }
 
             },
                 
@@ -1621,7 +1653,8 @@ const dash = {
                             menu.classList.remove('menu-clicked');
                             li.classList.remove('category-selected');
 
-                            // remove filtro do layer -- a implementar
+                            // remove filtro do layer 
+                            dash.map.localidad.color_map_category('');
 
                         } else {
 
@@ -1633,6 +1666,8 @@ const dash = {
                             li.classList.add('category-selected');
 
                             // chama filtro mapbox
+                            const category = li.dataset.menuOption;
+                            dash.map.localidad.color_map_category(category);
 
                         }
 
@@ -1644,7 +1679,8 @@ const dash = {
                         li.classList.add('category-selected');
 
                         // chama filtro mapbox
-
+                        const category = li.dataset.menuOption;
+                        dash.map.localidad.color_map_category(category);
 
                     }
 
