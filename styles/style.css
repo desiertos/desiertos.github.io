@@ -498,6 +498,7 @@ input#location-search {
 
     flex: 1;
     border: none;
+    border-radius: 0;
     border: 1px solid var(--font-color);
     border-left: none;
     outline: none;
