@@ -393,18 +393,28 @@ button.menu-toggle.clicked {
 
 }
 
-.dashboard--menu.menu-clicked li.category-selected::after {
+/*@media (min-width: 621px) {*/
 
-    content: attr(data-option-description);
-    text-transform: none;
-    margin-left: .7rem;
-    font-size: .7rem;
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: 1;
-    padding-top: calc(var(--header-height) / 4);
+    /* don't do this on mobile*/
 
-}
+    .dashboard--menu.menu-clicked li.category-selected::after {
+
+        content: attr(data-option-description);
+        text-transform: none;
+        margin-left: .7rem;
+        font-size: .7rem;
+        font-weight: 400;
+        letter-spacing: 0;
+        line-height: 1;
+        padding-top: calc(var(--header-height) / 4);
+    
+    }
+
+/*}*/
+
+
+
+
 
 
 
