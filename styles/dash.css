@@ -415,10 +415,11 @@ button.menu-toggle.clicked {
     flex-basis: 0;
     transition: flex-basis .5s;
     margin: 0;
+    padding-left: 0;
 
 }
 
-/*@media (min-width: 621px) {*/
+@media (min-width: 621px) {
 
     /* don't do this on mobile*/
 
@@ -435,7 +436,7 @@ button.menu-toggle.clicked {
     
     }
 
-/*}*/
+}
 
 
 
