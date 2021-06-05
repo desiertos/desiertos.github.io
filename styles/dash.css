@@ -385,6 +385,19 @@ button.menu-toggle.clicked {
 
     }
 
+    .dashboard--menu:not(.menu-clicked) li:hover::after {
+
+        font-size: .7rem;
+        content: attr(data-option-description);
+        text-transform: none;
+        margin-left: .7rem;
+        font-weight: 400;
+        letter-spacing: 0;
+        line-height: 1;
+        padding-top: calc(var(--header-height) / 4);
+
+    }
+
     .dashboard--menu:not(.menu-clicked):hover li:not(:hover)::after {
 
         content: '';
@@ -2363,5 +2376,5 @@ ul.codigo-etica--valores li {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border-width: 0;
-  }
+}
 
