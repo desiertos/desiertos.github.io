@@ -218,7 +218,7 @@ const app = {
                         .map(d => (
                             {
                                 local : d.local,
-                                text  : d.nam
+                                text  : d.nam.trim()
                             })
                         );
                 }
@@ -233,7 +233,15 @@ const app = {
 
                 const index_selected = Math.floor(Math.random() * amount_available_cities);
 
-                output.push(available_cities[index_selected]);
+                let city = available_cities[index_selected];
+
+                /*if (!city.text.includes("Capital")) {
+
+                    city.text = "localidad de " + city.text;
+
+                }*/
+                
+                output.push(city);
 
             })
 
@@ -1271,7 +1279,7 @@ const app = {
                     
                     first : 'Estás en un <span data-category-highlight="bosque" data-category-highlight-text="bosque informativo"></span>. Esto significa que en tu comunidad hay condiciones razonables para el ejercicio de un periodismo profesional, que permite a las personas informarse sobre los problemas de su entorno y mejorar la calidad de la vida pública local.',
 
-                    second: 'Un <span data-category-highlight="bosque" data-category-highlight-text="bosque informativo"></span> es una zona donde hay condiciones razonables para el ejercicio del periodismo profesional, que es el que está al servicio de la comunidad. En este lugar es posible saber lo que pasa y, eventualmente, oír voces críticas, aunque ello no implique que no haya amenazas para medios y periodistas. La localidad de <span class="js--random-location-bosque"></span> es un ejemplo de este tipo de región.'
+                    second: 'Un <span data-category-highlight="bosque" data-category-highlight-text="bosque informativo"></span> es una zona donde hay condiciones razonables para el ejercicio del periodismo profesional, que es el que está al servicio de la comunidad. En este lugar es posible saber lo que pasa y, eventualmente, oír voces críticas, aunque ello no implique que no haya amenazas para medios y periodistas. <span class="js--random-location-bosque"></span> es un ejemplo de este tipo de región.'
 
                 },
 
@@ -1279,7 +1287,7 @@ const app = {
                     
                     first : 'Estás en un <span data-category-highlight="semibosque" data-category-highlight-text="semibosque informativo"></span>. Esto significa que en tu comunidad hay condiciones para el ejercicio del periodismo profesional, pero que este enfrenta limitaciones y riesgos que podrían ser graves.',
 
-                    second : 'Un <span data-category-highlight="semibosque" data-category-highlight-text="semibosque informativo"></span> es una zona donde hay condiciones para el ejercicio del periodismo profesional, pero este enfrenta limitaciones y riesgos que podrían ser graves. Si bien es posible que los habitantes reciban noticias sobre su entorno, existen déficits capaces de afectar la diversidad y profundidad de la cobertura, en especial de la información sensible para la calidad de la vida pública local. La localidad de <span class="js--random-location-semibosque"></span> es un ejemplo de este tipo de región.'
+                    second : 'Un <span data-category-highlight="semibosque" data-category-highlight-text="semibosque informativo"></span> es una zona donde hay condiciones para el ejercicio del periodismo profesional, pero este enfrenta limitaciones y riesgos que podrían ser graves. Si bien es posible que los habitantes reciban noticias sobre su entorno, existen déficits capaces de afectar la diversidad y profundidad de la cobertura, en especial de la información sensible para la calidad de la vida pública local. <span class="js--random-location-semibosque"></span> es un ejemplo de este tipo de región.'
 
                 },
 
@@ -1288,7 +1296,7 @@ const app = {
                     
                     first : 'Estás en un <span data-category-highlight="semidesierto" data-category-highlight-text="semidesierto informativo"></span>. Esto significa que en tu comunidad hay condiciones escasas para el ejercicio del periodismo profesional',
 
-                    second : 'Un <span data-category-highlight="semidesierto" data-category-highlight-text="semidesierto informativo"></span> es una zona donde hay condiciones escasas para el ejercicio del periodismo profesional. Existen medios y periodistas, pero la producción de noticias locales presenta dificultades serias, en especial cuando se trata de la difusión de información sensible para la calidad de la vida pública local. Es posible que en este lugar sea más sencillo saber qué pasa afuera que adentro, como en la localidad de <span class="js--random-location-semidesierto"></span>.'
+                    second : 'Un <span data-category-highlight="semidesierto" data-category-highlight-text="semidesierto informativo"></span> es una zona donde hay condiciones escasas para el ejercicio del periodismo profesional. Existen medios y periodistas, pero la producción de noticias locales presenta dificultades serias, en especial cuando se trata de la difusión de información sensible para la calidad de la vida pública local. Es posible que en este lugar sea más sencillo saber qué pasa afuera que adentro, como en <span class="js--random-location-semidesierto"></span>.'
 
                 },
 
