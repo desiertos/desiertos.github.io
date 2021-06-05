@@ -1625,14 +1625,62 @@ const dash = {
                 const menu = document.querySelector(this.ref.menu);
                 const bkdrop = document.querySelector(this.ref.backdrop);
 
+                const relato = document.querySelector(dash.interactions.relato_periodista.refs.text);
+                const btn_relato = document.querySelector(dash.interactions.relato_periodista.refs.toggle_button);
+
                 btn.addEventListener('click', function(e) {
 
                     menu.classList.toggle('is-open');
                     btn.classList.toggle('clicked');
-                    bkdrop.classList.toggle('activated');
+
+                    const aside_is_folded = relato.classList.contains('folded');
+
+                    if (!aside_is_folded) {
+
+                        // in case the relato is opened
+                        relato.classList.add('folded');
+                        btn_relato.classList.remove('clicked');
+
+                    } else {
+
+                        // só faz o toggle se o relato não estiver aberto (porque caso contrário o backdrop já estaria presente e iríamos querer mantê-lo)
+
+                        bkdrop.classList.toggle('activated');
+
+                    }
+
+
 
                 })
 
+
+            }
+
+        },
+
+        backdrop : {
+
+            ref : '.menu-backdrop',
+
+            monitor_click : function() {
+
+                const btn_menu = document.querySelector(dash.interactions.menu.ref.button);
+                const menu = document.querySelector(dash.interactions.menu.ref.menu);
+                const bkdrop = document.querySelector(this.ref);
+                const relato = document.querySelector(dash.interactions.relato_periodista.refs.text);
+                const btn_relato = document.querySelector(dash.interactions.relato_periodista.refs.toggle_button);
+
+                //const aside_is_folded = aside.classList.contains('folded')
+
+                bkdrop.addEventListener('click', function(e) {
+
+                    btn_menu.classList.remove('clicked');
+                    menu.classList.remove('is-open');
+                    bkdrop.classList.remove('activated');
+                    relato.classList.add('folded');
+                    btn_relato.classList.remove('clicked');
+
+                })
 
             }
 
@@ -3494,6 +3542,7 @@ const dash = {
             dash.interactions.relato_periodista.tabs.init_monitor();
             dash.vis.location_card.breadcrumbs.monitor_click();
             dash.interactions.menu.monitor_click();
+            dash.interactions.backdrop.monitor_click();
             dash.interactions.expand_card_mobile.monitor();
             dash.interactions.menu_categoria.monitor();
 
