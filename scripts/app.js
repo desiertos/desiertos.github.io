@@ -68,6 +68,8 @@ const app = {
 
     },
 
+    mobile : false,
+
     data : {
 
         provincia : null,
@@ -246,6 +248,12 @@ const app = {
             })
 
             return output;
+
+        },
+
+        detect_mobile : function() {
+
+            app.mobile = window.innerWidth <= 620
 
         }
 
@@ -660,7 +668,7 @@ const app = {
                 {
                     linear : false, // false means the map transitions using map.flyTo()
                     speed: 1, 
-                    padding: {top: 30, bottom: 30, left: 30, right: 30},
+                    padding: {top: 30, bottom: app.mobile ? 180 : 30, left: 30, right: 30},
                     pitch: pitch,
                     bearing: bearing
                 }
@@ -1759,6 +1767,7 @@ const app = {
 
         init : function() {
 
+            app.utils.detect_mobile();
             app.utils.colors.populate();
             app.scroller.steps.get();
             app.vis.stripplot.sels.d3.set(); // sets up d3 selections;
