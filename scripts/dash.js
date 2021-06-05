@@ -3520,17 +3520,24 @@ const dash = {
             dash.utils.evaluate_national_data();
 
             // pre-process localidad data
-            dash.data.localidad.features.forEach(el => {
+            // dash.data.localidad.features.forEach(el => {
 
-                const types = Object.keys(dash.params.colors);
+            //     const types = Object.keys(dash.params.colors);
 
-                const categoria = el.properties.categoria;
+            //     const categoria = el.properties.categoria;
 
-                el.properties['color_real'] = categoria ?
-                  dash.params.colors[dash.params.categories[+categoria-1]] :
-                  'lightgray';
+            //     el.properties['color_real'] = categoria ?
+            //       dash.params.colors[dash.params.categories[+categoria-1]] :
+            //       'lightgray';
 
-            })
+            // })
+
+            // pre-process list
+            dash.data.fopea_data.lista_locais.forEach(
+                row => {
+                    row.text = row.text.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                }
+            );
 
             mapboxgl.accessToken = dash.params.mapbox.token;
 
