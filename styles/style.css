@@ -373,8 +373,45 @@ h2 {
 
     position: fixed;
     width: calc(100% - 50vw);
-    height: 100vh;  
+    height: calc(100vh - 27px - var(--header-height));  
     z-index: 1;
+
+}
+
+footer {
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 27px;
+    background-color: white;
+    font-family: var(--font-body);
+    border-top: 1px solid var(--font-color);
+}
+
+footer p.footer-text {
+
+    margin: 0;
+    width: calc(100% - 50vw);
+    line-height: 27px;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer p.footer-text::before {
+
+    content: 'Proyecto realizado con el apoyo de la ';
+
+}
+
+footer img {
+
+    display: inline;
+    height: 12px;
+    margin-left: 5px;
 
 }
 
@@ -395,6 +432,7 @@ h2 {
     right: 0;
     width: 50vw;
     background-color: transparent;
+    scroll-behavior: smooth;
 
 }
 
@@ -593,7 +631,7 @@ input#location-search {
 
 .story-step {
 
-    height: 100vh;
+    height: calc(100vh - 27px); 
     position: relative;
     display: flex;
     flex-direction: column;
@@ -960,6 +998,16 @@ line.vis-story-stripplot-axis {
         width: 100vw;
         z-index: 0;
     
+    }
+
+    footer p.footer-text {
+        width: 100vw;
+    }
+
+    footer p.footer-text::before {
+
+        content: 'Con el apoyo de la ';
+
     }
 
     .story-container {
