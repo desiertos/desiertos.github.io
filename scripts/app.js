@@ -1010,15 +1010,15 @@ const app = {
     
                         const new_option = document.createElement("option");
                         
-                        new_option.label = row.text.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-                        new_option.value = row.text;
-                        new_option.dataset.tipoLocalidade = row.tipo;
+                        new_option.value = row.text.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                        //new_option.value = row.text;
+                        //new_option.dataset.tipoLocalidade = row.tipo;
     
                         parent.appendChild(new_option);
     
                     })
 
-                    const input = document.querySelector('#location-search');
+                    //const input = document.querySelector('#location-search');
 
                     // new Awesomplete(input, {
                     //     list: 'datalist',
@@ -1036,6 +1036,8 @@ const app = {
 
                     //console.log(input_el.value);
 
+                    console.log(e, search_content);
+
                     if (
                         app.data.fopea_data.lista_locais
                           .map(row => row.text)
@@ -1046,8 +1048,9 @@ const app = {
 
                         const local = app.data.fopea_data.lista_locais.filter(row => row.text == search_content)[0];
 
-                        console.log("tipo: ", local.tipo);
-                        console.log("nome: ", local.local);
+                        console.log("Local do valor", local);
+
+                        local.text = local.name;
 
                         const data = app.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
 
@@ -1794,29 +1797,35 @@ const app = {
             
 
 
+            // pre-process list
+            app.data.fopea_data.lista_locais.forEach(
+                row => {
+                    row.text = row.text.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                }
+            );
 
             // pre-process localidad data
-            app.data.localidad.features.forEach(el => {
+            // app.data.localidad.features.forEach(el => {
 
-                const types = Object.keys(app.params.colors);
+            //     const types = Object.keys(app.params.colors);
 
-                const categoria = el.properties.categoria;
+            //     const categoria = el.properties.categoria;
 
-                //const id = el.properties.gid;
-                //const indice = ( (id - 1) % 4 );
+            //     //const id = el.properties.gid;
+            //     //const indice = ( (id - 1) % 4 );
 
 
-                //const tipo = app.params.patterns.names[indice];
-                //const type = types[indice];
-                //const color = app.params.colors[type];
+            //     //const tipo = app.params.patterns.names[indice];
+            //     //const type = types[indice];
+            //     //const color = app.params.colors[type];
 
-                //el.properties["tipo"] = tipo;
-                //el.properties["color"] = color;
-                el.properties['color_real'] = categoria ?
-                  app.params.colors[app.params.categories[+categoria-1]] :
-                  'lightgray';
+            //     //el.properties["tipo"] = tipo;
+            //     //el.properties["color"] = color;
+            //     el.properties['color_real'] = categoria ?
+            //       app.params.colors[app.params.categories[+categoria-1]] :
+            //       'lightgray';
 
-            })
+            // })
 
             mapboxgl.accessToken = app.params.mapbox.token;
 
