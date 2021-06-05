@@ -253,7 +253,8 @@ const app = {
 
         detect_mobile : function() {
 
-            app.mobile = window.innerWidth <= 620
+            app.mobile = window.innerWidth <= 620;
+            if (app.mobile) app.utils.resize.resize();
 
         },
 
