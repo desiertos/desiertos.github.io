@@ -1275,6 +1275,29 @@ const app = {
 
             }
 
+        },
+
+        backdrop : {
+
+            ref : '.menu-backdrop',
+
+            monitor_click : function() {
+
+                const btn_menu = document.querySelector(app.interactions.menu.ref.button);
+                const menu = document.querySelector(app.interactions.menu.ref.menu);
+                const bkdrop = document.querySelector(this.ref);
+
+                bkdrop.addEventListener('click', function(e) {
+
+                    btn_menu.classList.remove('clicked');
+                    menu.classList.remove('is-open');
+                    bkdrop.classList.remove('activated');
+
+
+                })
+
+            }
+
         }
 
     },
@@ -1832,6 +1855,7 @@ const app = {
             app.utils.load_data();
             app.ctrl.prevents_scroll_on_opening(true);
             app.interactions.menu.monitor_click();
+            app.interactions.backdrop.monitor_click();
             //app.utils.resize.monitor();
             
         },
