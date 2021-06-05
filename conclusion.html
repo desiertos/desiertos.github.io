@@ -297,134 +297,74 @@
 
     </main>
 
-    <script src="./scripts/d3.v6.min.js"></script>
     <script>
 
         // menu
 
-        const menu = {
+        const interactions = {
+            
+            menu : {
 
-            ref : {
+                ref : {
 
-                button : 'button.menu-toggle',
-                menu : 'ul.menu',
-                backdrop : '.menu-backdrop'
-
-            },
-
-            monitor_click : function() {
-
-                const btn = document.querySelector(this.ref.button);
-                const menu = document.querySelector(this.ref.menu);
-                const bkdrop = document.querySelector(this.ref.backdrop);
-
-                btn.addEventListener('click', function(e) {
-
-                    menu.classList.toggle('is-open');
-                    btn.classList.toggle('clicked');
-                    bkdrop.classList.toggle('activated');
-
-                })
-
-            }
-
-        }
-
-        const vis = {
-
-            refs : {
-
-                container : '.conclusiones-ranking-container',
-                svg : 'svg.conclusiones-ranking'
-
-            },
-
-            data : {
-
-                file : './data/ranking.json',
-
-                raw : null,
-
-                read : function() {
-
-                    fetch(this.file, {mode: 'cors'})
-                      .then( response => response.json() )
-                      .then( data => vis.begin(data) );
-
-                }
-
-            },
-
-            sizing : {
-
-                h : 1000,
-                w : null,
-
-                margin : {
-
-                    left : 100
+                    button : 'button.menu-toggle',
+                    menu : 'ul.menu',
+                    backdrop : '.menu-backdrop'
 
                 },
 
-                get : function() {
+                monitor_click : function() {
 
-                    let w = +d3.select(vis.refs.container).style('width').slice(0,-2);
+                    const btn = document.querySelector(this.ref.button);
+                    const menu = document.querySelector(this.ref.menu);
+                    const bkdrop = document.querySelector(this.ref.backdrop);
 
-                    console.log(w);
+                    btn.addEventListener('click', function(e) {
 
-                    this.w = w;
+                        menu.classList.toggle('is-open');
+                        btn.classList.toggle('clicked');
+                        bkdrop.classList.toggle('activated');
+
+                    })
 
                 }
 
             },
 
-            components : {
+            backdrop : {
 
-                scales : {
+                ref : '.menu-backdrop',
 
-                    x : d3.scaleLinear(),
-                    w : d3.scaleLinear(),
-                    y : d3.scaleBand(),
+                monitor_click : function() {
 
-                    set : function() {
+                    const btn_menu = document.querySelector(interactions.menu.ref.button);
+                    const menu = document.querySelector(interactions.menu.ref.menu);
+                    const bkdrop = document.querySelector(this.ref);
 
-                        this.x.range([vis.sizing.margin.left, vis.sizing.w])
-                        this.w.range([0, vis.sizing.w])
-                        this.y.range([0, vis.sizing.h])
+                    bkdrop.addEventListener('click', function(e) {
 
-                        this.x.domain([0,1]);
-                        this.w.domain([0,1]);
-                        this.y.domain(vis.data.raw.map(d => d.nam));
+                        btn_menu.classList.remove('clicked');
+                        menu.classList.remove('is-open');
+                        bkdrop.classList.remove('activated');
 
-                    }
+
+                    })
 
                 }
+
             },
 
             init : function() {
 
-                vis.sizing.get();
-                vis.data.read();
-
-            },
-
-            begin : function(data) {
-
-                console.log(data);
-
-                this.data.raw = data;
-                vis.components.scales.set();
+                this.menu.monitor_click();
+                this.backdrop.monitor_click();
 
             }
 
+
         }
 
-        menu.monitor_click();
-
-        vis.init();
-
-
-
+        interactions.init();
 
     </script>
 

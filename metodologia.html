@@ -51,7 +51,7 @@
             <header class="full-bleed">
                 <h2>
                     <span class="kicker">
-                        metodologia
+                        metodología
                     </span>
 
                     ¿Cómo se realizó esta investigación?
@@ -491,35 +491,74 @@
 
         // menu
 
-        const menu = {
+        const interactions = {
+            
+            menu : {
 
-            ref : {
+                ref : {
 
-                button : 'button.menu-toggle',
-                menu : 'ul.menu',
-                backdrop : '.menu-backdrop'
+                    button : 'button.menu-toggle',
+                    menu : 'ul.menu',
+                    backdrop : '.menu-backdrop'
+
+                },
+
+                monitor_click : function() {
+
+                    const btn = document.querySelector(this.ref.button);
+                    const menu = document.querySelector(this.ref.menu);
+                    const bkdrop = document.querySelector(this.ref.backdrop);
+
+                    btn.addEventListener('click', function(e) {
+
+                        menu.classList.toggle('is-open');
+                        btn.classList.toggle('clicked');
+                        bkdrop.classList.toggle('activated');
+
+                    })
+
+                }
 
             },
 
-            monitor_click : function() {
+            backdrop : {
 
-                const btn = document.querySelector(this.ref.button);
-                const menu = document.querySelector(this.ref.menu);
-                const bkdrop = document.querySelector(this.ref.backdrop);
+                ref : '.menu-backdrop',
 
-                btn.addEventListener('click', function(e) {
+                monitor_click : function() {
 
-                    menu.classList.toggle('is-open');
-                    btn.classList.toggle('clicked');
-                    bkdrop.classList.toggle('activated');
+                    const btn_menu = document.querySelector(interactions.menu.ref.button);
+                    const menu = document.querySelector(interactions.menu.ref.menu);
+                    const bkdrop = document.querySelector(this.ref);
 
-                })
+                    bkdrop.addEventListener('click', function(e) {
+
+                        btn_menu.classList.remove('clicked');
+                        menu.classList.remove('is-open');
+                        bkdrop.classList.remove('activated');
+
+
+                    })
+
+                }
+
+            },
+
+            init : function() {
+
+                this.menu.monitor_click();
+                this.backdrop.monitor_click();
 
             }
 
+
         }
 
-        menu.monitor_click();
+        interactions.init();
+
+
+
+
 
 
 
