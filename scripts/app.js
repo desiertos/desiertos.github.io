@@ -254,7 +254,7 @@ const app = {
         detect_mobile : function() {
 
             app.mobile = window.innerWidth <= 620;
-            if (app.mobile) app.utils.resize.resize();
+            //if (app.mobile) app.utils.resize.resize();
 
         },
 
@@ -274,46 +274,46 @@ const app = {
             };
         },
 
-        resize : {
+        // resize : {
 
-            monitor : function() {
+        //     monitor : function() {
 
-                console.log('monitoring resize');
+        //         console.log('monitoring resize');
 
-                window.addEventListener('resize', app.utils.debounce(app.utils.resize.resize, 500));
+        //         window.addEventListener('resize', app.utils.debounce(app.utils.resize.resize, 500));
 
-            },
+        //     },
 
-            resize : function() {
+        //     resize : function() {
 
-                if (app.mobile) {
+        //         if (app.mobile) {
 
-                    console.log('fired resize');
+        //             console.log('fired resize');
 
-                    const ref = ".story-step";
+        //             const ref = ".story-step";
 
-                    const height = window.innerHeight;
-                    const story_steps = document.querySelectorAll(ref)
+        //             const height = window.innerHeight;
+        //             const story_steps = document.querySelectorAll(ref)
 
-                    const root_styles = getComputedStyle( document.documentElement );
+        //             const root_styles = getComputedStyle( document.documentElement );
 
-                    const story_height = +d3.select(ref).style("height").slice(0,-2);
-                    const google_bar_height = +d3.select('footer').style("height").slice(0,-2);
+        //             const story_height = +d3.select(ref).style("height").slice(0,-2);
+        //             const google_bar_height = +d3.select('footer').style("height").slice(0,-2);
 
 
-                    if (story_height + google_bar_height > height) {
+        //             if (story_height + google_bar_height > height) {
 
-                        const new_height = height - google_bar_height;
+        //                 const new_height = height - google_bar_height;
 
-                        document.documentElement.style.setProperty('--story-height-mobile', new_height + 'px');
+        //                 document.documentElement.style.setProperty('--story-height-mobile', new_height + 'px');
 
-                    }
+        //             }
 
-                }
+        //         }
 
-            }
+        //     }
 
-        }
+        // }
 
     },
 
@@ -726,7 +726,7 @@ const app = {
                 {
                     linear : false, // false means the map transitions using map.flyTo()
                     speed: 1, 
-                    padding: {top: 30, bottom: app.mobile ? 180 : 30, left: 30, right: 30},
+                    padding: {top: 30, bottom: app.mobile ? 210 : 30, left: 30, right: 30},
                     pitch: pitch,
                     bearing: bearing
                 }
@@ -1832,7 +1832,7 @@ const app = {
             app.utils.load_data();
             app.ctrl.prevents_scroll_on_opening(true);
             app.interactions.menu.monitor_click();
-            app.utils.resize.monitor();
+            //app.utils.resize.monitor();
             
         },
 
