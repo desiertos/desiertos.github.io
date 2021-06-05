@@ -255,6 +255,62 @@ const app = {
 
             app.mobile = window.innerWidth <= 620
 
+        },
+
+        debounce : function(func, wait, immediate) {
+            // https://davidwalsh.name/function-debounce
+            var timeout;
+            return function() {
+                var context = this, args = arguments;
+                var later = function() {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+                var callNow = immediate && !timeout;
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+                if (callNow) func.apply(context, args);
+            };
+        },
+
+        resize : {
+
+            monitor : function() {
+
+                window.addEventListener('resize', app.utils.debounce(app.utils.resize.resize, 500));
+
+            },
+
+            resize : function() {
+
+                if (app.mobile) {
+
+                    console.log('fired resize');
+
+                    const ref = ".story-step";
+
+                    const height = window.innerHeight;
+                    const story_steps = document.querySelectorAll(ref)
+
+                    const root_styles = getComputedStyle( document.documentElement );
+                    getPropertyValue('--font-color')
+
+                    const story_height = +d3.select(ref).style("height").slice(0,-2);
+                    const google_bar_height = +d3.select('footer').slice(0,-2);
+
+
+                    if (story_height + google_bar_height > height) {
+
+                        const new_height = height - google_bar_height;
+
+                        document.documentElement.style.setProperty('--story-height-mobile', new_height + 'px');
+
+                    }
+
+                }
+
+            }
+
         }
 
     },
@@ -1774,6 +1830,7 @@ const app = {
             app.utils.load_data();
             app.ctrl.prevents_scroll_on_opening(true);
             app.interactions.menu.monitor_click();
+            app.utils.resize.monitor();
             
         },
 

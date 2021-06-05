@@ -32,6 +32,8 @@
 
     --size-controls: 29px;
 
+    --story-height-mobile: calc(100vh - 27px);
+
     font-size: max(16px, calc(.5em + .75vw));
 
     --delay: .05s;
@@ -1018,6 +1020,7 @@ line.vis-story-stripplot-axis {
 
     .story-step {
 
+        height: var(--story-height-mobile);
         max-width: 100vw;
         padding: var(--header-height) 0;
         justify-content: flex-end;
