@@ -456,17 +456,18 @@ a.button-go-on::before {
 
 a.button-go-on span {
 
-    font-size: 2rem;
-    font-weight: 100;
+    /* font-size: 2rem; */
+    /* font-weight: 100; */
     border: 1px solid var(--font-color);
     color: var(--font-color);
     width: 2rem;
-    height: 4rem;
+    /* height: 2rem; */
+    padding: 5px 0;
     /* transform-origin: right; */
-    transform: scaleY(.5);
+    /* transform: scaleY(.5); */
     display: inline-block;
     text-align: center;
-    line-height: 4rem;
+    /* line-height: 4rem; */
 
 }
 
@@ -979,8 +980,16 @@ line.vis-story-stripplot-axis {
     .story-step-inner {
 
         max-width: 90vw;
-        padding: 20px;
+        padding: 0;
         background-color: white;
+        border-radius: 0;
+        border: none
+
+    }
+
+    .story-step:first-of-type .story-step-inner {
+
+        padding: 20px;
         border-radius: 4px;
         border: 1px solid var(--font-color);
 
@@ -988,8 +997,10 @@ line.vis-story-stripplot-axis {
 
     .story-step p.card-only-text {
 
-        padding: 0;
-        border: none;
+        padding: 20px;
+        border-radius: 5px 5px 0px 0px;
+        border: 1px solid var(--font-color);
+        border-bottom: none;
         margin: 0;
     }
 
@@ -997,6 +1008,31 @@ line.vis-story-stripplot-axis {
 
         width: 100vw;
 
+    }
+
+    a.button-go-on {
+
+        display: block;
+        width: 90vw;
+        margin: 0;
+
+    }
+
+    a.button-go-on span {
+        display: block;
+        width: 90vw;
+        border-radius: 0 0 5px 5px;
+        border: 1px solid var(--font-color);
+        padding: 0;
+        background-color: white;
+    }
+
+    a.button-go-on::before {
+        content: '';
+    }
+
+    a.button-go-on[href="#fecho"] span {
+        margin: 0 5vw;
     }
 
 
