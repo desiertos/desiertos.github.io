@@ -277,6 +277,8 @@ const app = {
 
             monitor : function() {
 
+                console.log('monitoring resize');
+
                 window.addEventListener('resize', app.utils.debounce(app.utils.resize.resize, 500));
 
             },
@@ -293,10 +295,9 @@ const app = {
                     const story_steps = document.querySelectorAll(ref)
 
                     const root_styles = getComputedStyle( document.documentElement );
-                    getPropertyValue('--font-color')
 
                     const story_height = +d3.select(ref).style("height").slice(0,-2);
-                    const google_bar_height = +d3.select('footer').slice(0,-2);
+                    const google_bar_height = +d3.select('footer').style("height").slice(0,-2);
 
 
                     if (story_height + google_bar_height > height) {
