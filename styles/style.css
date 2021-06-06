@@ -354,6 +354,34 @@ button.menu-toggle.clicked path {
 
 /* fim menu */
 
+.icons-kicker {
+
+    display: flex;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+
+}
+
+@media (max-height: 640px) {
+
+    .icons-kicker {
+
+        display: none;
+
+    }
+}
+
+
+.icons-kicker img {
+
+    display: inline;
+
+}
+
+.icons-kicker img + img {
+
+    margin-left: -2px;
+}
 
 .dashboard--title {
 
