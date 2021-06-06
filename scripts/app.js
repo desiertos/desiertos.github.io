@@ -36,9 +36,9 @@ const app = {
 
         geojsons : {
 
-            provincia : '../data/maps/prov2.json',
-            localidad : '../data/maps/dep.json',
-            mask : '../data/maps/arg_mask.json'
+            provincia : '../data/maps/prov.json',
+            localidad : '../data/maps/dep.json'
+            //mask : '../data/maps/arg_mask.json'
 
         },
 
@@ -90,7 +90,7 @@ const app = {
             Promise.all([
 
                 fetch(app.params.geojsons.localidad, {mode: 'cors'}).then( response => response.json()),
-                fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
+                //fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.fopea_data, {mode: 'cors'}).then( response => response.json())
         
@@ -546,26 +546,26 @@ const app = {
 
         },
 
-        world_mask : {
+        // world_mask : {
 
-            initialize : function() {
+        //     initialize : function() {
 
-                app.map_obj.addSource('mask', {
-                    type: 'geojson',
-                    'data' : app.data.mask
-                });
+        //         app.map_obj.addSource('mask', {
+        //             type: 'geojson',
+        //             'data' : app.data.mask
+        //         });
 
-                app.map_obj.addLayer({
-                    'id': 'mask',
-                    'type': 'fill',
-                    'source': 'mask',
-                    'layout': {},
-                    'paint': {'fill-color': '#F4F0EC'},
-                }, 'provincia');
+        //         app.map_obj.addLayer({
+        //             'id': 'mask',
+        //             'type': 'fill',
+        //             'source': 'mask',
+        //             'layout': {},
+        //             'paint': {'fill-color': '#F4F0EC'},
+        //         }, 'provincia');
 
-            }
+        //     }
 
-        },
+        // },
 
         popup: (name) => new mapboxgl.Popup(
             {
@@ -1879,9 +1879,9 @@ const app = {
             //console.log(data);
 
             app.data.localidad = data[0];
-            app.data.mask = data[1];
-            app.data.provincia = data[2];
-            app.data.fopea_data = data[3];
+            //app.data.mask = data[1];
+            app.data.provincia = data[1];
+            app.data.fopea_data = data[2];
             // {
             //     localidad : data[0].features.map(d => d.properties),
             //     provincia : data[2].features.map(d => d.properties),
@@ -1944,7 +1944,7 @@ const app = {
 
                 app.map.localidad.initialize();
                 app.map.province.initialize();
-                app.map.world_mask.initialize();
+                //app.map.world_mask.initialize();
                 app.map.fog_of_war.initialize(); 
 
                 //fit map to continental Argentina
