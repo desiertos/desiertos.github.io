@@ -2505,7 +2505,7 @@ const dash = {
                         dash.vis.location_card.state.user_location_type
                     ].length;
 
-                    svg.style.height = nof_variables * height;
+                    svg.style.height = nof_variables * height + "px";
                     
                 }
 
