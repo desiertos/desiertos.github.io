@@ -32,11 +32,18 @@
 
     --size-controls: 29px;
 
-    --font-size: max(16px, calc(.5em + .75vw));
+    font-size: max(16px, calc(8px + .75vw));
 
     --delay: .05s;
 
 }
+
+@media (max-width: 375px) {
+    :root {
+      font-size: 14px; /* 10px */
+    }
+}
+  
 
 * {
     box-sizing: border-box;
