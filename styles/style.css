@@ -150,6 +150,9 @@ button.menu-toggle {
     height: var(--header-height);
     border-left: 2px solid var(--header-border-color);
     padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
 }
 
