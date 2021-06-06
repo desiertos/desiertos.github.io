@@ -20,7 +20,7 @@ const dash = {
         mapbox : {
 
             token : 'pk.eyJ1IjoidGlhZ29tYnAiLCJhIjoiY2thdjJmajYzMHR1YzJ5b2huM2pscjdreCJ9.oT7nAiasQnIMjhUB-VFvmw',
-            style : 'mapbox://styles/tiagombp/ckn87x7w014i517qodqof85bi?optimize=true',
+            style : 'mapbox://styles/tiagombp/ckpkfql7g27qy18qveuf6wx1m?optimize=true',
             start : {
 
                 center : {
@@ -44,9 +44,9 @@ const dash = {
 
         geojsons : {
 
-            provincia : '../data/maps/prov2.json',
-            localidad : '../data/maps/dep.json',
-            mask : '../data/maps/arg_mask.json'
+            provincia : '../data/maps/prov.json',
+            localidad : '../data/maps/dep.json'
+            //mask : '../data/maps/arg_mask.json'
 
         },
 
@@ -94,7 +94,7 @@ const dash = {
             Promise.all([
 
                 fetch(dash.params.geojsons.localidad, {mode: 'cors'}).then( response => response.json()),
-                fetch(dash.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
+                //fetch(dash.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
                 fetch(dash.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
                 fetch(dash.params.fopea_data, {mode: 'cors'}).then( response => response.json())
         
@@ -686,7 +686,7 @@ const dash = {
                     'layout': {},
                     'paint': {
                       'line-color': 'black',
-                      'line-width': 5
+                      'line-width': 4
                     },
                     'filter': ['==', 'provincia', '']}); // puts behind road-label
 
@@ -854,80 +854,80 @@ const dash = {
 
         },
 
-        fog_of_war : {
+        // fog_of_war : {
 
-            initialize : function() {
+        //     initialize : function() {
 
-                dash.map_obj.addLayer({
-                    'id': 'fog_of_war_provincia',
-                    'type': 'fill',
-                    'source': 'provincia',
-                    'paint': {
-                      'fill-color': 'ghostwhite',
-                      'fill-opacity': 0,
-                      'fill-outline-color': '#555'
-                    },
-                    'filter': ['!=', 'province', '']
-                }); // puts behind road-label
+        //         dash.map_obj.addLayer({
+        //             'id': 'fog_of_war_provincia',
+        //             'type': 'fill',
+        //             'source': 'provincia',
+        //             'paint': {
+        //               'fill-color': 'ghostwhite',
+        //               'fill-opacity': 0,
+        //               'fill-outline-color': '#555'
+        //             },
+        //             'filter': ['!=', 'province', '']
+        //         }); // puts behind road-label
 
-                // dash.map_obj.addLayer({
-                //     'id': 'fog_of_war_cidade',
-                //     'type': 'fill',
-                //     'source': 'cidade',
-                //     'paint': {
-                //       'fill-color': 'ghostwhite',
-                //       'fill-opacity': 0,
-                //       'fill-outline-color': '#555'
-                //     },
-                //     'filter': ['!=', 'cidade', '']
-                // }); // puts behind road-label
+        //         // dash.map_obj.addLayer({
+        //         //     'id': 'fog_of_war_cidade',
+        //         //     'type': 'fill',
+        //         //     'source': 'cidade',
+        //         //     'paint': {
+        //         //       'fill-color': 'ghostwhite',
+        //         //       'fill-opacity': 0,
+        //         //       'fill-outline-color': '#555'
+        //         //     },
+        //         //     'filter': ['!=', 'cidade', '']
+        //         // }); // puts behind road-label
 
-            },
+        //     },
 
-            toggle : function(location, type = 'provincia') {
+        //     toggle : function(location, type = 'provincia') {
 
-                let opacity = 0;
+        //         let opacity = 0;
 
-                if (location != '') {
+        //         if (location != '') {
 
-                    opacity = 1;
+        //             opacity = 1;
 
-                    dash.map_obj.setFilter(
-                        'fog_of_war_' + type, [
-                            '!=',
-                            ['get', 'nam'],
-                            location
-                        ]);
+        //             dash.map_obj.setFilter(
+        //                 'fog_of_war_' + type, [
+        //                     '!=',
+        //                     ['get', 'nam'],
+        //                     location
+        //                 ]);
 
 
-                }
+        //         }
 
-                dash.map_obj.setPaintProperty('fog_of_war_' + type, 'fill-opacity', opacity);
+        //         dash.map_obj.setPaintProperty('fog_of_war_' + type, 'fill-opacity', opacity);
 
-            }
+        //     }
 
-        },
+        // },
 
-        world_mask : {
+        // world_mask : {
 
-            initialize : function() {
+        //     initialize : function() {
 
-                dash.map_obj.addSource('mask', {
-                    type: 'geojson',
-                    'data' : dash.data.mask
-                });
+        //         dash.map_obj.addSource('mask', {
+        //             type: 'geojson',
+        //             'data' : dash.data.mask
+        //         });
 
-                dash.map_obj.addLayer({
-                    'id': 'mask',
-                    'type': 'fill',
-                    'source': 'mask',
-                    'layout': {},
-                    'paint': {'fill-color': '#F4F0EC'},
-                });
+        //         dash.map_obj.addLayer({
+        //             'id': 'mask',
+        //             'type': 'fill',
+        //             'source': 'mask',
+        //             'layout': {},
+        //             'paint': {'fill-color': '#F4F0EC'},
+        //         });
 
-            }
+        //     }
 
-        },
+        // },
 
         fit_Argentina : function() {
 
@@ -1036,201 +1036,6 @@ const dash = {
             //         5,
             //     ]
             // );
-
-        }
-
-    },
-
-    scroller : {
-
-        steps : {
-
-            list : null,
-
-            get : function() {
-
-                const steps_html = document.querySelector(".story-container").children;
-
-                dash.scroller.steps.list = Array.from(steps_html).map(d => d.dataset.step);
-
-            }
-
-        },
-
-        config : function() {
-
-            enterView({
-
-                selector: '.story-step',
-
-                enter: function(el) {
-
-                    const step = el.dataset.step;
-
-                    console.log("Renderizando step... ", step);
-
-                    dash.scroller.render[step]();
-
-                },
-
-                exit: function(el) {
-
-                    const step = el.dataset.step;
-
-                    const index_step = dash.scroller.steps.list.indexOf(step);
-
-                    const step_anterior = dash.scroller.steps.list[index_step - 1];
-
-                    dash.scroller.render[step_anterior]();
-
-                    console.log("saiu, ", step_anterior);
-                },
-
-                offset: 0.5, // enter at middle of viewport
-                //once: true, // trigger just once
-            });
-
-        },
-
-        // por em outro lugar?
-
-        render : {
-
-            'abertura' : function() {
-
-                dash.map_obj.setPaintProperty('cidade', 'fill-pattern', null);
-                dash.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
-                dash.map_obj.setPaintProperty('cidade', 'fill-outline-color', 'ghostwhite');
-                dash.map_obj.setPaintProperty('cidade', 'fill-opacity', .5);
-                dash.map.set_initial_view();
-                dash.map.cidade.toggle_highlight_border('');
-
-                //dash.interactions.story.toggle_visibility("dashboard_button");
-
-            },
-
-            'pesquisa' : function() {
-
-                console.log('Pesquisando...');
-
-                dash.map.set_initial_view();
-                dash.map.fog_of_war.toggle('provincia', '');
-                dash.map.fog_of_war.toggle('cidade', '');
-                dash.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color']);
-                dash.map.cidade.toggle_highlight_border('');
-                
-            },
-
-            'location-card' : function() {
-
-                const type = dash.vis.location_card.state.user_location_type;
-                const location = dash.vis.location_card.state.user_location_name
-
-                dash.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
-
-                dash.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color_real']);
-
-                dash.map.cidade.toggle_highlight_border(location);
-
-                dash.map.fog_of_war.toggle(type, location);
-
-            },
-
-            'story-no-map-interactions' : function() {},
-
-            'segundo' : function() {
-
-                dash.map.fit_Argentina();
-
-                dash.map_obj.setPaintProperty('cidade', 'fill-pattern', ['get', 'tipo']);
-                dash.map_obj.setPaintProperty('cidade', 'fill-opacity', 1);
-                dash.map.fog_of_war.toggle('provincia', '');
-                dash.map.fog_of_war.toggle('cidade', '');
-
-            },
-
-            'importancia-periodismo' : function() {
-
-                // dash.map.highlight_feature(type, location, pitch = 60, bearing = 30  );
-
-                // dash.map.cidade.toggle_highlight_border(location);
-
-                // dash.map.fog_of_war.toggle(type, location);
-
-            },
-
-            'real-colors' : function() {
-
-                dash.map.fit_Argentina();
-                dash.map.fog_of_war.toggle('provincia', '');
-                dash.map.fog_of_war.toggle('cidade', '');
-                dash.map.cidade.toggle_highlight_border('');
-                dash.map_obj.setPaintProperty('cidade', 'fill-color', ['get', 'color_real']);
-
-            },
-
-            'remaining-category1' : function() {
-
-                const location = dash.vis.location_card.state.remaining_categories_locations[0];
-
-                dash.map.highlight_feature('cidade', location);
-
-                dash.map.fog_of_war.toggle('cidade', location);
-
-                dash.map.cidade.toggle_highlight_border(location);
-
-            },
-
-            'remaining-category2' : function() {
-
-                const location = dash.vis.location_card.state.remaining_categories_locations[1];
-
-                dash.map.highlight_feature('cidade', location);
-
-                dash.map.fog_of_war.toggle('cidade', location);
-
-                dash.map.cidade.toggle_highlight_border(location);
-
-            },
-
-            'remaining-category3' : function() {
-
-                const location = dash.vis.location_card.state.remaining_categories_locations[2];
-
-                dash.map.highlight_feature('cidade', location);
-
-                dash.map.fog_of_war.toggle('cidade', location);
-
-                dash.map.cidade.toggle_highlight_border(location);
-
-            },
-
-            'blabla' : function() {
-
-                dash.map.cidade.toggle_highlight_border('');
-
-                dash.map.fit_Argentina();
-
-            },
-
-            'penultimo' : function() {
-
-                dash.map.cidade.toggle_highlight_border('');
-                dash.map.fog_of_war.toggle('cidade', '');
-                dash.map.fit_Argentina();
-
-
-            },
-
-            'fecho' : function() {
-
-                //dash.map.fit_Argentina();
-                //dash.map.highlight_feature('provincia', 'Salta');
-
-
-            }
-
-
 
         }
 
@@ -3561,9 +3366,9 @@ const dash = {
             //console.log(data);
 
             dash.data.localidad = data[0];
-            dash.data.mask = data[1];
-            dash.data.provincia = data[2];
-            dash.data.fopea_data = data[3];
+            //dash.data.mask = data[1];
+            dash.data.provincia = data[1];
+            dash.data.fopea_data = data[2];
 
             //get national data
             dash.utils.evaluate_national_data();
@@ -3612,10 +3417,10 @@ const dash = {
 
                 // initialize map
 
-                dash.map.world_mask.initialize();
+                //dash.map.world_mask.initialize();
                 dash.map.localidad.initialize();
                 dash.map.province.initialize();
-                dash.map.fog_of_war.initialize(); 
+                //dash.map.fog_of_war.initialize(); 
 
                 // monitor hover and click events on provinces
 
