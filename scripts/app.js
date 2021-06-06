@@ -1626,7 +1626,7 @@ const app = {
                     app.params.mapbox.start.center.lat
                 ], // starting position [lng, lat]
                 zoom: app.params.mapbox.start.zoom, // starting zoom
-                preserveDrawingBuffer: true
+                interactive: false
             });
 
             app.map_obj.on('load', function() {
