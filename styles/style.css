@@ -557,6 +557,9 @@ input#location-search {
     transition: transform .5s;*/
     -webkit-appearance: none;
     -webkit-border-radius: 0;
+
+    height: var(--size-controls);
+    margin-left: 0;
 }
 /*
 input#location-search.unfolded {
