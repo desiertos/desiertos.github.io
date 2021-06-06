@@ -111,16 +111,45 @@ header.header-dashboard {
     margin-left: calc( var(--header-height) / 2 - 0.55rem);
 }
 
-button.menu-toggle {
-    display: flex;
+header .twitter-share-button {
     margin-left: auto;
+    margin-right: 15px;
+}
+
+button.menu-toggle {
+
+    width: var(--header-height);
+    height: var(--header-height);
+    border-left: 2px solid var(--header-border-color);
+    padding: 0;
+    display: flex;
     align-items: center;
+    justify-content: center;
+
+}
+
+button.menu-toggle rect, 
+button.menu-toggle path {
+
+    transition: all .3s;
+
 }
 
 button.menu-toggle.clicked {
 
     background-color: var(--font-color);
-    color: white;
+}
+
+button.menu-toggle.clicked rect {
+
+    fill: var(--font-color);
+
+}
+
+button.menu-toggle.clicked path {
+
+    stroke: white;
+
 }
 
 .menu-toggle {
@@ -2386,7 +2415,11 @@ ul.codigo-etica--valores li {
 
 .poster-outer-container {
 
+
+    position: absolute;
+    /*transform: translateY(-200vh);*/
     background-color: var(--map-bkg);
+    z-index: 5;
 
 }
 
@@ -2396,6 +2429,7 @@ ul.codigo-etica--valores li {
     margin: 0 auto;
     height: 640px;
     border: 16px solid lavender;
+    background-color: white;
 
 }
 
@@ -2403,7 +2437,95 @@ ul.codigo-etica--valores li {
 
     padding: 8px 9px;
     border-bottom: 1px solid var(--font-color);
-    font-size: 10px;
+    font-size: 11px;
     font-family: var(--font-body);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+#poster header a {
+
+    text-decoration: none;
+    color: var(--font-color);
+
+}
+
+#poster figure {
+
+    width: 336px;
+    height: 220px;
+    margin: 0;
+
+}
+
+#poster .poster-card {
+
+    padding: 16px;
+
+}
+
+#poster .kicker {
+    font-size: 8px;
+    font-family: var(--font-body);
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+#poster h2 {
+    font-size: 21px;
+    margin-bottom: 4px;
+}
+
+#poster [data-text_field="poster-category_description"] {
+
+    font-size: 9px;
+    line-height: 12px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+
+}
+
+#poster .poster-logo-fopea {
+
+    height: 12px;
+    display: inline;
+
+}
+
+#poster .dashboard-basic-info-table-group .name {
+
+    letter-spacing: .8px;
+    font-size: 8px;
+    margin: 0;
+    padding-bottom: 4px;
+}
+
+#poster .dashboard-basic-info-table-group [data-infotable_field] {
+
+    font-size: 21px;
+    font-weight: 500;
+    margin: 0;
+
+}
+
+#poster .dashboard-basic-info-table-group:last-of-type {
+
+    border-bottom: 0;
+
+}
+
+#poster [data-category] {
+
+    font-size: 10px;
+    padding: 4px;
+    border-top: 1px solid var(--font-color);
+    border-bottom: 1px solid var(--font-color);
+    margin-bottom: 4px;
+    margin-top: 0;
+    text-transform: uppercase;
+    font-weight: 500;
 
 }
