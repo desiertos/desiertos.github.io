@@ -601,6 +601,20 @@ const dash = {
 
                 console.log("Clicou em ", localidad, local, dash.vis.location_card.state.user_location_province);
 
+                // clears hover featureState
+                // o id da localidad é o randId. Só ver o 'promoteId' no addSource lá em cima.
+
+                const id = e.features[0].properties.randId;
+
+                dash.map_obj.setFeatureState(
+                    { 
+                        source: 'localidad',
+                        id: id
+                    },
+
+                    { hover : false }
+                );
+
                 dash.vis.render_selected_place(local);
 
             },
@@ -785,6 +799,17 @@ const dash = {
                     };
 
                     console.log("Clicou em ", province_name, local);
+
+                    // clears hover featureState
+                    // o id da da provincia é o nam. Só ver o 'promoteId' no addSource lá em cima.
+                    dash.map_obj.setFeatureState(
+                        { 
+                            source: 'provincia',
+                            id: province_name
+                        },
+
+                        { hover : false }
+                    );
 
                     dash.vis.render_selected_place(local);
 
