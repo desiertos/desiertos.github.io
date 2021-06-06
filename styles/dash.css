@@ -39,7 +39,7 @@
 
     --map-bkg : #F4F0EC;
 
-    /*font-size: calc(.5em + .75vw);*/
+    font-size: max(16px, calc(8px + .75vw));
 
 }
 
@@ -2381,3 +2381,29 @@ ul.codigo-etica--valores li {
     border-width: 0;
 }
 
+
+/* poster */
+
+.poster-outer-container {
+
+    background-color: var(--map-bkg);
+
+}
+
+#poster {
+
+    max-width: 368px;
+    margin: 0 auto;
+    height: 640px;
+    border: 16px solid lavender;
+
+}
+
+#poster header {
+
+    padding: 8px 9px;
+    border-bottom: 1px solid var(--font-color);
+    font-size: 10px;
+    font-family: var(--font-body);
+
+}

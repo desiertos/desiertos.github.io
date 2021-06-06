@@ -4,15 +4,63 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/dash.css">
     <title>Document</title>
 </head>
 <body>
 
-    <div id="poster">
+    <div class="poster-outer-container">
 
-        
+        <div id="poster" data-color="blue">
+
+            <header>
+                <img src="" alt="Logo Google News">
+                <a href="http://desiertosinformativos.fopea.org/">desiertosinformativos.fopea.org/</a>
+            </header>
+    
+            <figure class="static-map">
+    
+            </figure>
+    
+            <div class="poster-card">
+                <p class="kicker">
+                    Estás ubicado en
+                </p>
+    
+                <h2>
+                    <span class="js--text-field" data-text_field='name'>Argentina</span>
+                </h2>
+    
+                <p class="js--text-field" data-text_field='category' data-category>categoria</p>
+    
+                <p class="js--text-field" data-text_field='category_description'></p>
+    
+                <div class="dashboard--basic-info-table">
+    
+                    <div class="dashboard-basic-info-table-group" data-infotable-group="poblacion">
+                        <span class="name">Población</span>
+                        <span data-infotable_field="poblacion"></span>
+                    </div>
+    
+                    <div class="dashboard-basic-info-table-group" data-infotable-group="medios" data-categoria-local="none">
+                        <span class="name">Medios relevados</span>
+                        <span data-infotable_field="medios"></span>
+                        <span class="info-table--note">* Comprende a las entidades más representativas del área. <a href="../metodologia.html" target="_blank">Ver metodología</a>.</span>
+                    </div>
+    
+                    <div class="dashboard-basic-info-table-group" data-infotable-group="periodistas">
+                        <span class="name">Periodistas detectados</span>
+                        <span data-infotable_field="periodistas"></span>
+                    </div>
+                </div>
+    
+            </div>
+    
+        </div>
 
     </div>
+
+
     
 </body>
 </html>
