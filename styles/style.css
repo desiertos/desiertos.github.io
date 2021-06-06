@@ -51,7 +51,7 @@
 
 html {
 
-    scroll-snap-type: y mandatory;
+    /*scroll-snap-type: y mandatory;*/
     scroll-behavior: smooth;
 
 }
@@ -607,7 +607,7 @@ input#location-search.unfolded {
     border: 1px solid var(--font-color);
     /*border-right: 1px solid var(--font-color);*/
     outline: none;
-    cursor: pointer;
+    /*cursor: pointer;*/
     width: var(--size-controls);
     height: var(--size-controls);
     order: -1;
@@ -678,7 +678,7 @@ input#location-search {
     flex-direction: column;
     justify-content: center;
 
-    scroll-snap-align: start;
+    /*scroll-snap-align: start;*/
 
 
 }
