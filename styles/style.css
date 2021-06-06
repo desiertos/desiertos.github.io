@@ -141,18 +141,40 @@ header {
 
 header .twitter-share-button {
     margin-left: auto;
+    margin-right: 15px;
 }
 
 button.menu-toggle {
-    display: flex;
-    /*margin-left: auto;*/
-    align-items: center;
+
+    width: var(--header-height);
+    height: var(--header-height);
+    border-left: 2px solid var(--header-border-color);
+    padding: 0;
+
+}
+
+button.menu-toggle rect, 
+button.menu-toggle path {
+
+    transition: all .3s;
+
 }
 
 button.menu-toggle.clicked {
 
     background-color: var(--font-color);
-    color: white;
+}
+
+button.menu-toggle.clicked rect {
+
+    fill: var(--font-color);
+
+}
+
+button.menu-toggle.clicked path {
+
+    stroke: white;
+
 }
 
 .menu-toggle {
@@ -390,7 +412,7 @@ h2 {
     letter-spacing: .1em;
     font-family: var(--font-body);
     font-weight: 400;
-    margin-top: 2rem;
+    margin-top: 1rem;
     margin-bottom: .5rem;
     color: var(--font-color);
 
@@ -427,7 +449,7 @@ footer {
 footer p.footer-text {
 
     margin: 0;
-    width: calc(100% - 50vw);
+    /*width: calc(100% - 50vw);*/
     line-height: 27px;
     font-size: 12px;
     display: flex;
