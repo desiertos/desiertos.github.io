@@ -139,9 +139,13 @@ header {
     margin-left: calc( var(--header-height) / 2 - 0.55rem);
 }
 
+header .twitter-share-button {
+    margin-left: auto;
+}
+
 button.menu-toggle {
     display: flex;
-    margin-left: auto;
+    /*margin-left: auto;*/
     align-items: center;
 }
 

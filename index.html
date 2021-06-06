@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable"       content="yes">
+
+    <meta property="og:title"                 content="Desiertos informativos en la Argentina | FOPEA">
+    <meta property="og:description"           content="¿Vivís en un lugar con acceso a noticias locales?">
+    <meta property="og:image"                 content="https://desiertosinformativos.fopea.org/img/site.jpg">
+
+
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -25,6 +34,8 @@
             </div>
         </div>
         <h1 class="dashboard--title">Desiertos de noticias en la Argentina</h1>
+        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="¿Vivís en un lugar con acceso a noticias locales?" data-url="https://desiertosinformativos.fopea.org/" data-via="FOPEA" data-lang="es" data-show-count="false"><img src="./img/twitter_logo.svg" alt="Tweetear"></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <!--<a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=Hello%20world">Tweet</a>-->
         <button class="menu-toggle" aria-label="Menú">&#8801;</button>
     </header>
 
@@ -282,6 +293,23 @@
         </p>
 
     </footer>
+
+    <script>window.twttr = (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0],
+          t = window.twttr || {};
+        if (d.getElementById(id)) return t;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      
+        t._e = [];
+        t.ready = function(f) {
+          t._e.push(f);
+        };
+      
+        return t;
+      }(document, "script", "twitter-wjs"));</script>
 
     <script src="./scripts/enter-view.min.js"></script>
     <script src="./scripts/d3.v6.min.js"></script>
