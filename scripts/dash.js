@@ -44,8 +44,8 @@ const dash = {
 
         geojsons : {
 
-            provincia : '../data/maps/prov.json',
-            localidad : '../data/maps/dep.json'
+            provincia : 'mapbox://tiagombp.4fk72g1y',
+            localidad : 'mapbox://tiagombp.d8u3a43g'
             //mask : '../data/maps/arg_mask.json'
 
         },
@@ -93,9 +93,9 @@ const dash = {
 
             Promise.all([
 
-                fetch(dash.params.geojsons.localidad, {mode: 'cors'}).then( response => response.json()),
+                //fetch(dash.params.geojsons.localidad, {mode: 'cors'}).then( response => response.json()),
                 //fetch(dash.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
-                fetch(dash.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
+                //fetch(dash.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
                 fetch(dash.params.fopea_data, {mode: 'cors'}).then( response => response.json())
         
             ])
@@ -312,8 +312,8 @@ const dash = {
             initialize : function() {
 
                 dash.map_obj.addSource('localidad', {
-                    type: 'geojson',
-                    'data' : dash.data.localidad,
+                    type: 'vector',
+                    url : dash.params.geojsons.localidad,
                     'promoteId' : 'randId'
                 });
 
@@ -321,6 +321,7 @@ const dash = {
                     'id': 'localidad',
                     'type': 'fill',
                     'source': 'localidad',
+                    'source-layer': 'localidad',
                     'layout': {},
                     'paint': {
                       'fill-color': ['get', 'color_real'],
@@ -342,6 +343,7 @@ const dash = {
                     'id': 'localidad-border-hover',
                     'type': 'line',
                     'source': 'localidad',
+                    'source-layer': 'localidad',
                     'layout': {},
                     'paint': {
                       'line-color': [
@@ -371,6 +373,7 @@ const dash = {
                     'id': 'localidad-border',
                     'type': 'line',
                     'source': 'localidad',
+                    'source-layer': 'localidad',
                     'layout': {},
                     'paint': {
                       'line-color': '#666',
@@ -382,6 +385,7 @@ const dash = {
                     'id': 'localidad-highlight',
                     'type': 'line',
                     'source': 'localidad',
+                    'source-layer': 'localidad',
                     'layout': {},
                     'paint': {
                       'line-color': 'black',
@@ -511,6 +515,7 @@ const dash = {
                     dash.map_obj.setFeatureState(
                         { 
                             source: 'localidad',
+                            sourceLayer: 'localidad',
                             id: dash.map.localidad.hoveredStateId
                         },
 
@@ -525,6 +530,7 @@ const dash = {
                 dash.map_obj.setFeatureState(
                     { 
                         source: 'localidad',
+                        sourceLayer: 'localidad',
                         id: dash.map.localidad.hoveredStateId
                     },
 
@@ -542,7 +548,12 @@ const dash = {
                 // return circle to normal sizing and color
                 if (dash.map.localidad.hoveredStateId !== null) {
                     dash.map_obj.setFeatureState(
-                        { source: 'localidad', id: dash.map.localidad.hoveredStateId },
+                        { 
+                            source: 'localidad', 
+                            sourceLayer: 'localidad', 
+                            id: dash.map.localidad.hoveredStateId 
+                        },
+
                         { hover: false }
                     );
                 }
@@ -609,6 +620,7 @@ const dash = {
                 dash.map_obj.setFeatureState(
                     { 
                         source: 'localidad',
+                        sourceLayer: 'localidad',
                         id: id
                     },
 
@@ -648,8 +660,8 @@ const dash = {
             initialize : function() {
 
                 dash.map_obj.addSource('provincia', {
-                    type: 'geojson',
-                    'data' : dash.data.provincia,
+                    type: 'vector',
+                    url : dash.params.geojsons.provincia,
                     'promoteId' : 'nam'
                 });
 
@@ -657,6 +669,7 @@ const dash = {
                     'id': 'provincia',
                     'type': 'fill',
                     'source': 'provincia',
+                    'source-layer': 'provincia',
                     'layout': {},
                     'paint': {
                       'fill-color': 'transparent',
@@ -677,6 +690,7 @@ const dash = {
                     'id': 'provincia-border-hover',
                     'type': 'line',
                     'source': 'provincia',
+                    'source-layer': 'provincia',
                     'layout': {},
                     'paint': {
                       'line-color': '#666',
@@ -697,6 +711,7 @@ const dash = {
                     'id': 'provincia-border',
                     'type': 'line',
                     'source': 'provincia',
+                    'source-layer': 'provincia',
                     'layout': {},
                     'paint': {
                       'line-color': 'black',
@@ -741,6 +756,7 @@ const dash = {
                     dash.map_obj.setFeatureState(
                         { 
                             source: 'provincia',
+                            sourceLayer: 'provincia',
                             id: dash.map.province.hoveredStateId
                         },
 
@@ -755,6 +771,7 @@ const dash = {
                 dash.map_obj.setFeatureState(
                     { 
                         source: 'provincia',
+                        sourceLayer: 'provincia',
                         id: dash.map.province.hoveredStateId
                     },
 
@@ -773,7 +790,12 @@ const dash = {
     
                 if (dash.map.province.hoveredStateId) {
                     dash.map_obj.setFeatureState(
-                        { source: 'provincia', id: dash.map.province.hoveredStateId },
+                        { 
+                            source: 'provincia', 
+                            sourceLayer: 'provincia',
+                            id: dash.map.province.hoveredStateId 
+                        },
+
                         { hover: false }
                     );
                 }
@@ -805,6 +827,7 @@ const dash = {
                     dash.map_obj.setFeatureState(
                         { 
                             source: 'provincia',
+                            sourceLayer: 'provincia',
                             id: province_name
                         },
 
@@ -846,7 +869,12 @@ const dash = {
 
                     if (dash.map.province.hoveredStateId) {
                         dash.map_obj.setFeatureState(
-                            { source: 'provincia', id: dash.map.province.hoveredStateId },
+                            { 
+                                source: 'provincia',
+                                sourceLayer: 'provincia',
+                                id: dash.map.province.hoveredStateId 
+                            },
+
                             { hover: false }
                         );
                     }
@@ -3390,10 +3418,10 @@ const dash = {
 
             //console.log(data);
 
-            dash.data.localidad = data[0];
+            //dash.data.localidad = data[0];
             //dash.data.mask = data[1];
-            dash.data.provincia = data[1];
-            dash.data.fopea_data = data[2];
+            //dash.data.provincia = data[1];
+            dash.data.fopea_data = data[0];
 
             //get national data
             dash.utils.evaluate_national_data();
