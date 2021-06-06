@@ -2216,6 +2216,7 @@ span.conclusiones-author {
     font-family: var(--font-title);
     font-weight: 500;
     margin-bottom: 1rem;
+    text-align: center;
 
 }
 
