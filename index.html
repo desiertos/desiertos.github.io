@@ -68,15 +68,19 @@
                         Hablamos de vegetación, de clima y de ecosistemas informativos. Las zonas donde hay condiciones para ejercer un periodismo profesional activo son como <span data-category-highlight="bosque" data-category-highlight-text="bosques"></span>, donde es posible encontrar luces, sombras, matices, diversidad y oxígeno. En el otro extremo están las áreas donde las condiciones para el ejercicio del periodismo profesional son muy débiles: se parecen a los <span data-category-highlight="desierto" data-category-highlight-text="desiertos"></span> porque el paisaje es monocromático, árido, seco y proclive a los espejismos. 
                     </p>
 
-                    <p class="kicker">Y vos, ¿dónde estás?</p>
+                    <form id="form" autocomplete="off" spellcheck="false" tabindex="0">
+                        <fieldset>
+                            <label class="kicker" for="location-search">Y vos, ¿dónde estás?</label>
+                            <div class="container-search">
+                                <input type="search" id="location-search" name="q" list="locations" placeholder="Selecciona tu ubicación">
+                                <div class="search-button" id="story-search-place" aria-hidden="true">
+                                    <img src="./img/search.png">
+                                </div>
+                            </div>
+                            <datalist id="locations"></datalist>
+                        </fieldset>
+                    </form>
 
-                    <div class="container-search">
-                        <button type="submit" class="search-button" id="story-search-place">
-                            <img src="./img/search.png">
-                        </button>
-                        <input type="search" id="location-search" name="q" list="locations" aria-label="Search through list of locations in Argentina" placeholder="Selecciona tu ubicación">
-                        <datalist id="locations"></datalist>
-                    </div>
                 
                 </div>
 

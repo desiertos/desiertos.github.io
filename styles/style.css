@@ -49,11 +49,33 @@ html {
 
 }
 
-input {
+input[type=search],
+fieldset {
 
-    border-radius: 0; /*ios fix*/
-
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+      margin:0;
+      border:0;
+    border-radius: 0;
+      padding:0;
+      display:inline-block;
+      vertical-align:middle;
+      white-space:normal;
+      background:none;
+      line-height: 1.5;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
 }
+
+form, fieldset {
+    width: 100%
+}
+
 
 .prevent-scrolling {
     overflow-y: hidden;
@@ -577,6 +599,8 @@ input#location-search.unfolded {
     cursor: pointer;
     width: var(--size-controls);
     height: var(--size-controls);
+    order: -1;
+    padding: 5px;
   }
   
 .search-button img {

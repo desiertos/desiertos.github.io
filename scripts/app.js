@@ -824,7 +824,7 @@ const app = {
 
                     const step_anterior = app.scroller.steps.list[index_step - 1];
 
-                    app.scroller.render[step_anterior]();
+                    app.scroller.render[step_anterior]('back');
 
                     //console.log("saiu, ", step_anterior);
                 },
@@ -839,14 +839,18 @@ const app = {
 
         render : {
 
-            'abertura' : function() {
+            'abertura' : function(direction = null) {
 
                 //app.map_obj.setPaintProperty('localidad', 'fill-pattern', null);
                 //app.map_obj.setPaintProperty('localidad', 'fill-color', ['get', 'color']);
                 //app.map_obj.setPaintProperty('localidad', 'fill-outline-color', 'ghostwhite');
                 //app.map_obj.setPaintProperty('localidad', 'fill-opacity', .5);
                // app.map.set_initial_view();
-               app.ctrl.prevents_scroll_on_opening(true);
+               //app.ctrl.prevents_scroll_on_opening(true);
+               if (direction == 'back') { 
+                   app.interactions.story.search_bar.reset();
+                }
+
                app.map.clear_highlights_and_popups();
                app.map.fit_Argentina();
                app.map.localidad.toggle_highlight_border('');
@@ -1064,7 +1068,8 @@ const app = {
                     input : '#location-search',
                     search_button : '#story-search-place',
                     destination_step : '#location-card',
-                    destination_focus : '[data-next-focus]'
+                    destination_focus : '[data-next-focus]',
+                    form : 'form'
 
                 },
 
@@ -1144,22 +1149,50 @@ const app = {
 
                 },
 
+                reset : function() {
+
+                    const ref_form = app.interactions.story.search_bar.refs.form;
+                    const form = document.querySelector(ref_form);
+                    form.reset();
+
+                },
+
                 listen_search : function() {
 
                     const ref_btn = app.interactions.story.search_bar.refs.search_button;
                     const ref_input = app.interactions.story.search_bar.refs.input;
+                    const ref_form = app.interactions.story.search_bar.refs.form;
 
                     const btn = document.querySelector(ref_btn);
                     const input_el = document.querySelector(ref_input);
+                    const form = document.querySelector(ref_form);
 
                     //console.log(btn);
 
-                    btn.addEventListener('click', function(e) {
+                    // btn.addEventListener('click', function(e) {
+
+                    //     const search_content = input_el.value;
+
+                    //     app.interactions.story.search_bar.submit(e, search_content);
+                        
+                    // });
+
+                    form.addEventListener('submit', function(e) {
 
                         const search_content = input_el.value;
 
-                        app.interactions.story.search_bar.submit(e, search_content);
+                        console.log('SUBMITED', search_content);
                         
+                        if (search_content) app.interactions.story.search_bar.submit(e, search_content);
+
+                        e.preventDefault();
+
+                    });
+
+                    form.addEventListener('reset', function(e) {
+
+                        console.log('RESET!', input_el.value);
+ 
                     });
 
                     input_el.addEventListener('change', function(e){
@@ -1173,21 +1206,21 @@ const app = {
 
                     });
 
-                    //substitutes accents as user types
-                    input_el.addEventListener('input',function(){
-                        //console.log('fire INPUT')
-                        this.value = this.value.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-                    });
+                    // //substitutes accents as user types
+                    // input_el.addEventListener('input',function(){
+                    //     //console.log('fire INPUT')
+                    //     this.value = this.value.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                    // });
 
-                    input_el.addEventListener('keydown', function (e) {
+                    // input_el.addEventListener('keydown', function (e) {
 
-                        if (e.code === 'Enter') {  //checks whether the pressed key is "Enter"
+                    //     if (e.code === 'Enter') {  //checks whether the pressed key is "Enter"
 
-                            //console.log(e);
-                            const search_content = input_el.value;
-                            app.interactions.story.search_bar.submit(e, search_content);
-                        }
-                    });
+                    //         //console.log(e);
+                    //         const search_content = input_el.value;
+                    //         app.interactions.story.search_bar.submit(e, search_content);
+                    //     }
+                    // });
 
                 },
 
