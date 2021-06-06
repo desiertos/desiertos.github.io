@@ -555,6 +555,8 @@ input#location-search {
     /*transform-origin: left;
     transform: scaleX(0);
     transition: transform .5s;*/
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
 }
 /*
 input#location-search.unfolded {
