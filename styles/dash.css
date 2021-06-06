@@ -704,6 +704,7 @@ input#location-search.unfolded {
     outline: none;
     cursor: pointer;
     width: var(--size-controls);
+    height: var(--size-controls);
   }
   
   .search-button img {
