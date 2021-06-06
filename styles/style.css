@@ -576,7 +576,7 @@ input#location-search.unfolded {
   }
   
 .search-button img {
-    object-fit: cover;
+    /*object-fit: cover;*/
     /*width: 20px;
     height: 20px;*/
 }

@@ -707,7 +707,7 @@ input#location-search.unfolded {
   }
   
   .search-button img {
-    object-fit: cover;
+    /*object-fit: cover;*/
 }
 
 .container-search-dashboard .awesomplete > ul {
