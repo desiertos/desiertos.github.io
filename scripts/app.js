@@ -36,8 +36,8 @@ const app = {
 
         geojsons : {
 
-            provincia : '../data/maps/prov.json',
-            localidad : '../data/maps/dep.json'
+            provincia : 'mapbox://tiagombp.4fk72g1y',
+            localidad : 'mapbox://tiagombp.d8u3a43g'
             //mask : '../data/maps/arg_mask.json'
 
         },
@@ -89,9 +89,9 @@ const app = {
 
             Promise.all([
 
-                fetch(app.params.geojsons.localidad, {mode: 'cors'}).then( response => response.json()),
+                //fetch(app.params.geojsons.localidad, {mode: 'cors'}).then( response => response.json()),
                 //fetch(app.params.geojsons.mask, {mode: 'cors'}).then( response => response.json()),
-                fetch(app.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
+                //fetch(app.params.geojsons.provincia, {mode: 'cors'}).then( response => response.json()),
                 fetch(app.params.fopea_data, {mode: 'cors'}).then( response => response.json())
         
             ])
@@ -331,14 +331,15 @@ const app = {
             initialize : function() {
 
                 app.map_obj.addSource('localidad', {
-                    type: 'geojson',
-                    'data' : app.data.localidad
+                    type: 'vector',
+                    url : app.params.geojsons.localidad
                 });
 
                 app.map_obj.addLayer({
                     'id': 'localidad',
                     'type': 'fill',
                     'source': 'localidad',
+                    'source-layer' : 'localidad',
                     'layout': {},
                     'paint': {
                       'fill-color': ['get', 'color_real'],
@@ -351,6 +352,7 @@ const app = {
                     'id': 'localidad-border',
                     'type': 'line',
                     'source': 'localidad',
+                    'source-layer' : 'localidad',
                     'layout': {},
                     'paint': {
                       'line-color': '#666',
@@ -362,6 +364,7 @@ const app = {
                     'id': 'localidad-highlight',
                     'type': 'line',
                     'source': 'localidad',
+                    'source-layer' : 'localidad',
                     'layout': {},
                     'paint': {
                       'line-color': 'black',
@@ -440,14 +443,15 @@ const app = {
             initialize : function() {
 
                 app.map_obj.addSource('provincia', {
-                    type: 'geojson',
-                    'data' : app.data.provincia
+                    type: 'vector',
+                    url : app.params.geojsons.provincia
                 });
 
                 app.map_obj.addLayer({
                     'id': 'provincia',
                     'type': 'fill',
                     'source': 'provincia',
+                    'source-layer' : 'provincia',
                     'layout': {},
                     'paint': {
                       'fill-outline-color': '#AAA',
@@ -459,6 +463,7 @@ const app = {
                     'id': 'provincia-border',
                     'type': 'line',
                     'source': 'provincia',
+                    'source-layer' : 'provincia',
                     'layout': {},
                     'paint': {
                       'line-color': '#666',
@@ -470,6 +475,7 @@ const app = {
                     'id': 'provincia-highlight',
                     'type': 'line',
                     'source': 'provincia',
+                    'source-layer' : 'provincia',
                     'layout': {},
                     'paint': {
                       'line-color': '#666',
@@ -500,6 +506,7 @@ const app = {
                     'id': 'fog_of_war_provincia',
                     'type': 'fill',
                     'source': 'provincia',
+                    'source-layer' : 'provincia',
                     'paint': {
                       'fill-color': 'ghostwhite',
                       'fill-opacity': 0,
@@ -512,6 +519,7 @@ const app = {
                     'id': 'fog_of_war_localidad',
                     'type': 'fill',
                     'source': 'localidad',
+                    'source-layer' : 'localidad',
                     'paint': {
                       'fill-color': 'ghostwhite',
                       'fill-opacity': 0,
@@ -585,13 +593,13 @@ const app = {
             location_data.color_real =
             app.params.colors[app.params.categories[+categoria-1]];
 
-            const location_feature = app.data.localidad.features
-            .filter(d => d.properties.local == location)
-            [0]//.geometry.coordinates;
+            // const location_feature = app.data.localidad.features
+            // .filter(d => d.properties.local == location)
+            // [0]//.geometry.coordinates;
 
             let location_coordinates = [
-                location_feature.properties.xc,
-                location_feature.properties.yc
+                location_data.xc,
+                location_data.yc
             ];
 
             //console.log('Location Data for', name, location_data);
@@ -1567,22 +1575,22 @@ const app = {
 
             //console.log(data);
 
-            app.data.localidad = data[0];
+            //app.data.localidad = data[0];
             //app.data.mask = data[1];
-            app.data.provincia = data[1];
-            app.data.fopea_data = data[2];
+            //app.data.provincia = data[1];
+            app.data.fopea_data = data[0];
             // {
             //     localidad : data[0].features.map(d => d.properties),
             //     provincia : data[2].features.map(d => d.properties),
             //     lista_locais : data[3]
             // };
 
-            const pobs = data[0].features.map(d => d.properties.pob);
+            //const pobs = data[0].features.map(d => d.properties.pob);
 
             //console.log(pobs);
 
-            app.data.max_pob = Math.max(...pobs);
-            app.data.min_pob = Math.min(...pobs);
+            //app.data.max_pob = Math.max(...pobs);
+            //app.data.min_pob = Math.min(...pobs);
             
 
 
