@@ -1735,10 +1735,7 @@ const dash = {
 
                 const element = document.querySelector("#poster")
 
-                html2canvas(element, {
-                    windowWidth: element.scrollWidth,
-                    windowHeight: element.scrollHeight
-                }).then(
+                html2canvas(element, {scrollY: -window.scrollY}).then(
 
                     canvas => {
 
