@@ -21,6 +21,7 @@ const dash = {
 
             token : 'pk.eyJ1IjoidGlhZ29tYnAiLCJhIjoiY2thdjJmajYzMHR1YzJ5b2huM2pscjdreCJ9.oT7nAiasQnIMjhUB-VFvmw',
             style : 'mapbox://styles/tiagombp/ckpkfql7g27qy18qveuf6wx1m?optimize=true',
+            style_static_map : 'tiagombp/ckpcy0bxc0jru18o6eskk8r8u',
             start : {
 
                 center : {
@@ -1257,27 +1258,27 @@ const dash = {
 
                 },
 
-            },
-
-            download_map : {
-
-                ref: '.download-map a',
-
-                monitor : function() {
-
-                    const link = document.querySelector(this.ref);
-
-                    link.addEventListener('click', event => {
-
-                        const poster = dash.map_obj.getCanvas().toDataURL();
-
-                        link.href = poster;
-
-                    });
-
-                }
-
             }
+
+            // download_map : {
+
+            //     ref: '.download-map a',
+
+            //     monitor : function() {
+
+            //         const link = document.querySelector(this.ref);
+
+            //         link.addEventListener('click', event => {
+
+            //             const poster = dash.map_obj.getCanvas().toDataURL();
+
+            //             link.href = poster;
+
+            //         });
+
+            //     }
+
+            // }
 
         },
 
@@ -1642,17 +1643,95 @@ const dash = {
 
             ref : '.download-map a',
 
-            convert_and_download : function() {
+            generate_static_map_url : function() {
 
-                const dl = document.querySelector(dash.interactions.download_map.ref);
+                const data = dash.vis.location_card.state.location_data;
 
-                dl.innerHTML = 'generando la imagen...';
+                let url = 
+                
+                'https://api.mapbox.com/styles/v1/' +
+                dash.params.mapbox.style_static_map +
+                '/static/pin-l+' +
+                '212121' + 
+                '(' + data.xc + ',' + data.yc + ')' +
+                '/[' + data.xmin + ',' + data.ymin + 
+                ','  + data.xmax + ',' + data.ymax + ']' + 
+                '/' + 900 + 'x' + 600 + 
+                '?access_token=' + dash.params.mapbox.token;
 
-                const canvas_el = document.querySelector('canvas');
+                console.log(url);
 
-                console.log('Já existe um ', canvas_el);
+                url = encodeURI(url);
 
-                if (canvas_el) canvas_el.remove();
+                console.log(url);
+
+                return url;
+
+
+            },
+
+            get_static_map_image : function() {
+
+                function startDownload(url) {
+                    let imageURL = url;
+                  
+                    downloadedImg = new Image;
+                    downloadedImg.crossOrigin = "Anonymous";
+                    downloadedImg.addEventListener("load", imageReceived, false);
+                    downloadedImg.src = imageURL;
+                }
+
+                function imageReceived() {
+
+                    // aqui converte-se a imagem que veio da API do mapbox em dataurl, para aí sim ser acrescentada a um elemento imagem do card -- questões de segurança
+
+                    // engraçado aqui ele recuperar a referencia ao objeto que chamou a função!
+                    console.log(downloadedImg);
+
+                    let canvas = document.createElement("canvas");
+                    let context = canvas.getContext("2d");
+
+                    const image_lab = document.querySelector('.image-lab');
+                  
+                    canvas.width = 900;
+                    canvas.height = 600;
+                  
+                    context.drawImage(downloadedImg, 0, 0);
+                    image_lab.appendChild(canvas);
+                  
+                    try {
+
+                        // convertendo a imagem do mapa em data url... para ser acrescentada como source do elemento imagem que vai ser inserido no card
+
+                        let static_map = document.createElement('img');
+                        static_map.crossOrigin = "Anonymous";
+                        static_map.addEventListener("load", dash.interactions.download_map.convert_card_to_image, false);
+                        static_map.src = canvas.toDataURL("image/png");
+
+                    }
+
+                    catch(err) {
+                      console.log("Error: " + err);
+                    }
+                }
+
+                const url = this.generate_static_map_url();
+                startDownload(url);
+
+            },
+
+            convert_card_to_image : function() {
+
+                console.log('STATIC MAP, the ghost', this);
+
+                // agora que a imagem do mapa foi convertida e acrescentada como dataurl no src do elemento imagem (que ainda não tem pai), o elemento vai ser pendurado no nosso card
+                document.querySelector('figure.static-map').appendChild(this);
+
+                // removendo o canvas que foi usado na conversao da imagem do mapa
+                const lab_canvas = document.querySelector('.image-lab canvas');
+                if (lab_canvas) lab_canvas.remove();
+
+                // e agora finalmente convertendo o card inteiro para imagem
 
                 html2canvas(document.querySelector("#poster")).then(
 
@@ -1660,14 +1739,15 @@ const dash = {
 
                         document.querySelector('.poster-outer-container').appendChild(canvas)
 
-                        const canvas_el = document.querySelector('canvas');
+                        const canvas_el = document.querySelector('.poster-outer-container > canvas');
 
+                        const dl = document.querySelector(dash.interactions.download_map.ref);
                         dl.href = canvas_el.toDataURL();
                         dl.download = "desiertos_informativos_fopea.png";
 
                         dl.innerHTML = 'LISTO PARA DESCARGAR';
 
-                        dl.removeEventListener('click', dash.interactions.download_map.convert_and_download);
+                        dl.removeEventListener('click', dash.interactions.download_map.handler);
 
                     }
 
@@ -1675,11 +1755,29 @@ const dash = {
 
             },
 
+            handler : function() {
+
+                dash.interactions.download_map.reset();
+
+                dash.interactions.download_map.get_static_map_image();
+
+            },
+
             monitor_click : function() {
 
                 const dl = document.querySelector(this.ref);
                 
-                dl.addEventListener('click', dash.interactions.download_map.convert_and_download)
+                dl.addEventListener('click', dash.interactions.download_map.handler)
+
+            },
+
+            reset : function() {
+
+                const canvas_el = document.querySelector('.poster-outer-container > canvas');
+                if (canvas_el) canvas_el.remove();
+
+                const lab_canvas = document.querySelector('.image-lab canvas');
+                if (lab_canvas) lab_canvas.remove();
 
             }
 
