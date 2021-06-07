@@ -1168,6 +1168,12 @@ a.button-go-on.first span {
 
     }
 
+    [data-step="search-step"] .story-step-inner {
+
+        background-color: transparent;
+
+    }
+
     .story-step:first-of-type .story-step-inner {
 
         padding: 20px;

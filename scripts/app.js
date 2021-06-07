@@ -69,6 +69,7 @@ const app = {
     },
 
     mobile : false,
+    for_the_first_time_in_forever : true,
 
     data : {
 
@@ -812,7 +813,7 @@ const app = {
 
             enterView({
 
-                selector: '.story-step',
+                selector: '.scroller-step',
 
                 enter: function(el) {
 
@@ -872,6 +873,7 @@ const app = {
                 
             // },
 
+            // no scroller
             'search-step' : function(direction = null) {
 
                 if (direction == 'back') { 
@@ -885,6 +887,7 @@ const app = {
  
             },
 
+            // no scroll
             'location-card' : function() {
 
                 //app.ctrl.prevents_scroll_on_opening(false);
@@ -897,7 +900,6 @@ const app = {
 
                 const type = app.vis.location_card.state.user_location_type;
                 const location = app.vis.location_card.state.user_location_name
-
                 app.map.highlight_feature(type, location, name = 'user-location', pitch = 0, bearing = 0  );
 
                 //app.map_obj.setPaintProperty('localidad', 'circle-opacity', 1);
@@ -1243,44 +1245,25 @@ const app = {
 
                     // set vis state, calls vis render
 
+                    if (app.for_the_first_time_in_forever) {
+
+                        app.for_the_first_time_in_forever = false;
+
+                    } else {
+
+                        app.scroller.render['search-step'](direction = 'back');
+
+                    }
+
                     app.vis.location_card.state.set(local, data);
 
                     // populates fields
 
                     app.vis.location_card.update_text_fields();
 
-                    // with the fields updated, resize svg
+                    app.scroller.render['location-card']();
 
-                    //app.vis.stripplot.dimensions.set_size();
-                    //app.vis.stripplot.scales.range.set();
-                    //app.vis.stripplot.scales.set(local.tipo);
-                    //app.vis.stripplot.components.labels.render(local.tipo);
-                    //app.vis.stripplot.components.lines.render(local.tipo);
-                    //app.vis.stripplot.components.marks.render(local.tipo);
-
-                    //updates maps
-
-                    // let type; 
-                    
-                    // if (local.type == "localidad") {
-
-                    //     type = 'localidad';
-
-                    // } else {
-
-                    //     if (local.type == "provincia") {
-                            
-                    //         type = 'provincia';
-
-                    //     }
-
-                    // }
-                    
-                    // app.map.highlight_feature(type = type, location = local.local);
-
-                    // scrolls to card
-
-                    //app.ctrl.prevents_scroll_on_opening(false);
+                    app.ctrl.prevents_scroll_on_opening(false);
 
                     const destination_step = document.querySelector(
                         app.interactions.story.search_bar.refs.destination_step
@@ -1559,7 +1542,7 @@ const app = {
             app.utils.colors.populate();
             app.scroller.steps.get();
             app.utils.load_data();
-            //app.ctrl.prevents_scroll_on_opening(true);
+            app.ctrl.prevents_scroll_on_opening(true);
             app.interactions.menu.monitor_click();
             app.interactions.backdrop.monitor_click();
             //app.utils.resize.monitor();
