@@ -2465,14 +2465,13 @@ ul.codigo-etica--valores li {
 .poster-outer-container {
 
     position: absolute;
-    transform: translateY(-500vh);
+    transform: translateY(200vh);
     background-color: var(--map-bkg);
     z-index: -5;
     top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    height: calc( 1080px * 2 );
+    /*right: 0;
+    bottom: 0;*/
+    height: 3500px;
 
 }
 
@@ -2518,8 +2517,14 @@ ul.codigo-etica--valores li {
 #poster figure {
 
     width: 336px;
-    height: 224px;
+    height: 220px;
     margin: 0;
+
+}
+
+#poster img {
+
+    max-width: 336px;
 
 }
 
