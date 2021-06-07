@@ -425,6 +425,7 @@ h1 {
     font-weight: 600;
     line-height: 1.1;
     color: var(--title-color);
+    font-size: 1.8rem;
 
 }
 
@@ -1177,6 +1178,8 @@ line.vis-story-stripplot-axis {
 
     a.button-go-on.first {
         width: 100%;
+        max-width: 100%;
+        justify-content: center;
     }
 
     a.button-go-on:not(.first) {
