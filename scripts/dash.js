@@ -1635,6 +1635,46 @@ const dash = {
 
             }
 
+        },
+
+        download_map : {
+
+            el : document.querySelector('.download-map a'),
+
+            convert_and_download : function() {
+
+                const canvas_el = document.querySelector('canvas');
+
+                console.log('Já existe um ', canvas_el);
+
+                if (canvas_el) canvas_el.remove();
+
+                html2canvas(document.querySelector("#poster")).then(
+
+                    canvas => {
+
+                        document.querySelector('.poster-outer-container').appendChild(canvas)
+
+                        const canvas_el = document.querySelector('canvas');
+
+                        dash.interactions.download_map.el.href = canvas_el.toDataURL();
+
+                        dash.interactions.download_map.el.innerHTML = 'LISTO PARA DESCARGAR';
+
+                        dash.interactions.download_map.el.removeEventListener('click', dash.interactions.download_map.convert_and_download);
+
+                    }
+
+                );
+
+            },
+
+            monitor_click : function() {
+
+                this.el.addEventListener('click', this.convert_and_download)
+
+            }
+
         }
 
     },
@@ -1954,11 +1994,31 @@ const dash = {
 
                     text_fields.forEach(field => {
 
-                        console.log(field);
+                        //console.log(field);
 
                         const location_type = dash.vis.location_card.state.user_location_type;
 
-                        const field_type = field.dataset.text_field;
+                        let field_type = field.dataset.text_field;
+
+                        if (field_type.slice(0,6) == 'poster') {
+
+                            field_type = field_type.slice(7);
+
+                            if (field_type == 'category' & location_type == 'localidad') {
+
+                                const cat = dash.vis.location_card.state.user_location_category;
+
+                                field.dataset.category = cat;
+
+                                //console.log("CATEGORIA POSTER", cat);
+
+                                document.querySelector('#poster').style.borderColor = dash.params.colors[cat];
+
+                            }
+
+                        }
+
+                        //console.log(field_type);
 
                         field.innerHTML = this[location_type][field_type]();
 
@@ -3403,6 +3463,7 @@ const dash = {
             dash.interactions.backdrop.monitor_click();
             dash.interactions.expand_card_mobile.monitor();
             dash.interactions.menu_categoria.monitor();
+            //dash.interactions.download_map.monitor_click();
 
             dash.utils.load_data();
             
@@ -3509,7 +3570,7 @@ const dash = {
                 // Load images to use as patterns
                 dash.utils.load_patterns();
 
-                dash.interactions.story.download_map.monitor();
+                //dash.interactions.story.download_map.monitor();
               
             });
 
