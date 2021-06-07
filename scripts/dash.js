@@ -1733,7 +1733,12 @@ const dash = {
 
                 // e agora finalmente convertendo o card inteiro para imagem
 
-                html2canvas(document.querySelector("#poster")).then(
+                const element = document.querySelector("#poster")
+
+                html2canvas(element, {
+                    windowWidth: element.scrollWidth,
+                    windowHeight: element.scrollHeight
+                }).then(
 
                     canvas => {
 
