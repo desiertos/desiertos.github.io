@@ -1640,9 +1640,13 @@ const dash = {
 
         download_map : {
 
-            el : document.querySelector('.download-map a'),
+            ref : '.download-map a',
 
             convert_and_download : function() {
+
+                const dl = document.querySelector(dash.interactions.download_map.ref);
+
+                dl.innerHTML = 'generando la imagen...';
 
                 const canvas_el = document.querySelector('canvas');
 
@@ -1658,11 +1662,12 @@ const dash = {
 
                         const canvas_el = document.querySelector('canvas');
 
-                        dash.interactions.download_map.el.href = canvas_el.toDataURL();
+                        dl.href = canvas_el.toDataURL();
+                        dl.download = "desiertos_informativos_fopea.png";
 
-                        dash.interactions.download_map.el.innerHTML = 'LISTO PARA DESCARGAR';
+                        dl.innerHTML = 'LISTO PARA DESCARGAR';
 
-                        dash.interactions.download_map.el.removeEventListener('click', dash.interactions.download_map.convert_and_download);
+                        dl.removeEventListener('click', dash.interactions.download_map.convert_and_download);
 
                     }
 
@@ -1672,7 +1677,9 @@ const dash = {
 
             monitor_click : function() {
 
-                this.el.addEventListener('click', this.convert_and_download)
+                const dl = document.querySelector(this.ref);
+                
+                dl.addEventListener('click', dash.interactions.download_map.convert_and_download)
 
             }
 
@@ -3464,7 +3471,7 @@ const dash = {
             dash.interactions.backdrop.monitor_click();
             dash.interactions.expand_card_mobile.monitor();
             dash.interactions.menu_categoria.monitor();
-            //dash.interactions.download_map.monitor_click();
+            dash.interactions.download_map.monitor_click();
 
             dash.utils.load_data();
             

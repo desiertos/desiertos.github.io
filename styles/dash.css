@@ -2417,7 +2417,7 @@ ul.codigo-etica--valores li {
 
 
     position: absolute;
-    transform: translateY(-200vh);
+    transform: translateY(-400vh);
     background-color: var(--map-bkg);
 
 }
