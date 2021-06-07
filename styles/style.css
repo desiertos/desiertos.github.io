@@ -1067,6 +1067,23 @@ line.vis-story-stripplot-axis {
 
 }
 
+a.button-go-on.first {
+
+    background-color: var(--color-highlight);
+    border: 1px solid var(--font-color);
+    font-size: .7rem;
+    line-height: calc(.7em + 8px);
+    font-family: var(--font-body);  
+    padding: 4px;
+    color: var(--font-color);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+
+}
+
+a.button-go-on.first span {
+    border: none;
+}
 
 @media screen and (max-width: 620px) {
 
@@ -1180,6 +1197,7 @@ line.vis-story-stripplot-axis {
         width: 100%;
         max-width: 100%;
         justify-content: center;
+
     }
 
     a.button-go-on:not(.first) {
