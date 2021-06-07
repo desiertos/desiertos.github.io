@@ -1113,10 +1113,10 @@ line.vis-story-stripplot-axis {
 
     .story-step {
 
-        height: calc(100vh - 60px);
         max-width: 100vw;
         padding: var(--header-height) 0;
         justify-content: flex-end;
+        padding-bottom: 60px;
         
 
     }
@@ -1152,7 +1152,7 @@ line.vis-story-stripplot-axis {
 
         width: 100vw;
         height: calc(var(--header-height) + 33px);
-        margin-bottom: -33px;
+        bottom: 0;
 
     }
 
