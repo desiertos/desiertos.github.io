@@ -691,7 +691,7 @@ a.button-go-on::before {
 
 input#location-search {
 
-
+    touch-action: manipulation;
     flex: 1;
     border: none;
     border-radius: 0;
