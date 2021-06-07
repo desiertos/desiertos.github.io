@@ -882,7 +882,7 @@ const app = {
 
             'location-card' : function() {
 
-                app.ctrl.prevents_scroll_on_opening(false);
+                //app.ctrl.prevents_scroll_on_opening(false);
                 
                 const destination_focus = document.querySelector(
                     app.interactions.story.search_bar.refs.destination_focus
@@ -1275,7 +1275,7 @@ const app = {
 
                     // scrolls to card
 
-                    app.ctrl.prevents_scroll_on_opening(false);
+                    //app.ctrl.prevents_scroll_on_opening(false);
 
                     const destination_step = document.querySelector(
                         app.interactions.story.search_bar.refs.destination_step
@@ -1552,7 +1552,7 @@ const app = {
             app.utils.colors.populate();
             app.scroller.steps.get();
             app.utils.load_data();
-            app.ctrl.prevents_scroll_on_opening(true);
+            //app.ctrl.prevents_scroll_on_opening(true);
             app.interactions.menu.monitor_click();
             app.interactions.backdrop.monitor_click();
             //app.utils.resize.monitor();
