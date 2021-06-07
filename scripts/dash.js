@@ -238,7 +238,7 @@ const dash = {
 
                 const cat_numeric = '' + (dash.params.categories.indexOf(category) + 1);
 
-                console.log(cat_numeric);
+                //console.log(cat_numeric);
 
                 const available_cities = data
                   .filter(d => ['San Luis', 'Salta'].includes(d.provincia))
@@ -247,7 +247,7 @@ const dash = {
 
                 const amount_available_cities = available_cities.length;
 
-                console.log(available_cities);
+                //console.log(available_cities);
 
                 // get a random city
 
@@ -567,7 +567,7 @@ const dash = {
     
                 if (option == 'on') {
 
-                    console.log('MONITORING LOCALIDAD EVENTS');
+                    //console.log('MONITORING LOCALIDAD EVENTS');
 
                     dash.map.localidad.hoveredStateId = null;
 
@@ -581,7 +581,7 @@ const dash = {
     
                 } else {
 
-                    console.log('turning off localidad event monitor');
+                    //console.log('turning off localidad event monitor');
 
                     dash.map_obj.off('mousemove', 'localidad', dash.map.localidad.mouse_enter_handler);
                          
@@ -611,7 +611,7 @@ const dash = {
 
                 };
 
-                console.log("Clicou em ", localidad, local, dash.vis.location_card.state.user_location_province);
+                //console.log("Clicou em ", localidad, local, dash.vis.location_card.state.user_location_province);
 
                 // clears hover featureState
                 // o id da localidad é o randId. Só ver o 'promoteId' no addSource lá em cima.
@@ -806,7 +806,7 @@ const dash = {
 
             click_event_handler : function(e) {
 
-                console.log(e);
+                //console.log(e);
 
                 //const province_name = feature.properties.nam; 
                 const province_name = e.features[0].properties.nam;
@@ -821,7 +821,7 @@ const dash = {
 
                     };
 
-                    console.log("Clicou em ", province_name, local);
+                    //console.log("Clicou em ", province_name, local);
 
                     // clears hover featureState
                     // o id da da provincia é o nam. Só ver o 'promoteId' no addSource lá em cima.
@@ -892,7 +892,7 @@ const dash = {
     
                 } else {
 
-                    console.log('turning off province event monitor');
+                    //console.log('turning off province event monitor');
 
                     dash.map_obj.off('mousemove', 'provincia', dash.map.province.mouse_enter_handler);
     
@@ -1025,7 +1025,7 @@ const dash = {
 
         highlight_feature : function(location, type = 'provincia', pitch = 0, bearing = 0) {
 
-            console.log(type, location, pitch, bearing);
+            //console.log(type, location, pitch, bearing);
 
             // type provincia, cidade
 
@@ -1052,14 +1052,14 @@ const dash = {
 
             const location_data = dash.data.fopea_data[type].filter(d => d.local == location)[0];
 
-            console.log(location_data);
+            //console.log(location_data);
 
             let bbox_highlighted = [
                 location_data.xmin, location_data.ymin,
                 location_data.xmax, location_data.ymax
             ];  
             
-            console.log(bbox_highlighted);
+            //console.log(bbox_highlighted);
         
             dash.map_obj.fitBounds(
 
@@ -1172,7 +1172,7 @@ const dash = {
 
                     //console.log(input_el.value);
 
-                    console.log('Submited: ', search_content);
+                    //console.log('Submited: ', search_content);
 
                     if (
                         dash.data.fopea_data.lista_locais
@@ -1186,12 +1186,12 @@ const dash = {
 
                         //console.log(local);
 
-                        console.log("tipo: ", local.tipo);
-                        console.log("nome: ", local.local);
+                        //console.log("tipo: ", local.tipo);
+                        //console.log("nome: ", local.local);
 
                         local.text = local.name;
 
-                        console.log("CIRURGIA NO OBJETO LOCAL", local);
+                        //console.log("CIRURGIA NO OBJETO LOCAL", local);
 
                         //const data = dash.data.fopea_data[local.tipo].filter(d => d.local == local.local)[0];
 
@@ -1202,7 +1202,7 @@ const dash = {
 
                     } else {
 
-                        console.log("Valor invalido, chico")
+                        //console.log("Valor invalido, chico")
 
                         // fazer algo visível na página aqui
 
@@ -1239,7 +1239,7 @@ const dash = {
 
                         const search_content = e.target.value;
 
-                        console.log('Changed');
+                        //console.log('Changed');
 
                         dash.interactions.story.search_bar.submit(e, search_content);
 
@@ -1295,7 +1295,7 @@ const dash = {
 
             open_close : function(e) {
 
-                console.log('called', e);
+                //console.log('called', e);
 
                 const aside = document.querySelector(dash.interactions.relato_periodista.refs.text);
 
@@ -1321,10 +1321,10 @@ const dash = {
 
                     // aside is visible and is about to close: keep overflow hidden until the transition end.
                     // BUT! until the OPACITY transition end. if we do not specify the propertyName, it will toggle the class twice.
-                    console.log('está visível, espera o fim da transição para deixar o overflow normal.')              
+                    //console.log('está visível, espera o fim da transição para deixar o overflow normal.')              
                     aside.addEventListener('transitionend', (e) => {
 
-                        console.log('transition ', e.propertyName, ' end.');
+                        //console.log('transition ', e.propertyName, ' end.');
 
                         if (e.propertyName == 'opacity') {
 
@@ -1341,7 +1341,7 @@ const dash = {
 
                 const btn = document.querySelector(dash.interactions.relato_periodista.refs[which_button + '_button']);
 
-                console.log('monitoring ', which_button, '...');
+                //console.log('monitoring ', which_button, '...');
 
                 btn.addEventListener('click', dash.interactions.relato_periodista.open_close);
 
@@ -1353,7 +1353,7 @@ const dash = {
 
                 articles.forEach(article => {
 
-                    console.log('testando os articles...', article.dataset.provinciaInforme);
+                    //console.log('testando os articles...', article.dataset.provinciaInforme);
 
                     if (article.dataset.provinciaInforme == provincia) article.classList.add('active')
                     else article.classList.remove('active');
@@ -1366,7 +1366,7 @@ const dash = {
 
                 const method = option ? 'remove' : 'add';
 
-                console.log(option, method);
+                //console.log(option, method);
 
                 const btn = document.querySelector(this.refs.toggle_button);
 
@@ -1554,7 +1554,7 @@ const dash = {
 
                 const current_option = document.querySelector(this.ref + ' .category-selected');
 
-                console.log("opcao selecionada atual é ", current_option);
+                //console.log("opcao selecionada atual é ", current_option);
 
                 if (current_option) current_option.classList.remove('category-selected');
 
@@ -1630,7 +1630,7 @@ const dash = {
 
                 el.addEventListener('click', e => {
                     
-                    console.log('cliquei no botao');
+                    //console.log('cliquei no botao');
                     card.classList.toggle('expanded');
 
                 });
@@ -1659,11 +1659,11 @@ const dash = {
                 '/' + 900 + 'x' + 600 + 
                 '?access_token=' + dash.params.mapbox.token;
 
-                console.log(url);
+                //console.log(url);
 
                 url = encodeURI(url);
 
-                console.log(url);
+                //console.log(url);
 
                 return url;
 
@@ -1686,7 +1686,7 @@ const dash = {
                     // aqui converte-se a imagem que veio da API do mapbox em dataurl, para aí sim ser acrescentada a um elemento imagem do card -- questões de segurança
 
                     // engraçado aqui ele recuperar a referencia ao objeto que chamou a função!
-                    console.log(downloadedImg);
+                    //console.log(downloadedImg);
 
                     let canvas = document.createElement("canvas");
                     let context = canvas.getContext("2d");
@@ -1722,7 +1722,7 @@ const dash = {
 
             convert_card_to_image : function() {
 
-                console.log('STATIC MAP, the ghost', this);
+                //console.log('STATIC MAP, the ghost', this);
 
                 // agora que a imagem do mapa foi convertida e acrescentada como dataurl no src do elemento imagem (que ainda não tem pai), o elemento vai ser pendurado no nosso card
                 document.querySelector('figure.static-map').appendChild(this);
@@ -1770,7 +1770,7 @@ const dash = {
 
                 const dl = document.querySelector(this.ref);
                 dl.dataset.download = "";
-                console.log('Monitoring clicks on download');
+                //console.log('Monitoring clicks on download');
                 
                 dl.addEventListener('click', dash.interactions.download_map.handler)
 
@@ -1814,7 +1814,7 @@ const dash = {
 
             // local has the form { text, local, tipo }
 
-            console.log('Renderizando ', local);
+            //console.log('Renderizando ', local);
 
             dash.interactions.story.search_bar.clear_search();
 
@@ -1865,7 +1865,7 @@ const dash = {
 
                     dash.interactions.download_map.not_monitoring();
 
-                    console.log('Botão relato. Update informe', local.text, local.local);
+                    //console.log('Botão relato. Update informe', local.text, local.local);
 
                     dash.interactions.relato_periodista.show_button_informe(true);
                     dash.interactions.relato_periodista.update_informe(local.text);
@@ -1886,7 +1886,7 @@ const dash = {
 
             }
 
-            console.log(data);
+            //console.log(data);
 
             // center map on province
             if (local.tipo != 'pais') {
@@ -1923,7 +1923,7 @@ const dash = {
 
             // check if new selection is another localidad in the same province, or if it is another province (in case a province was selected)
 
-            console.log(local.provincia, dash.vis.location_card.state.user_location_province);
+            //console.log(local.provincia, dash.vis.location_card.state.user_location_province);
 
             let new_view = true;
 
@@ -1933,7 +1933,7 @@ const dash = {
 
             }
 
-            console.log('new view', new_view);
+            //console.log('new view', new_view);
             
 
             // set vis state, calls vis render
@@ -1990,7 +1990,7 @@ const dash = {
 
             } else {
 
-                console.log('barchart');
+                //console.log('barchart');
                 dash.vis.location_card.barchart_count.hide(false);
                 dash.vis.location_card.barchart_count.evaluate();
 
@@ -2044,7 +2044,7 @@ const dash = {
 
                 set : function(local, data) {
 
-                    console.log(data);
+                    //console.log(data);
 
                     const state = dash.vis.location_card.state;
 
@@ -2100,7 +2100,7 @@ const dash = {
                         const mini_data = dash.data.fopea_data.medios_prototipicos
                                  .filter(d => d.provincia == prov)[0];
 
-                        console.log(mini_data);
+                        //console.log(mini_data);
                         
                         return mini_data.desc;
 
@@ -2124,7 +2124,7 @@ const dash = {
 
                     const text_fields = document.querySelectorAll(this.ref);
 
-                    console.log('Atualizar textos de ', text_fields);
+                    //console.log('Atualizar textos de ', text_fields);
 
                     text_fields.forEach(field => {
 
@@ -2195,7 +2195,7 @@ const dash = {
 
                     const info_table_fields = document.querySelectorAll(this.ref);
 
-                    console.log('Atualizar números de');
+                    //console.log('Atualizar números de');
 
                     info_table_fields.forEach(field => {
 
@@ -2281,7 +2281,7 @@ const dash = {
 
                 monitor_click : function() {
 
-                    console.log('monitoring crumbs');
+                    //console.log('monitoring crumbs');
 
                     const crumbs = document.querySelector(this.ref_container);
 
@@ -2291,7 +2291,7 @@ const dash = {
 
                         const type = btn_clicked.dataset.breadcrumbsType;
 
-                        console.log('clicou no breadcrumb', type);
+                        //console.log('clicou no breadcrumb', type);
 
                         // if (type == 'pais') { 
 
@@ -2431,7 +2431,7 @@ const dash = {
                             0
                         );
 
-                    console.log(fields, variables);
+                    //console.log(fields, variables);
 
                     fields.forEach(field => {
 
@@ -2761,7 +2761,7 @@ const dash = {
                     const dimensions = dash.vis.stripplot.dimensions;
                     const scales = dash.vis.stripplot.scales;
 
-                    console.log("setting scales...", type, variables);
+                    //console.log("setting scales...", type, variables);
 
                     // resets scales
                     scales.y = {};
@@ -2787,7 +2787,7 @@ const dash = {
 
                             data = dash.data.fopea_data[type].filter(d => d.provincia == provincia);
 
-                            console.log('dominio', type, provincia, variable, data);
+                            //console.log('dominio', type, provincia, variable, data);
 
                         }
 
@@ -2855,7 +2855,7 @@ const dash = {
 
                         const variables = dash.vis.stripplot.variables[type];
 
-                        console.log(variables);
+                        //console.log(variables);
 
                         dash.vis.stripplot.sels.d3.container
                           .selectAll("p.vis-dash-stripplot-labels-variables")
@@ -2975,7 +2975,7 @@ const dash = {
 
 
 
-                                console.log('circulos da variavel... ', variable);
+                                //console.log('circulos da variavel... ', variable);
 
                                 const marks = dash.vis.stripplot.sels.d3.svg
                                 .selectAll("rect.vis-dash-stripplot-marks[data-variable='" + variable + "']")
