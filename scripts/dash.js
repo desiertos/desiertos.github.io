@@ -1737,10 +1737,9 @@ const dash = {
 
                 html2canvas(element, {
 
-                    scrollY: -window.scrollY,
                     windowWidth: element.scrollWidth,
                     windowHeight: element.scrollHeight
-                    
+
                 }).then(
 
                     canvas => {
