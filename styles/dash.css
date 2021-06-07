@@ -1900,10 +1900,27 @@ p.dash-stripplot-tooltip-visible {
 
     }
 
-    .download-map a[data-download]::before,
-    .download-map a::before {
+    .download-map a[data-download=""]::before,
+    .download-map a[data-download="disabled"]::before {
         content: '';
     }
+
+    .download-map a[data-download="preparing"],
+    .download-map a[data-download="ready"] {
+
+        width: 10rem;
+
+    }
+
+    /*.download-map a[data-download="preparing"]::before {
+        content: 'Preparando la imagen...';
+    }
+    
+    .download-map a[data-download="ready"]::before {
+        content: 'Descargar';
+    }*/
+
+
 
     .download-map a::after {
 
