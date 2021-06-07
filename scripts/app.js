@@ -1275,6 +1275,8 @@ const app = {
 
                     // scrolls to card
 
+                    app.ctrl.prevents_scroll_on_opening(false);
+
                     const destination_step = document.querySelector(
                         app.interactions.story.search_bar.refs.destination_step
                     );
