@@ -156,6 +156,11 @@ button.menu-toggle {
 
 }
 
+button.menu-toggle svg {
+    width: var(--header-height);
+    height: var(--header-height);
+}
+
 button.menu-toggle rect, 
 button.menu-toggle path {
 
@@ -1129,8 +1134,8 @@ line.vis-story-stripplot-axis {
 
     #search-step.story-step {
 
-        justify-content: flex-start;
-        margin-bottom: 100px;
+        justify-content: center;
+
     }
 
 
