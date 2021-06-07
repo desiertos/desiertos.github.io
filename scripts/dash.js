@@ -1537,6 +1537,7 @@ const dash = {
                     bkdrop.classList.remove('activated');
                     relato.classList.add('folded');
                     btn_relato.classList.remove('clicked');
+                    document.documentElement.classList.remove('aside-shown-no-overflow-here');
 
                 })
 
