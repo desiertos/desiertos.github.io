@@ -855,14 +855,6 @@ const app = {
                 //app.map_obj.setPaintProperty('localidad', 'fill-opacity', .5);
                // app.map.set_initial_view();
                //app.ctrl.prevents_scroll_on_opening(true);
-               if (direction == 'back') { 
-                   app.interactions.story.search_bar.reset();
-                }
-
-               app.map.clear_highlights_and_popups();
-               app.map.fit_Argentina();
-               app.map.localidad.toggle_highlight_border('');
-               if (document.querySelector('div.mapboxgl-popup')) document.querySelector('div.mapboxgl-popup').remove();
 
                 //app.interactions.story.toggle_visibility("dashboard_button");
 
@@ -880,15 +872,28 @@ const app = {
                 
             // },
 
+            'search-step' : function(direction = null) {
+
+                if (direction == 'back') { 
+                    app.interactions.story.search_bar.reset();
+                 }
+ 
+                app.map.clear_highlights_and_popups();
+                app.map.fit_Argentina();
+                app.map.localidad.toggle_highlight_border('');
+                if (document.querySelector('div.mapboxgl-popup')) document.querySelector('div.mapboxgl-popup').remove();
+ 
+            },
+
             'location-card' : function() {
 
                 //app.ctrl.prevents_scroll_on_opening(false);
                 
-                const destination_focus = document.querySelector(
+                /*const destination_focus = document.querySelector(
                     app.interactions.story.search_bar.refs.destination_focus
                 );
 
-                destination_focus.focus();
+                destination_focus.focus();*/
 
                 const type = app.vis.location_card.state.user_location_type;
                 const location = app.vis.location_card.state.user_location_name

@@ -568,13 +568,13 @@ a.button-go-on {
 
     text-decoration: none;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     max-width: 36vw;
     width: 36rem;
     margin: 0 auto;
 }
 
-a.button-go-on::before {
+a.button-go-on::after {
     color: transparent;
     content: 'Seguir';
 }
@@ -1174,7 +1174,7 @@ line.vis-story-stripplot-axis {
         background-color: white;
     }
 
-    a.button-go-on::before {
+    a.button-go-on::after {
         content: '';
     }
 
