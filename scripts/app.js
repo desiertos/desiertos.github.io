@@ -1281,8 +1281,8 @@ const app = {
                         app.interactions.story.search_bar.refs.destination_step
                     );
 
-                    destination_step.scrollIntoView({behavior: "smooth"});
-
+                    const scroll = destination_step.scrollHeight;
+                    window.scrollTo(0, scroll, {behavior: "smooth"});
 
 
                 }
