@@ -2470,13 +2470,19 @@ ul.codigo-etica--valores li {
 .poster-outer-container {
 
     position: absolute;
-    transform: translateY(200vh);
+    /*transform: translateY(200vh);*/
     background-color: var(--map-bkg);
     z-index: -5;
-    top: 0;
+    top: -3000px;
     /*right: 0;
     bottom: 0;*/
-    height: 3500px;
+    height: calc(1080px * 2);
+
+}
+
+.poster-outer-container canvas {
+
+    max-width: 720px;
 
 }
 
