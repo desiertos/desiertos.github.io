@@ -781,6 +781,7 @@ input#location-search.unfolded {
     text-decoration: none;
 
     text-align: center;
+    transition: width .5s;
 
 }
 
