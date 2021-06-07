@@ -92,8 +92,10 @@ header.header-dashboard {
   align-items: center;
 }
 
-.brands a {
+header.header-dashboard a {
   border: none;
+  margin-left: 10px;
+
 }
 
 .pipe {
@@ -106,9 +108,9 @@ header.header-dashboard {
   /*align-self: center;*/
 }
 
-.brands a img {
+header.header-dashboard a img {
     height: 1.1rem;
-    margin-left: calc( var(--header-height) / 2 - 0.55rem);
+    /*height: calc( 0.5 * var(--header-height));*/
 }
 
 header .twitter-share-button {
@@ -481,16 +483,6 @@ button.menu-toggle.clicked path {
 }
 
 
-
-
-
-
-
-
-
-
-
-
 body {
     margin: 0;
     padding: 0;
@@ -507,6 +499,8 @@ h1 {
     font-weight: 600;
     line-height: 1.1;
     color: var(--title-color);
+    padding: 0 10px;
+    text-align: center;
 
 }
 
