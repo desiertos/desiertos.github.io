@@ -777,7 +777,7 @@ input#location-search.unfolded {
     font-size: .6rem;
     background: white;
     font-family: var(--font-body);  
-    padding-right: 0;
+
     color: var(--font-color);
     text-transform: uppercase;
     letter-spacing: .1em;
@@ -785,34 +785,68 @@ input#location-search.unfolded {
     justify-content: space-between;
     border: 1px solid var(--font-color);
     text-decoration: none;
-    padding-left: 5px;
+
+    text-align: center;
 
 }
 
-.download-map a span {
+.download-map a::before {
+    content: 'Compartir mi mapa';
+    flex: 1;
+}
+
+.download-map a::after {
 
     height: var(--size-controls);
     line-height: var(--size-controls);
-    display: block;
-
-}
-
-.download-map a span.download-content{
-
-    flex: 1 0 0;
-    text-align: center;
-
-}
-
-.download-map a span.download-icon {
-
-    text-align: center;
+    width: var(--size-controls);
+    display: inline-block;
+    content: ' \2193';
+    font-weight: 600;
     font-size: 1rem;
-    flex: 0 0 var(--size-controls);
+    text-align: center;
     border-left: 1px solid var(--font-color);
 
+}
+
+.download-map a[data-download="preparing"]::after {
+
+    border-left: none;
+    animation: spin 1s infinite;
 
 }
+
+.download-map a[data-download="ready"] {
+
+    border-width: 2px;
+    background-color: var(--color-highlight);
+    transition: all .5s;
+
+}
+
+.download-map a[data-download="preparing"]::before {
+    content: 'Preparando la imagen...';
+}
+
+.download-map a[data-download="ready"]::before {
+    content: 'Descargar';
+}
+
+.download-map a[data-download="disabled"] {
+    color: var(--color-grey);
+    pointer-events: none;
+    transition: color .5s;
+}
+
+
+@keyframes spin {
+    0% {
+      transform: rotate(0deg)
+    }
+    100% {
+      transform: rotate(360deg)
+    }
+  }
 
 
 
@@ -1605,6 +1639,8 @@ p.dash-stripplot-tooltip-visible {
 .map-container .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-group button {
 
     border: 1px solid var(--font-color);
+    width: var(--size-controls);
+    height: var(--size-controls);
 
 }
 
@@ -1870,11 +1906,12 @@ p.dash-stripplot-tooltip-visible {
 
     }
 
-    .download-map span.download-text {
-        display: none;
+    .download-map a[data-download]::before,
+    .download-map a::before {
+        content: '';
     }
 
-    .download-map a span.download-icon {
+    .download-map a::after {
 
         border-left: none;
 
@@ -2417,8 +2454,9 @@ ul.codigo-etica--valores li {
 
 
     position: absolute;
-    transform: translateY(-400vh);
+    transform: translateY(-500vh);
     background-color: var(--map-bkg);
+    z-index: -2;
 
 }
 

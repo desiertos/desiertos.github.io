@@ -1744,8 +1744,7 @@ const dash = {
                         const dl = document.querySelector(dash.interactions.download_map.ref);
                         dl.href = canvas_el.toDataURL();
                         dl.download = "desiertos_informativos_fopea.png";
-
-                        dl.innerHTML = 'LISTO PARA DESCARGAR';
+                        dl.dataset.download = "ready";
 
                         dl.removeEventListener('click', dash.interactions.download_map.handler);
 
@@ -1758,6 +1757,8 @@ const dash = {
             handler : function() {
 
                 dash.interactions.download_map.reset();
+                const dl = document.querySelector(dash.interactions.download_map.ref);
+                dl.dataset.download = "preparing";
 
                 dash.interactions.download_map.get_static_map_image();
 
@@ -1765,7 +1766,11 @@ const dash = {
 
             monitor_click : function() {
 
+                dash.interactions.download_map.reset();
+
                 const dl = document.querySelector(this.ref);
+                dl.dataset.download = "";
+                console.log('Monitoring clicks on download');
                 
                 dl.addEventListener('click', dash.interactions.download_map.handler)
 
@@ -1778,6 +1783,24 @@ const dash = {
 
                 const lab_canvas = document.querySelector('.image-lab canvas');
                 if (lab_canvas) lab_canvas.remove();
+
+                const dl = document.querySelector(this.ref);
+                dl.href = "#"
+                dl.removeAttribute('download');
+
+                const img = document.querySelector('figure.static-map img');
+                if (img) img.remove();
+
+            },
+
+            not_monitoring : function() {
+
+                dash.interactions.download_map.reset();
+
+                const dl = document.querySelector(dash.interactions.download_map.ref);
+                dl.dataset.download = "disabled";
+
+                dl.removeEventListener('click', dash.interactions.download_map.handler);
 
             }
 
@@ -1798,6 +1821,8 @@ const dash = {
             let data;
 
             if (local.tipo == 'pais') {
+
+                dash.interactions.download_map.not_monitoring();
 
                 // data = {
 
@@ -1837,6 +1862,8 @@ const dash = {
                 dash.map.localidad.sets_opacity_on_hover('on');
 
                 if (local.tipo == 'provincia') {
+
+                    dash.interactions.download_map.not_monitoring();
 
                     console.log('Botão relato. Update informe', local.text, local.local);
 
@@ -1887,6 +1914,7 @@ const dash = {
 
             } else if (local.tipo == 'localidad') {
 
+                dash.interactions.download_map.monitor_click();
                 dash.map.localidad.toggle_highlight(local.local);
 
             }
@@ -3569,7 +3597,7 @@ const dash = {
             dash.interactions.backdrop.monitor_click();
             dash.interactions.expand_card_mobile.monitor();
             dash.interactions.menu_categoria.monitor();
-            dash.interactions.download_map.monitor_click();
+            //dash.interactions.download_map.monitor_click();
 
             dash.utils.load_data();
             
