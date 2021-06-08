@@ -617,7 +617,7 @@ const app = {
               .addClassName(name);
 
             const popup_tip = document.querySelector('.' + name + ' .mapboxgl-popup-tip');
-            popup_tip.style.borderTopColor = location_data.color_real;
+            //popup_tip.style.borderTopColor = location_data.color_real;
 
             const popup_content = document.querySelector('.' + name + ' .mapboxgl-popup-content');
             popup_content.style.backgroundColor = location_data.color_real;
@@ -891,12 +891,6 @@ const app = {
             'location-card' : function() {
 
                 //app.ctrl.prevents_scroll_on_opening(false);
-                
-                /*const destination_focus = document.querySelector(
-                    app.interactions.story.search_bar.refs.destination_focus
-                );
-
-                destination_focus.focus();*/
 
                 const type = app.vis.location_card.state.user_location_type;
                 const location = app.vis.location_card.state.user_location_name
@@ -1273,6 +1267,12 @@ const app = {
                     //window.scrollTo(0, scroll, {behavior: "smooth"});
 
                     destination_step.scrollIntoView({behavior: "smooth"});
+                    
+                    const destination_focus = document.querySelector(
+                        app.interactions.story.search_bar.refs.destination_focus
+                    );
+    
+                    destination_focus.focus();
 
 
                 }

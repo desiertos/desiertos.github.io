@@ -30,7 +30,7 @@
     --color-vis-variable-label : #636363;
     --color-vis-axis : #E5E5E5;
 
-    --size-controls: 29px;
+    --size-controls: 33px;
 
     font-size: max(16px, calc(8px + .75vw));
 
@@ -578,6 +578,7 @@ a.button-go-on {
     max-width: 36vw;
     width: 36rem;
     margin: 0 auto;
+    height: var(--size-controls);
 }
 
 a.button-go-on::after {
@@ -585,26 +586,49 @@ a.button-go-on::after {
     content: 'Seguir';
 }
 
-[data-step="abertura"] a.button-go-on::after {
-    content: '¡Entrá y descubrí!';
-    color: var(--font-color);
-    padding: 4px 10px;
-}
-
 a.button-go-on span {
 
-    /* font-size: 2rem; */
-    /* font-weight: 100; */
     border: 1px solid var(--font-color);
     color: var(--font-color);
-    width: 2rem;
-    /* height: 2rem; */
-    padding: 5px 0;
-    /* transform-origin: right; */
-    /* transform: scaleY(.5); */
-    display: inline-block;
+    width: var(--size-controls);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    /* line-height: 4rem; */
+
+}
+
+[data-step="abertura"] a.button-go-on::after {
+    content: '';
+}
+
+a.button-go-on.first {
+
+    background-color: var(--color-highlight);
+    border: 1px solid var(--font-color);
+    font-size: .7rem;
+    font-family: var(--font-body);  
+    color: var(--font-color);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    max-width: 100%;
+
+}
+
+a.button-go-on.first span {
+    border: none;
+    border-right: 1px solid var(--font-color);
+    background-color: white;
+}
+
+a.button-go-on.first p {
+
+    margin: 0;
+    font-size: .7rem;
+    display: flex;
+    align-items: center;
+    margin-left: calc(var(--size-controls) / 3);
+    line-height: 100%;
 
 }
 
@@ -648,18 +672,24 @@ input#location-search {
     font-size: .7rem;
     background: var(--color-highlight);
     font-family: var(--font-body);  
-    padding: 4px;
+    line-height: 100%;
     color: var(--font-color);
     text-transform: uppercase;
     letter-spacing: .1em;
-    /*transform-origin: left;
-    transform: scaleX(0);
-    transition: transform .5s;*/
+    padding-left: calc(var(--size-controls) / 3);
     -webkit-appearance: none;
     -webkit-border-radius: 0;
 
     height: var(--size-controls);
     margin-left: 0;
+
+}
+
+input#location-search::placeholder {
+
+    font-weight: normal;
+    color: var(--font-color);
+
 }
 /*
 input#location-search.unfolded {
@@ -678,7 +708,9 @@ input#location-search.unfolded {
     width: var(--size-controls);
     height: var(--size-controls);
     order: -1;
-    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
 .search-button img {
@@ -1054,6 +1086,7 @@ line.vis-story-stripplot-axis {
 
     font-family: var(--font-body) !important;
     padding: 10px 10px !important;
+    border: 1px solid var(--font-color);
     /*letter-spacing: .1em;
     text-transform: uppercase;*/
     /* part of the style is inline, so we need to use JS to style it */
@@ -1064,25 +1097,8 @@ line.vis-story-stripplot-axis {
 
     border-left: none !important;
     align-self: flex-start !important;
+    border-top-color: var(--font-color) !important;
 
-}
-
-a.button-go-on.first {
-
-    background-color: var(--color-highlight);
-    border: 1px solid var(--font-color);
-    font-size: .7rem;
-    line-height: calc(.7em + 8px);
-    font-family: var(--font-body);  
-    padding: 4px;
-    color: var(--font-color);
-    text-transform: uppercase;
-    letter-spacing: .1em;
-
-}
-
-a.button-go-on.first span {
-    border: none;
 }
 
 @media screen and (max-width: 620px) {
@@ -1199,18 +1215,19 @@ a.button-go-on.first span {
 
     }
 
-    a.button-go-on.first {
+    /*a.button-go-on.first {
         width: 100%;
         max-width: 100%;
         justify-content: center;
 
-    }
+    }*/
 
     a.button-go-on:not(.first) {
 
         display: block;
         width: 90vw;
         margin: 0;
+        height: unset;
 
     }
 
