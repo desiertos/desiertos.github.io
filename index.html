@@ -21,12 +21,19 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Lusitana:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,600;1,700;1,800&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/style.css">
     <script src="../scripts/prefixfree.min.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G83P72276S"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-G83P72276S');
+    </script>
     <!--<link rel="stylesheet" href="./scripts/awesomplete/awesomplete.css" />-->
     <title>Desiertos de noticias em la Argentina</title>
 </head>
@@ -100,19 +107,16 @@
                         Hablamos de vegetación, de clima y de ecosistemas informativos. Las zonas donde hay condiciones para ejercer un periodismo profesional activo son como <span data-category-highlight="bosque" data-category-highlight-text="bosques"></span>, donde es posible encontrar luces, sombras, matices, diversidad y oxígeno. En el otro extremo están las áreas donde las condiciones para el ejercicio del periodismo profesional son muy débiles: se parecen a los <span data-category-highlight="desierto" data-category-highlight-text="desiertos"></span> porque el paisaje es monocromático, árido, seco y proclive a los espejismos. 
                     </p>
 
-                    <form id="form" autocomplete="off" spellcheck="false">
-                        <fieldset>
-                            <label class="kicker" for="location-search">Y vos, ¿dónde estás?</label>
-                            <div class="container-search">
-                                <input type="search" id="location-search" name="q" list="locations" placeholder="Selecciona tu ubicación">
-                                <div class="search-button" id="story-search-place" aria-hidden="true">
-                                    <img src="./img/search.png">
-                                </div>
-                            </div>
-                            <datalist id="locations"></datalist>
-                        </fieldset>
-                    </form>
-
+                    <a href="#search-step" class="button-go-on first">
+                        <span aria-hidden="true">  
+                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L6.50062 7.48451L12 1" stroke="#212121" stroke-linecap="round"/>
+                            </svg>                     
+                        </span>
+                        <p>
+                            ¡Entrá y descubrí!
+                        </p>
+                    </a>
                 
                 </div>
 
@@ -120,94 +124,131 @@
     
             </div>
 
-            <div class="story-step" data-step="location-card" id="location-card">
+            <div class="story-step" data-step="search-step" id="search-step">
 
                 <div class="story-step-inner">
 
-                    <p class="js--location-category-description card-text card-only-text">"Selecciona tu ubicación arriba :) "</p>
-
-                    <a href="#other-categories" data-next-focus class="button-go-on"><span aria-hidden="true">                        <svg width="20" height="10" viewBox="0 0 20 10">
-                        <line x1="0" y1="0" x2="10" y2="10" stroke="#212121"/>
-                        <line x1="10" y1="10" x2="20" y2="0" stroke="#212121"/>
-                    </svg></span></a>
+                    <form id="form" autocomplete="off" spellcheck="false">
+                        <fieldset>
+                            <label class="kicker" for="location-search">Y vos, ¿dónde estás?</label>
+                            <div class="container-search">
+                                <input type="search" id="location-search" name="q" list="locations" placeholder="Selecciona tu ubicación">
+                                <div class="search-button" id="story-search-place" aria-hidden="true">
+                                    <img src="./img/search.svg">
+                                </div>
+                            </div>
+                            <datalist id="locations"></datalist>
+                        </fieldset>
+                    </form>
 
                 </div>      
 
             </div>
 
-            <div class="story-step" data-step="other-categories" id="other-categories">
+            <div class="story-step" data-step="location-card" id="location-card">
+
+                <div class="story-step-inner">
+
+                    <p class="js--location-category-description card-text card-only-text">"Selecciona tu ubicación arriba :) "
+                    </p>
+
+                    <a href="#other-categories" class="next-focus button-go-on">                  
+                        <span aria-hidden="true">  
+                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L6.50062 7.48451L12 1" stroke="#212121" stroke-linecap="round"/>
+                            </svg>                       
+                        </span>
+                    </a>
+                </div>      
+
+            </div>
+
+            <div class="story-step scroller-step" data-step="other-categories" id="other-categories">
            
                 <div class="story-step-inner">
 
                     <p class="card-text card-only-text">Además de regiones como la tuya, que es un <span class="js--location-category" data-category-highlight="bosque"></span>, también hay zonas que se clasifican como <span class="js--remaining-category1" data-category-highlight="semibosque"></span>, <span class="js--remaining-category2" data-category-highlight="semidesierto"></span> y <span class="js--remaining-category3" data-category-highlight="desierto"></span>.</p>
 
-                    <a href="#rem1" class="button-go-on"><span aria-hidden="true">                        <svg width="20" height="10" viewBox="0 0 20 10">
-                        <line x1="0" y1="0" x2="10" y2="10" stroke="#212121"/>
-                        <line x1="10" y1="10" x2="20" y2="0" stroke="#212121"/>
-                    </svg></span></a>
+                    <a href="#rem1" class="button-go-on">                       
+                        <span aria-hidden="true">  
+                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L6.50062 7.48451L12 1" stroke="#212121" stroke-linecap="round"/>
+                            </svg>                       
+                        </span>
+                    </a>
 
                 </div>
 
             </div>
 
-            <div class="story-step" data-step="remaining-category1" id="rem1">
+            <div class="story-step scroller-step" data-step="remaining-category1" id="rem1">
            
                 <div class="story-step-inner">
 
                     <p class="js--location-remaining-category1-text card-text card-only-text"></p>
 
-                    <a href="#rem2" class="button-go-on"><span aria-hidden="true">                        
-                        <svg width="20" height="10" viewBox="0 0 20 10">
-                        <line x1="0" y1="0" x2="10" y2="10" stroke="#212121"/>
-                        <line x1="10" y1="10" x2="20" y2="0" stroke="#212121"/>
-                    </svg></span></a>
+                    <a href="#rem2" class="button-go-on">                                              
+                        <span aria-hidden="true">  
+                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L6.50062 7.48451L12 1" stroke="#212121" stroke-linecap="round"/>
+                            </svg>                       
+                        </span>
+                    </a>
 
                 </div>
 
             </div>
 
-            <div class="story-step" data-step="remaining-category2" id="rem2">
+            <div class="story-step scroller-step" data-step="remaining-category2" id="rem2">
            
                 <div class="story-step-inner">
 
                     <p class="js--location-remaining-category2-text card-text card-only-text"></p>
 
-                    <a href="#rem3" class="button-go-on"><span aria-hidden="true">                        <svg width="20" height="10" viewBox="0 0 20 10">
-                        <line x1="0" y1="0" x2="10" y2="10" stroke="#212121"/>
-                        <line x1="10" y1="10" x2="20" y2="0" stroke="#212121"/>
-                    </svg></span></a>
+                    <a href="#rem3" class="button-go-on">                                           
+                        <span aria-hidden="true">  
+                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L6.50062 7.48451L12 1" stroke="#212121" stroke-linecap="round"/>
+                            </svg>                       
+                        </span>
+                    </a>
 
                 </div>
 
             </div>
 
-            <div class="story-step" data-step="remaining-category3" id="rem3">
+            <div class="story-step scroller-step" data-step="remaining-category3" id="rem3">
            
                 <div class="story-step-inner">
 
                     <p class="js--location-remaining-category3-text card-text card-only-text"></p>
 
-                    <a href="#arg-bosques" class="button-go-on"><span aria-hidden="true">
-                        <svg width="20" height="10" viewBox="0 0 20 10">
-                        <line x1="0" y1="0" x2="10" y2="10" stroke="#212121"/>
-                        <line x1="10" y1="10" x2="20" y2="0" stroke="#212121"/>
-                    </svg></span></a>
+                    <a href="#arg-bosques" class="button-go-on">                       
+                        <span aria-hidden="true">  
+                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L6.50062 7.48451L12 1" stroke="#212121" stroke-linecap="round"/>
+                            </svg>                       
+                        </span>
+                    </a>
 
                 </div>
 
             </div>
 
-            <div class="story-step" data-step="argentina-bosques" id="arg-bosques">
+            <div class="story-step scroller-step" data-step="argentina-bosques" id="arg-bosques">
            
 
                 <div class="story-step-inner">
 
                     <p class="card-text card-only-text">Los <span data-category-highlight="bosque" data-category-highlight-text="bosques informativos"></span> son las localidades menos frecuentes de la Argentina: por lo general aparecen en las áreas centrales, desarrolladas y con mayor población.</p>
 
-                    <a href="#arg-semibosques" class="button-go-on"><span aria-hidden="true">                        <svg width="20" height="10" viewBox="0 0 20 10">
-                        <line x1="0" y1="0" x2="10" y2="10" stroke="#212121"/>
-                        <line x1="10" y1="10" x2="20" y2="0" stroke="#212121"/>
-                    </svg></span></a>
+                    <a href="#arg-semibosques" class="button-go-on">       
+                        <span aria-hidden="true">  
+                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L6.50062 7.48451L12 1" stroke="#212121" stroke-linecap="round"/>
+                            </svg>                       
+                        </span>
+                    </a>
 
                 </div>
 
@@ -215,7 +256,7 @@
     
             </div>
 
-            <div class="story-step" data-step="argentina-semibosques" id="arg-semibosques">
+            <div class="story-step scroller-step" data-step="argentina-semibosques" id="arg-semibosques">
            
 
                 <div class="story-step-inner">
@@ -223,10 +264,13 @@
                     <p class="card-text card-only-text">Los <span data-category-highlight="semibosque" data-category-highlight-text="semibosques informativos"></span> se ven mayoritariamente en los alrededores de las áreas  pobladas, desarrolladas y centrales, y en las capitales de algunas provincias.
                     </p>
 
-                    <a href="#arg-semidesiertos" class="button-go-on"><span aria-hidden="true">                        <svg width="20" height="10" viewBox="0 0 20 10">
-                        <line x1="0" y1="0" x2="10" y2="10" stroke="#212121"/>
-                        <line x1="10" y1="10" x2="20" y2="0" stroke="#212121"/>
-                    </svg></span></a>
+                    <a href="#arg-semidesiertos" class="button-go-on">                            
+                        <span aria-hidden="true">  
+                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L6.50062 7.48451L12 1" stroke="#212121" stroke-linecap="round"/>
+                            </svg>                       
+                        </span>
+                    </a>
 
                 </div>
 
@@ -234,7 +278,7 @@
     
             </div>
 
-            <div class="story-step" data-step="argentina-semidesiertos" id="arg-semidesiertos">
+            <div class="story-step scroller-step" data-step="argentina-semidesiertos" id="arg-semidesiertos">
            
 
                 <div class="story-step-inner">
@@ -242,10 +286,13 @@
                     <p class="card-text card-only-text">Los <span data-category-highlight="semidesierto" data-category-highlight-text="semidesiertos informativos"></span> ocupan un cuarto del territorio argentino y están mezclados de manera heterogénea con las restantes categorías.
                     </p>
 
-                    <a href="#arg-desiertos" class="button-go-on"><span aria-hidden="true">                        <svg width="20" height="10" viewBox="0 0 20 10">
-                        <line x1="0" y1="0" x2="10" y2="10" stroke="#212121"/>
-                        <line x1="10" y1="10" x2="20" y2="0" stroke="#212121"/>
-                    </svg></span></a>
+                    <a href="#arg-desiertos" class="button-go-on">                            
+                        <span aria-hidden="true">  
+                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L6.50062 7.48451L12 1" stroke="#212121" stroke-linecap="round"/>
+                            </svg>                       
+                        </span>
+                    </a>
 
                 </div>
 
@@ -253,7 +300,7 @@
     
             </div>
 
-            <div class="story-step" data-step="argentina-desiertos" id="arg-desiertos">
+            <div class="story-step scroller-step" data-step="argentina-desiertos" id="arg-desiertos">
            
 
                 <div class="story-step-inner">
@@ -261,10 +308,13 @@
                     <p class="card-text card-only-text">Los <span data-category-highlight="desierto" data-category-highlight-text="desiertos informativos"></span> son los ecosistemas informativos más comunes de la Argentina: ocupan la mitad del territorio, y tienen gran presencia en el norte y en el sur, pero también aparecen en los suburbios de grandes ciudades.
                     </p>
 
-                    <a href="#penultimo" class="button-go-on"><span aria-hidden="true">                        <svg width="20" height="10" viewBox="0 0 20 10">
-                        <line x1="0" y1="0" x2="10" y2="10" stroke="#212121"/>
-                        <line x1="10" y1="10" x2="20" y2="0" stroke="#212121"/>
-                    </svg></span></a>
+                    <a href="#penultimo" class="button-go-on">
+                        <span aria-hidden="true">  
+                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L6.50062 7.48451L12 1" stroke="#212121" stroke-linecap="round"/>
+                            </svg>                       
+                        </span>
+                    </a>
 
                 </div>
 
@@ -272,7 +322,7 @@
     
             </div>
 
-            <div class="story-step" data-step="penultimo" id="penultimo">
+            <div class="story-step scroller-step" data-step="penultimo" id="penultimo">
            
 
                 <div class="story-step-inner">
@@ -281,15 +331,18 @@
 
                 </div>
 
-                <a href="#fecho" class="button-go-on"><span aria-hidden="true">                        <svg width="20" height="10" viewBox="0 0 20 10">
-                    <line x1="0" y1="0" x2="10" y2="10" stroke="#212121"/>
-                    <line x1="10" y1="10" x2="20" y2="0" stroke="#212121"/>
-                </svg></span></a>
+                <a href="#fecho" class="button-go-on">                        
+                    <span aria-hidden="true">  
+                        <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 1L6.50062 7.48451L12 1" stroke="#212121" stroke-linecap="round"/>
+                        </svg>                     
+                    </span>
+                </a>
     
             </div>
 
 
-            <div class="story-step" data-step="fecho" id="fecho">
+            <div class="story-step scroller-step" data-step="fecho" id="fecho">
            
 
                 <div class="story-step-inner">

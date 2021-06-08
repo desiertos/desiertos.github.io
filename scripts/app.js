@@ -69,6 +69,7 @@ const app = {
     },
 
     mobile : false,
+    for_the_first_time_in_forever : true,
 
     data : {
 
@@ -616,7 +617,7 @@ const app = {
               .addClassName(name);
 
             const popup_tip = document.querySelector('.' + name + ' .mapboxgl-popup-tip');
-            popup_tip.style.borderTopColor = location_data.color_real;
+            //popup_tip.style.borderTopColor = location_data.color_real;
 
             const popup_content = document.querySelector('.' + name + ' .mapboxgl-popup-content');
             popup_content.style.backgroundColor = location_data.color_real;
@@ -812,7 +813,7 @@ const app = {
 
             enterView({
 
-                selector: '.story-step',
+                selector: '.scroller-step',
 
                 enter: function(el) {
 
@@ -855,14 +856,6 @@ const app = {
                 //app.map_obj.setPaintProperty('localidad', 'fill-opacity', .5);
                // app.map.set_initial_view();
                //app.ctrl.prevents_scroll_on_opening(true);
-               if (direction == 'back') { 
-                   app.interactions.story.search_bar.reset();
-                }
-
-               app.map.clear_highlights_and_popups();
-               app.map.fit_Argentina();
-               app.map.localidad.toggle_highlight_border('');
-               if (document.querySelector('div.mapboxgl-popup')) document.querySelector('div.mapboxgl-popup').remove();
 
                 //app.interactions.story.toggle_visibility("dashboard_button");
 
@@ -880,19 +873,27 @@ const app = {
                 
             // },
 
+            // no scroller
+            'search-step' : function(direction = null) {
+
+                if (direction == 'back') { 
+                    app.interactions.story.search_bar.reset();
+                 }
+ 
+                app.map.clear_highlights_and_popups();
+                app.map.fit_Argentina();
+                app.map.localidad.toggle_highlight_border('');
+                if (document.querySelector('div.mapboxgl-popup')) document.querySelector('div.mapboxgl-popup').remove();
+ 
+            },
+
+            // no scroll
             'location-card' : function() {
 
                 //app.ctrl.prevents_scroll_on_opening(false);
-                
-                const destination_focus = document.querySelector(
-                    app.interactions.story.search_bar.refs.destination_focus
-                );
-
-                destination_focus.focus();
 
                 const type = app.vis.location_card.state.user_location_type;
                 const location = app.vis.location_card.state.user_location_name
-
                 app.map.highlight_feature(type, location, name = 'user-location', pitch = 0, bearing = 0  );
 
                 //app.map_obj.setPaintProperty('localidad', 'circle-opacity', 1);
@@ -1076,7 +1077,7 @@ const app = {
                     input : '#location-search',
                     search_button : '#story-search-place',
                     destination_step : '#location-card',
-                    destination_focus : '[data-next-focus]',
+                    destination_focus : '.next-focus',
                     form : 'form'
 
                 },
@@ -1238,44 +1239,25 @@ const app = {
 
                     // set vis state, calls vis render
 
+                    if (app.for_the_first_time_in_forever) {
+
+                        app.for_the_first_time_in_forever = false;
+
+                    } else {
+
+                        app.scroller.render['search-step'](direction = 'back');
+
+                    }
+
                     app.vis.location_card.state.set(local, data);
 
                     // populates fields
 
                     app.vis.location_card.update_text_fields();
 
-                    // with the fields updated, resize svg
+                    app.scroller.render['location-card']();
 
-                    //app.vis.stripplot.dimensions.set_size();
-                    //app.vis.stripplot.scales.range.set();
-                    //app.vis.stripplot.scales.set(local.tipo);
-                    //app.vis.stripplot.components.labels.render(local.tipo);
-                    //app.vis.stripplot.components.lines.render(local.tipo);
-                    //app.vis.stripplot.components.marks.render(local.tipo);
-
-                    //updates maps
-
-                    // let type; 
-                    
-                    // if (local.type == "localidad") {
-
-                    //     type = 'localidad';
-
-                    // } else {
-
-                    //     if (local.type == "provincia") {
-                            
-                    //         type = 'provincia';
-
-                    //     }
-
-                    // }
-                    
-                    // app.map.highlight_feature(type = type, location = local.local);
-
-                    // scrolls to card
-
-                    //app.ctrl.prevents_scroll_on_opening(false);
+                    app.ctrl.prevents_scroll_on_opening(false);
 
                     const destination_step = document.querySelector(
                         app.interactions.story.search_bar.refs.destination_step
@@ -1286,6 +1268,17 @@ const app = {
 
                     destination_step.scrollIntoView({behavior: "smooth"});
 
+                    // function focus() {
+
+                    //     const destination_focus = document.querySelector(
+                    //         app.interactions.story.search_bar.refs.destination_focus
+                    //     );
+        
+                    //     destination_focus.focus({ preventScroll: true });
+
+                    // }
+
+                    // setTimeout(focus, 1000);
 
                 }
 
@@ -1554,7 +1547,7 @@ const app = {
             app.utils.colors.populate();
             app.scroller.steps.get();
             app.utils.load_data();
-            //app.ctrl.prevents_scroll_on_opening(true);
+            app.ctrl.prevents_scroll_on_opening(true);
             app.interactions.menu.monitor_click();
             app.interactions.backdrop.monitor_click();
             //app.utils.resize.monitor();
