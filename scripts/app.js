@@ -1077,7 +1077,7 @@ const app = {
                     input : '#location-search',
                     search_button : '#story-search-place',
                     destination_step : '#location-card',
-                    destination_focus : '[data-next-focus]',
+                    destination_focus : '.next-focus',
                     form : 'form'
 
                 },
@@ -1267,13 +1267,18 @@ const app = {
                     //window.scrollTo(0, scroll, {behavior: "smooth"});
 
                     destination_step.scrollIntoView({behavior: "smooth"});
-                    
-                    const destination_focus = document.querySelector(
-                        app.interactions.story.search_bar.refs.destination_focus
-                    );
-    
-                    destination_focus.focus();
 
+                    // function focus() {
+
+                    //     const destination_focus = document.querySelector(
+                    //         app.interactions.story.search_bar.refs.destination_focus
+                    //     );
+        
+                    //     destination_focus.focus({ preventScroll: true });
+
+                    // }
+
+                    // setTimeout(focus, 1000);
 
                 }
 
