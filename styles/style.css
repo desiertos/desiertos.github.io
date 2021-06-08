@@ -1172,15 +1172,13 @@ line.vis-story-stripplot-axis {
 
     }
 
-
-
     .story-step-inner {
 
         max-width: 90vw;
         padding: 0;
         background-color: white;
-        border-radius: 0;
-        border: none
+        border-radius: 5px;
+        border: none;
 
     }
 
@@ -1193,8 +1191,13 @@ line.vis-story-stripplot-axis {
     .story-step:first-of-type .story-step-inner {
 
         padding: 20px;
-        border-radius: 4px;
         border: 1px solid var(--font-color);
+
+    }
+
+    .story-step:first-of-type {
+
+        justify-content: center;
 
     }
 
