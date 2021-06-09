@@ -1715,7 +1715,7 @@ p.dash-stripplot-tooltip-visible {
     box-shadow : none;
     border-radius : 0;
     margin-right: var(--size-controls);
-    margin-bottom: calc( 2 * var(--size-controls) + 1rem);
+    margin-bottom: calc( 1.5 * var(--size-controls) + 1rem);
 
 }
 
