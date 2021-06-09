@@ -361,6 +361,10 @@ button.menu-toggle.clicked path {
     top: var(--header-height);
     z-index: 3;
     align-items: center;
+    overflow: hidden;
+    margin-top: -1px;
+    border-top: 1px solid var(--font-color);
+    border-bottom: 1px solid var(--font-color);
 
 
 }
@@ -421,16 +425,28 @@ button.menu-toggle.clicked path {
 
     }
 
+    @keyframes expand {
+        0% {
+          transform: scaleX(.1);
+        }
+        100% {
+          transform: scaleX(1);
+        }
+      }
+
     .dashboard--menu:not(.menu-clicked) li:hover::after {
 
         font-size: .7rem;
         content: attr(data-option-description);
         text-transform: none;
         margin-left: .7rem;
+        margin-right: .7rem;
         font-weight: 400;
         letter-spacing: 0;
         line-height: 1;
         padding-top: calc(var(--header-height) / 4);
+        transform-origin: left;
+        animation: expand .6s;
 
     }
 
@@ -449,6 +465,13 @@ button.menu-toggle.clicked path {
 
     flex: 0;
     transition: flex-grow .3s;
+
+}
+
+.dashboard--menu.menu-clicked li.category-selected,
+.dashboard--menu.menu-clicked li.category-selected::before {
+
+    box-shadow: inset 0px 0px 0 2px var(--font-color);
 
 }
 
@@ -477,6 +500,7 @@ button.menu-toggle.clicked path {
         content: attr(data-option-description);
         text-transform: none;
         margin-left: .7rem;
+        margin-right: .7rem;
         font-size: .7rem;
         font-weight: 400;
         letter-spacing: 0;
@@ -1827,6 +1851,7 @@ p.dash-stripplot-tooltip-visible {
         left: 5vw;
         right: 5vw;
         top: calc( var(--header-height) + 5vw);
+        margin-top: 0;
     }
 
     .dashboard--menu li {
