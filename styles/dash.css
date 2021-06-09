@@ -860,6 +860,17 @@ input#location-search.unfolded {
 
 }
 
+.download-map a[data-download="disabled"] {
+    /*display : none;*/
+    opacity: 0;
+    pointer-events: none;
+}
+
+.download-map a[data-download="enabled"] {
+    opacity: 1;
+    transition: opacity .5s;
+}
+
 .download-map a[data-download="preparing"]::after {
 
     border-left: none;
@@ -1974,7 +1985,7 @@ p.dash-stripplot-tooltip-visible {
 
     }
 
-    .download-map a[data-download=""]::before,
+    .download-map a[data-download="enabled"]::before,
     .download-map a[data-download="disabled"]::before {
         content: '';
     }

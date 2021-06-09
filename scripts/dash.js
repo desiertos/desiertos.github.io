@@ -1776,7 +1776,7 @@ const dash = {
                 dash.interactions.download_map.reset();
 
                 const dl = document.querySelector(this.ref);
-                dl.dataset.download = "";
+                dl.dataset.download = "enabled";
                 //console.log('Monitoring clicks on download');
                 
                 dl.addEventListener('click', dash.interactions.download_map.handler)
