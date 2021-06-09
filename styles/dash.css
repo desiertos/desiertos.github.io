@@ -432,13 +432,17 @@ button.menu-toggle.clicked path {
     }
 
     @keyframes expand {
+
         0% {
-          transform: scaleX(.1);
+          content: attr(data-menu-option);
+          text-transform: uppercase;
         }
+
         100% {
-          transform: scaleX(1);
+          content: attr(data-option-description);
         }
-      }
+
+    }
 
     .dashboard--menu:not(.menu-clicked) li:hover::after {
 
@@ -452,7 +456,7 @@ button.menu-toggle.clicked path {
         line-height: 1;
         padding-top: calc(var(--header-height) / 4);
         transform-origin: left;
-        animation: expand .6s;
+        animation: expand 1s 1;
 
     }
 
@@ -512,6 +516,7 @@ button.menu-toggle.clicked path {
         letter-spacing: 0;
         line-height: 1;
         padding-top: calc(var(--header-height) / 4);
+        animation: expand 1s 1;
     
     }
 
