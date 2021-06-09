@@ -3,7 +3,7 @@
 
     --font-title : Newsreader;
     --font-body : Rubik;
-    --background-color: ghostwhite;
+    --background-color: white;
     --background-transp: rgba(248, 248, 255, .5);
     --background-transp-darker: rgba(248, 248, 255, .25);
 
@@ -643,7 +643,7 @@ h2 {
 
     position: fixed;
     width: 50vw;
-    top: calc(var(--header-height) * 2 );
+    top: calc(var(--header-height) * 2 - 1px);
     height: calc(100vh - var(--header-height) - var(--header-height));  
     z-index: 1;
 
@@ -846,16 +846,14 @@ input#location-search.unfolded {
     flex: 1;
 }
 
-.download-map a::after {
+.download-map a span.download-icon {
 
     height: var(--size-controls);
     line-height: var(--size-controls);
     width: var(--size-controls);
-    display: inline-block;
-    content: ' \2193';
-    font-weight: 600;
-    font-size: 1rem;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-left: 1px solid var(--font-color);
 
 }
@@ -871,9 +869,22 @@ input#location-search.unfolded {
     transition: opacity .5s;
 }
 
-.download-map a[data-download="preparing"]::after {
+.download-map a[data-download="preparing"] span.download-icon {
 
-    border-left: none;
+    /*border-left: none;*/
+
+}
+
+.download-map a[data-download] span.download-icon .svg-arrow {
+
+    transform-origin: 50% 50%;
+    transition: transform .5s;
+
+}
+
+
+.download-map a[data-download="preparing"] span.download-icon .svg-arrow {
+
     animation: spin 1s infinite;
 
 }
@@ -883,6 +894,7 @@ input#location-search.unfolded {
     border-width: 2px;
     background-color: var(--color-highlight);
     transition: all .5s;
+    margin-right: -2px;
 
 }
 
@@ -894,6 +906,15 @@ input#location-search.unfolded {
     content: 'Descargar';
 }
 
+.download-map a[data-download="ready"] span.download-icon .svg-arrow {
+
+    transform-origin: 50% 50%;
+    transform: rotate(180deg) translateY(5px);
+    transition: transform .5s;
+
+}
+
+
 .download-map a[data-download="disabled"] {
     color: var(--color-grey);
     pointer-events: none;
@@ -903,10 +924,10 @@ input#location-search.unfolded {
 
 @keyframes spin {
     0% {
-      transform: rotate(0deg)
+      transform: translateY(-5px) rotate(0deg);
     }
     100% {
-      transform: rotate(360deg)
+      transform: translateY(-5px) rotate(360deg)
     }
   }
 
@@ -2007,7 +2028,7 @@ p.dash-stripplot-tooltip-visible {
 
 
 
-    .download-map a::after {
+    .download-map a[data-download="enabled"] span.download-icon {
 
         border-left: none;
 
