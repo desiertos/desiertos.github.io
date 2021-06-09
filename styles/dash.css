@@ -378,6 +378,7 @@ button.menu-toggle.clicked path {
     padding-left: 0;
     display: flex;
     transition: flex-grow .3s;
+    position: relative; /*so we can absolutely position the close icon*/
 
 
 }
@@ -406,6 +407,11 @@ button.menu-toggle.clicked path {
     letter-spacing: .1em;
     content: attr(data-menu-option);
 
+}
+
+.dashboard--menu li span.dashboard--menu-item-close {
+    opacity: 0;
+    display: none;
 }
 
 @media (hover: hover) {
@@ -499,14 +505,30 @@ button.menu-toggle.clicked path {
 
         content: attr(data-option-description);
         text-transform: none;
+        margin-right: var(--header-height);
         margin-left: .7rem;
-        margin-right: .7rem;
         font-size: .7rem;
         font-weight: 400;
         letter-spacing: 0;
         line-height: 1;
         padding-top: calc(var(--header-height) / 4);
     
+    }
+
+    .dashboard--menu.menu-clicked li.category-selected .dashboard--menu-item-close {
+
+        transition: opacity .5s;
+        opacity: 1;
+        display: flex;
+        justify-content: stretch;
+        align-items: stretch;
+        /*width: var(--header-height);
+        height: var(--header-height);*/
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
     }
 
 }
