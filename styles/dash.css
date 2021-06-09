@@ -1919,6 +1919,22 @@ p.dash-stripplot-tooltip-visible {
         
     }
 
+    .dashboard--menu.menu-clicked li.category-selected .dashboard--menu-item-close {
+
+        transition: opacity .5s;
+        opacity: 1;
+        display: flex;
+        justify-content: stretch;
+        align-items: stretch;
+        /*width: var(--header-height);
+        height: var(--header-height);*/
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+    }
+
 
     /*.dashboard--title {
 
