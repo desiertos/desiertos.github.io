@@ -22,10 +22,10 @@
     --header-border-color: lightgrey;
     --header-height: 2.5rem;
 
-    --emoji-bosque: url('../img/icons/bosque.svg'); /*'🌳 ';*/
-    --emoji-semibosque: url('../img/icons/semibosque.svg'); /*'🌲 ';*/
-    --emoji-desierto: url('../img/icons/desierto.svg');/*'🏜 ';*/
-    --emoji-semidesierto: url('../img/icons/semidesierto.svg'); /*'⛰ ';*/
+    --emoji-bosque: url('../img/icons/bosque_slim.svg'); /*'🌳 ';*/
+    --emoji-semibosque: url('../img/icons/semibosque_slim.svg'); /*'🌲 ';*/
+    --emoji-desierto: url('../img/icons/desierto_slim.svg');/*'🏜 ';*/
+    --emoji-semidesierto: url('../img/icons/semidesierto_slim.svg'); /*'⛰ ';*/
 
     --color-vis-variable-label : #636363;
     --color-vis-axis : #E5E5E5;
