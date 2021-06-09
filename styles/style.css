@@ -362,7 +362,7 @@ button.menu-toggle.clicked path {
 .icons-kicker {
 
     display: flex;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     margin-top: 1rem;
 
 }
@@ -410,6 +410,7 @@ button.menu-toggle.clicked path {
 
 
 body {
+
     margin: 0;
     padding: 0;
     font-family: var(--font-body);
@@ -420,7 +421,6 @@ body {
 h1 {
 
     margin: 0;
-    margin-bottom: 1rem;
     font-family: var(--font-title);
     font-weight: 600;
     line-height: 1.1;
@@ -581,7 +581,15 @@ a.button-go-on {
     height: var(--size-controls);
 }
 
-a.button-go-on::after {
+a.button-go-on:not(.first) {
+
+    position: absolute;
+    bottom: var(--header-height);
+    justify-content: flex-end;
+    right: 0;
+}
+
+a.button-go-on::before {
     color: transparent;
     content: 'Seguir';
 }
@@ -598,7 +606,7 @@ a.button-go-on span {
 
 }
 
-[data-step="abertura"] a.button-go-on::after {
+[data-step="abertura"] a.button-go-on::before {
     content: '';
 }
 
@@ -612,6 +620,7 @@ a.button-go-on.first {
     text-transform: uppercase;
     letter-spacing: .1em;
     max-width: 100%;
+    margin-top: 1.5rem;
 
 }
 
@@ -771,14 +780,18 @@ input#location-search {
 
 .story-step {
 
-    height: calc(100vh - 27px); 
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    height: calc(100vh - 27px);
+    margin-bottom: 27px;
 
     /*scroll-snap-align: start;*/
+}
 
+.story-step[data-step="abertura"] {
+
+    /*height: 100vh;*/
+    /*flex-direction: column;
+    justify-content: center;*/
+    position: relative;
 
 }
 
@@ -786,7 +799,13 @@ input#location-search {
 
     max-width: 36vw;
     width: 36rem;
+    height: 100%;
+    /*height: calc(100% - 27px);*/
     margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     /*margin-top: 50vh;
     transform: translateY(-50%);*/
     background-color: var(--background-color);/*var(--background-transp); */
@@ -847,7 +866,7 @@ input#location-search {
 
 .story-step:last-child {
 
-    margin-bottom: 23px;
+    margin-bottom: 27px;
 
 }
 
@@ -903,6 +922,10 @@ input#location-search {
     font-family: var(--font-title);
     font-size: 1rem;
 
+}
+
+.card-text {
+    stroke: 3px;
 }
 
 .story-step p.card-only-text {
@@ -1163,6 +1186,9 @@ line.vis-story-stripplot-axis {
         padding: var(--header-height) 0;
         justify-content: flex-end;
         padding-bottom: 60px; 
+        display: flex;
+        flex-direction: column;
+        position: relative;
 
     }
 
@@ -1178,7 +1204,10 @@ line.vis-story-stripplot-axis {
         padding: 0;
         background-color: white;
         border-radius: 5px;
+        height: unset;
         border: none;
+        display: block;
+        position: static;
 
     }
 
@@ -1231,6 +1260,7 @@ line.vis-story-stripplot-axis {
         width: 90vw;
         margin: 0;
         height: unset;
+        position: static;
 
     }
 
@@ -1243,7 +1273,7 @@ line.vis-story-stripplot-axis {
         background-color: white;
     }
 
-    a.button-go-on:not(.first)::after {
+    a.button-go-on:not(.first)::before {
         content: '';
     }
 
