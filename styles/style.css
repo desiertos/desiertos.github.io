@@ -867,6 +867,7 @@ input#location-search {
 .story-step:last-child {
 
     margin-bottom: 27px;
+    position: relative;
 
 }
 
@@ -1279,9 +1280,9 @@ line.vis-story-stripplot-axis {
 
 
 
-    a.button-go-on[href="#fecho"] span {
+    /* a.button-go-on[href="#fecho"] span {
         margin: 0 5vw;
-    }
+    } */
 
 
 
