@@ -377,7 +377,7 @@ button.menu-toggle.clicked path {
     line-height: var(--header-height);
     padding-left: 0;
     display: flex;
-    transition: flex-grow .3s;
+    transition: flex-grow .5s;
     position: relative; /*so we can absolutely position the close icon*/
 
 
@@ -421,7 +421,7 @@ button.menu-toggle.clicked path {
     .dashboard--menu:not(.menu-clicked):hover li:not(:hover) {
 
         flex: 0;
-        transition: flex-grow .3s;
+        transition: flex-grow .5s;
 
     }
 
@@ -474,7 +474,7 @@ button.menu-toggle.clicked path {
 .dashboard--menu.menu-clicked li:not(.category-selected) {
 
     flex: 0;
-    transition: flex-grow .3s;
+    transition: flex-grow .5s;
 
 }
 
@@ -1924,6 +1924,11 @@ p.dash-stripplot-tooltip-visible {
     .dashboard--menu li {
         align-items: center;
         line-height: unset;
+
+    }
+
+    .dashboard--menu.menu-clicked li.category-selected, .dashboard--menu.menu-clicked li.category-selected::before {
+        box-shadow: none;
     }
 
     .dashboard--menu li:last-child {
