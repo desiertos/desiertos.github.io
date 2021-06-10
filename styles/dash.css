@@ -1340,13 +1340,14 @@ p[data-text_field="category_description"] {
 
     display: block;
     position: absolute;
-    background-color: #E5E5E5;
+    background-color: #F4F0EC;
     padding: 1em;
     width: 180px;
-    border: 2px solid var(--font-color);
+    border: 1px solid var(--font-color);
     right: 10px;
     z-index: 1;
     top: 2rem;
+    font-size: 0.65rem;
 
 }
 
