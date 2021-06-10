@@ -1034,7 +1034,7 @@ button.relato {
 
 }
 
-button.relato:hover {
+/*button.relato:hover {
 
     background-color: grey;
     color: white;
@@ -1043,13 +1043,13 @@ button.relato:hover {
 button.relato.clicked {
     background-color: var(--font-color);
     color: white;
-}
+}*/
 
 aside {
 
     position: fixed; /*absolute;*/
     z-index: 5;
-    top: calc( var(--header-height) * 2 + 1px);
+    top: calc( var(--header-height) * 2);
     left: 0;
     width: .25vw;
     min-width: min(380px, 100vw);
@@ -1152,9 +1152,17 @@ aside button.close-aside {
     right: 0px;
     height: var(--height-tabs);
     width: var(--height-tabs);
-    font-size: 1.5rem;
     border: 1px solid var(--font-color);
     border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+aside button.close-aside img {
+    display: initial;
+    max-width: initial;
 }
 
 /*
