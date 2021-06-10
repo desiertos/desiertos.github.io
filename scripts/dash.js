@@ -1566,7 +1566,20 @@ const dash = {
 
                 menu.addEventListener('click', function(e) {
 
-                    const li = e.target;
+                    let li = e.target;
+
+                    while (li.tagName != "LI") {
+
+                        li = li.parentNode;
+
+                        if (li.tagName == "UL") { 
+                        
+                            console.log('algo deu muito errado');
+                            break
+                        
+                        }
+
+                    }
 
                     if (menu.classList.contains('menu-clicked')) {
 
