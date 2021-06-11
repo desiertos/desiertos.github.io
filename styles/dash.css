@@ -886,6 +886,7 @@ input#location-search.unfolded {
 .download-map a[data-download="preparing"] span.download-icon .svg-arrow {
 
     animation: spin 1s infinite;
+    transition: transform .5s;
 
 }
 
@@ -895,6 +896,12 @@ input#location-search.unfolded {
     background-color: var(--color-highlight);
     transition: all .5s;
     margin-right: -2px;
+
+}
+
+.download-map a span.download-icon .svg-arrow {
+
+    transition: transform .5s;
 
 }
 
@@ -2161,6 +2168,7 @@ main.metodologia {
     background-color: white;
     padding-left: 10px;
     padding-right: 10px;
+    margin-bottom: 4rem;
 
 }
 
@@ -2423,7 +2431,6 @@ span.conclusiones-author {
     font-family: var(--font-title);
     font-weight: 500;
     margin-bottom: 1rem;
-    text-align: center;
 
 }
 
