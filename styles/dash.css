@@ -19,7 +19,7 @@
     --color-semibosque: #EEC471; /*EFCA47;*/
     --color-bosque: #99A860; /*92B879;*/
 
-    --header-border-color: lightgrey;
+    --header-border-color: #212121;/*lightgrey;*/
     --header-height: 2.5rem;
 
     --emoji-bosque: url('../img/icons/bosque_slim.svg'); /*'🌳 ';*/
@@ -73,7 +73,7 @@ header.header-dashboard {
     height: var(--header-height);
     z-index: 3;
     background-color: white;
-    border-bottom: 2px solid var(--header-border-color);
+    border-bottom: 1px solid var(--header-border-color);
     display: flex;
     align-items: center;
 }
@@ -122,7 +122,7 @@ button.menu-toggle {
 
     width: var(--header-height);
     height: var(--header-height);
-    border-left: 2px solid var(--header-border-color);
+    border-left: 1px solid var(--header-border-color);
     padding: 0;
     display: flex;
     align-items: center;
@@ -2170,6 +2170,11 @@ main.metodologia {
     padding-right: 10px;
     margin-bottom: 4rem;
 
+}
+
+main.metodologia a {
+    color: var(--font-color);
+    font-weight: 500;
 }
 
 .metodologia header {
