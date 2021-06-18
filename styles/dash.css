@@ -2201,8 +2201,16 @@ main.metodologia a {
 .full-bleed {
 
     margin: 0 3rem;
-    max-width: 1300px;
+    max-width: calc(1300px - 6rem);
 
+}
+
+@media (min-width: 1300px) {
+
+    .full-bleed {
+        margin: 0 auto;
+    }
+    
 }
 
 @media (max-width: 46rem) {
