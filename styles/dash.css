@@ -265,7 +265,7 @@ button.menu-toggle.clicked path {
     list-style: none;
     border: 1px solid var(--font-color);
     background-color: white;
-    font-size: .8rem;
+    font-size: min(.8rem, 12px);
     width: 100%;
     display: block;
 

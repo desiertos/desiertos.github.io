@@ -32,7 +32,7 @@
 
     --size-controls: 33px;
 
-    font-size: max(16px, calc(8px + .75vw));
+    font-size: max(14px, calc(8px + .75vw));
 
     --delay: .05s;
 
@@ -41,6 +41,12 @@
 @media (max-width: 375px) {
     :root {
       font-size: 14px; /* 10px */
+    }
+}
+
+@media (max-width: 375px) and (max-height: 600px) {
+    :root {
+      font-size: 12px; /* 10px */
     }
 }
   
@@ -291,7 +297,7 @@ button.menu-toggle.clicked path {
     list-style: none;
     border: 1px solid var(--font-color);
     background-color: white;
-    font-size: .8rem;
+    font-size: min(.8rem, 12px);
     width: 100%;
     display: block;
 
@@ -866,7 +872,7 @@ input#location-search {
 
 .story-step:last-child {
 
-    margin-bottom: 27px;
+    padding-bottom: calc(var(--header-height) + 33px + 60px);
     position: relative;
 
 }
@@ -1244,7 +1250,9 @@ line.vis-story-stripplot-axis {
 
         width: 100vw;
         height: calc(var(--header-height) + 33px);
-        bottom: 0;
+        bottom: 60px;
+        border-bottom: 1px solid var(--font-color);
+
 
     }
 
