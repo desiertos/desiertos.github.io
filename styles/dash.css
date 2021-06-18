@@ -961,7 +961,7 @@ input#location-search.unfolded {
     max-width: 42vw;
     width: 36rem;
     margin: 0 auto;
-    padding-top: 1rem;
+    padding-top: 1.5rem;
     /*margin-top: 50vh;
     transform: translateY(-50%);*/
     background-color: transparent; /*var(--background-transp); */
