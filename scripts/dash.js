@@ -2154,6 +2154,18 @@ const dash = {
 
                         let field_type = field.dataset.text_field;
 
+                        if (field_type == 'category' & location_type == 'localidad') {
+
+                            const cat = dash.vis.location_card.state.user_location_category;
+
+                            field.dataset.category = cat;
+                        
+                        } else if (field_type == 'category' & location_type != 'localidad') {
+
+                            field.dataset.category = "";
+                            
+                        }
+
                         if (field_type.slice(0,6) == 'poster') {
 
                             field_type = field_type.slice(7);
