@@ -1854,6 +1854,7 @@ p.dash-stripplot-tooltip-visible {
         background-color: white;
         border: 1px solid var(--font-color);
         border-top: none;
+        margin-bottom: 1.5rem;
 
     }
 
