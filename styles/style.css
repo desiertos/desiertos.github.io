@@ -432,6 +432,7 @@ h1 {
     line-height: 1.1;
     color: var(--title-color);
     font-size: 1.8rem;
+    padding: 0 10px;
 
 }
 
