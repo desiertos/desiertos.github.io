@@ -39,7 +39,7 @@
 
     --map-bkg : #F4F0EC;
 
-    font-size: max(16px, calc(8px + .75vw));
+    font-size: clamp(16px, 8px + 0.625vw, 20px);
 
 }
 
@@ -1596,8 +1596,8 @@ p[data-text_field='medio_prototipico'] {
     text-transform: uppercase;
     letter-spacing: 1px;
     font-family: var(--font-body);
-    font-size: 10px;
-    line-height: 15px;
+    font-size: .625rem;
+    line-height: 1rem;
     color : var(--color-vis-variable-label);
 }
 
@@ -1605,7 +1605,7 @@ span.vis-dash-stripplot-labels-minmax {
 
     position: absolute;
     font-family: var(--font-body);
-    font-size: 8px;
+    font-size: .5rem;
     transform: translateX(-50%);
     padding-top: 1em;
     pointer-events: none;
@@ -1689,7 +1689,7 @@ circle.vis-dash-stripplot-marks {
 p.label-location-selected {
 
     text-transform: uppercase;
-    font-size: 8px;
+    font-size: .5rem;
     letter-spacing: 1px;
     position: absolute;
     margin: 0;
